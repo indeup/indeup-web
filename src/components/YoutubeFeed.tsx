@@ -20,6 +20,11 @@ type FeedData = {
 
 const FALLBACK_THUMBNAIL = "/indeup_series.jpg";
 const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@indeup";
+// Read straight from GitHub, where the Action commits fresh data every
+// 6 hours — the live site (Cafe24 static hosting, deployed by hand)
+// would otherwise only show whatever was uploaded at the last manual
+// deploy. Same-origin /data/youtube.json stays as a fallback.
+const GITHUB_DATA_URL = "https://raw.githubusercontent.com/indeup/indeup-web/main/public/data/youtube.json";
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
@@ -158,17 +163,23 @@ export default function YoutubeFeed({ kind }: { kind: "longform" | "shorts" }) {
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/data/youtube.json", { cache: "no-store" })
-      .then((res) => {
-        if (!res.ok) throw new Error(`status ${res.status}`);
-        return res.json();
-      })
-      .then((json: FeedData) => {
-        if (!cancelled) setData(json);
-      })
-      .catch(() => {
-        if (!cancelled) setFailed(true);
-      });
+
+    async function load() {
+      for (const url of [GITHUB_DATA_URL, "/data/youtube.json"]) {
+        try {
+          const res = await fetch(url, { cache: "no-store" });
+          if (!res.ok) continue;
+          const json = (await res.json()) as FeedData;
+          if (!cancelled) setData(json);
+          return;
+        } catch {
+          // try the next source
+        }
+      }
+      if (!cancelled) setFailed(true);
+    }
+
+    load();
     return () => {
       cancelled = true;
     };

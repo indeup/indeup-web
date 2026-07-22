@@ -19,6 +19,12 @@ type FeedData = {
 
 const FALLBACK_THUMBNAIL = "/indeup_series.jpg";
 const NAVER_BLOG_HOME = "https://blog.naver.com/indeup_official";
+// Read the data straight from GitHub, where the Action commits it every
+// 6 hours — the live site (Cafe24 static hosting, deployed by hand) would
+// otherwise only ever show whatever was uploaded at the last manual deploy.
+// Same-origin /data/naver-blog.json is kept as a fallback for if GitHub is
+// ever unreachable, or once a proper CI deploy makes it the fresher copy.
+const GITHUB_DATA_URL = "https://raw.githubusercontent.com/indeup/indeup-web/main/public/data/naver-blog.json";
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
@@ -87,17 +93,23 @@ export default function NaverBlogFeed() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/data/naver-blog.json", { cache: "no-store" })
-      .then((res) => {
-        if (!res.ok) throw new Error(`status ${res.status}`);
-        return res.json();
-      })
-      .then((json: FeedData) => {
-        if (!cancelled) setData(json);
-      })
-      .catch(() => {
-        if (!cancelled) setFailed(true);
-      });
+
+    async function load() {
+      for (const url of [GITHUB_DATA_URL, "/data/naver-blog.json"]) {
+        try {
+          const res = await fetch(url, { cache: "no-store" });
+          if (!res.ok) continue;
+          const json = (await res.json()) as FeedData;
+          if (!cancelled) setData(json);
+          return;
+        } catch {
+          // try the next source
+        }
+      }
+      if (!cancelled) setFailed(true);
+    }
+
+    load();
     return () => {
       cancelled = true;
     };
