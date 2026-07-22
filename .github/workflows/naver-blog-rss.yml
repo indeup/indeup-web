@@ -1,0 +1,40 @@
+name: Refresh content feeds (Naver Blog + YouTube)
+
+on:
+  schedule:
+    # 4x/day, evenly spaced (UTC). Matches KST 09:00 / 15:00 / 21:00 / 03:00.
+    - cron: "0 0,6,12,18 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Fetch Naver Blog RSS -> public/data/naver-blog.json
+        run: node scripts/fetch-naver-blog.mjs
+
+      - name: Fetch YouTube feed -> public/data/youtube.json
+        run: node scripts/fetch-youtube.mjs
+
+      - name: Commit updated feed data if changed
+        run: |
+          if git diff --quiet -- public/data/naver-blog.json public/data/youtube.json; then
+            echo "No changes to feed data"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/naver-blog.json public/data/youtube.json
+          git commit -m "chore: refresh content feed data"
+          git push

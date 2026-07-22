@@ -1,0 +1,48 @@
+# ── indeup.com — Cafe24 Apache 정적 호스팅 ──────────────────────────
+# 이 사이트는 Next.js 정적 export(HTML/CSS/JS만)이며 PHP·DB·서버 코드가
+# 전혀 없습니다. 즉 SQL 인젝션, 서버 코드 실행, DB 유출 같은 공격 자체가
+# 성립하지 않는 구조입니다. 아래 설정은 그 위에 추가하는 브라우저 단
+# 보안 헤더와 기본적인 경로 차단입니다.
+#
+# 대용량 트래픽(DDoS) 공격은 .htaccess만으로 막을 수 없습니다 — 이건
+# 오리진 서버 앞단에 Cloudflare 같은 CDN/WAF를 두는 방식으로 대응하는
+# 것이 표준입니다. 아래는 그 전 단계로 갖출 수 있는 최소한의 하드닝입니다.
+
+# ── 디렉터리 목록 노출 차단 ─────────────────────────────────────────
+Options -Indexes -MultiViews
+IndexIgnore *
+
+# ── 민감 파일 접근 차단 ────────────────────────────────────────────
+<FilesMatch "(^\.|\.(env|git|gitignore|map|log|bak|sql|config|lock)$)">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # www 없는 주소로 통일 (canonical과 일치)
+  RewriteCond %{HTTP_HOST} ^www\.indeup\.com [NC]
+  RewriteRule ^(.*)$ https://indeup.com/$1 [L,R=301]
+
+  # HTTP → HTTPS 강제 (SSL 인증서 적용 후에만 활성화됩니다)
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ── 보안 헤더 ──────────────────────────────────────────────────────
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+  # Instagram 임베드(iframe)와 Next.js 하이드레이션 인라인 스크립트를
+  # 허용하는 선에서 나머지 출처는 차단합니다.
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.instagram.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self'; frame-src https://www.instagram.com; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+</IfModule>
+
+# ── 404 처리 ───────────────────────────────────────────────────────
+ErrorDocument 404 /404.html
+
+# ── .well-known 은 인증서/소유확인용이라 절대 차단하지 않음 ──────────
