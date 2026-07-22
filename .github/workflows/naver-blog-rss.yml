@@ -9,6 +9,13 @@ on:
 permissions:
   contents: write
 
+# Queue runs instead of letting two overlap — two concurrent runs both
+# committing to the same two JSON files is the one realistic way this
+# workflow could end up with a rejected/conflicting push.
+concurrency:
+  group: refresh-content-feeds
+  cancel-in-progress: false
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
@@ -19,7 +26,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
 
       - name: Fetch Naver Blog RSS -> public/data/naver-blog.json
         run: node scripts/fetch-naver-blog.mjs
@@ -37,4 +44,8 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add public/data/naver-blog.json public/data/youtube.json
           git commit -m "chore: refresh content feed data"
+          # Pick up any commits made to the repo since this job's checkout
+          # (e.g. a manual push) before pushing, so this never fails with a
+          # rejected non-fast-forward push.
+          git pull --rebase origin main
           git push
