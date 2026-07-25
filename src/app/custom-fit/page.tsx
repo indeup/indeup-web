@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SizeCta from "@/components/SizeCta";
 import Reveal from "@/components/Reveal";
 import CustomFitCalculator from "@/components/CustomFitCalculator";
 
@@ -205,7 +206,7 @@ export default function CustomFitPage() {
         </section>
 
         {/* 내부 링크 */}
-        <section className="border-t border-[var(--color-border)] px-6 py-14 sm:px-12 sm:py-16">
+        <section className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-16">
           <Reveal className="mx-auto max-w-3xl">
             <h2 className="text-sm font-semibold uppercase tracking-[0.15em] text-[var(--color-muted-foreground)]">
               더 알아보기
@@ -232,7 +233,7 @@ export default function CustomFitPage() {
                 </a>
               </li>
               <li>
-                <a href="/#contact" className="cursor-pointer font-medium text-[var(--color-primary)] underline underline-offset-4 hover:text-[var(--color-brand)]">
+                <a href="/support/" className="cursor-pointer font-medium text-[var(--color-primary)] underline underline-offset-4 hover:text-[var(--color-brand)]">
                   고객지원
                 </a>
               </li>
@@ -241,6 +242,7 @@ export default function CustomFitPage() {
         </section>
       </main>
 
+      <SizeCta />
       <Footer />
     </div>
   );

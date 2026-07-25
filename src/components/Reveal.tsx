@@ -19,6 +19,10 @@ export default function Reveal({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // Positive bottom margin so the reveal starts while the element is still
+    // below the viewport, not after it's already scrolled into view — a fast
+    // downward flick on mobile could otherwise outrun the 700ms transition
+    // and show a blank gap where the section should already be visible.
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -26,7 +30,7 @@ export default function Reveal({
           observer.disconnect();
         }
       },
-      { threshold: 0.15, rootMargin: "0px 0px -80px 0px" }
+      { threshold: 0, rootMargin: "0px 0px 200px 0px" }
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -36,8 +40,8 @@ export default function Reveal({
     <div
       ref={ref}
       style={delay ? { transitionDelay: `${delay}ms` } : undefined}
-      className={`transition-all duration-700 ease-out ${
-        visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+      className={`transition-all duration-500 ease-out ${
+        visible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
       } ${className ?? ""}`}
     >
       {children}

@@ -18,10 +18,32 @@
   --color-brand-dark: #8f2222;
   --color-brand-light: #e2574c;
 
-  --type-hero: clamp(2.75rem, 7vw, 6.5rem);
+  /* Min lowered from 2.75rem: at that floor, clamp() doesn't hand off to the
+     7vw scaling term until ~628px wide, so every real Korean phone (360–
+     430px) rendered the headline at a flat 44px regardless of screen width —
+     too wide for the two-line Korean copy to fit without an unplanned extra
+     wrap (which then clipped against the pinned section's fixed-height,
+     overflow-hidden frame). 1.75rem fits within a 360px screen's content
+     width at the line lengths actually used. */
+  --type-hero: clamp(1.75rem, 7vw, 6.5rem);
   --type-h2: clamp(1.75rem, 3.5vw, 3rem);
   --type-stat: clamp(2.25rem, 4vw, 3.5rem);
+
+  /* Tried pinning this to `1svh` (the small/stable viewport height, which
+     never changes as the address bar hides/shows) to stop a scroll bounce
+     on mobile — confirmed via a real screen recording that this was wrong:
+     `svh` stays sized for the address bar being *shown*, so once the
+     address bar actually hides, the newly-revealed strip at the bottom is
+     left as a plain white gap (the pinned section doesn't grow to fill it)
+     until the next scroll event recalculates. `dvh` does grow/shrink live
+     with the real visible area, which is what mobile visitors actually
+     expect — the original bounce turned out to be dominated by a separate,
+     now-fixed bug (interrupted crossfade transitions in the hero slider),
+     not by dvh itself. Kept as a variable in case a future component needs
+     to opt out, but both tiers resolve to dvh for now. */
+  --vh-unit: 1dvh;
 }
+
 
 @theme inline {
   --color-background: var(--background);
@@ -56,6 +78,12 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-pretendard), Arial, Helvetica, sans-serif;
+  /* Without this, Korean text can wrap at any syllable boundary — CSS's
+     default treats each syllable block like a standalone character, so a
+     line can break mid-word (e.g. "사이즈" -> "사" / "이즈"). `keep-all`
+     restricts breaks to spaces (between 어절), matching how Korean text is
+     actually meant to wrap. Latin/number runs still wrap normally. */
+  word-break: keep-all;
 }
 
 .no-scrollbar {

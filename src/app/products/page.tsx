@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SizeCta from "@/components/SizeCta";
 import Reveal from "@/components/Reveal";
 import TextReveal from "@/components/TextReveal";
 import ProductsHero from "@/components/ProductsHero";
@@ -132,7 +133,7 @@ export default function ProductsPage() {
             laid out as the same split-editorial (label left / copy right)
             pattern used throughout /brand/, instead of floating as an
             isolated centered block. */}
-        <section className="border-t border-[var(--color-border)] px-6 py-14 sm:px-12 sm:py-20">
+        <section className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-20">
           <Reveal className="mx-auto max-w-6xl">
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-[320px_1fr] lg:gap-16">
               <div>
@@ -220,7 +221,7 @@ export default function ProductsPage() {
         </section>
 
         {/* Brand tie-in */}
-        <section className="px-6 py-14 sm:px-12 sm:py-20">
+        <section className="px-6 py-16 sm:px-12 sm:py-20">
           <Reveal className="mx-auto flex max-w-6xl flex-col items-start gap-8 sm:flex-row sm:items-center sm:justify-between">
             <div className="max-w-2xl">
               <Eyebrow>Our Process</Eyebrow>
@@ -259,7 +260,7 @@ export default function ProductsPage() {
                 <span aria-hidden="true">&rarr;</span>
               </a>
               <a
-                href="/#custom"
+                href="/custom-fit/"
                 className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-white transition-colors duration-200 hover:border-white"
               >
                 맞춤 제작 알아보기
@@ -270,6 +271,7 @@ export default function ProductsPage() {
         </section>
       </main>
 
+      <SizeCta />
       <Footer />
     </div>
   );

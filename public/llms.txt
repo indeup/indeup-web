@@ -1,0 +1,24 @@
+# INDEUP
+
+> 인디업(INDEUP)은 공간에 맞춰 가로·깊이·높이를 10mm 단위로 제작하는 대한민국 맞춤형 책상 브랜드입니다. 운영 주체는 스니처이며, 실제 구매는 네이버 브랜드스토어에서 진행됩니다.
+
+## Official pages
+- [Home](https://indeup.com/)
+- [Brand](https://indeup.com/brand/)
+- [Products](https://indeup.com/products/)
+- [Custom-fit sizing](https://indeup.com/custom-fit/)
+- [Desk size & placement guide](https://indeup.com/guide/)
+- [Support / FAQ](https://indeup.com/support/)
+- [Privacy policy](https://indeup.com/privacy/)
+
+## Official store
+- [INDEUP Naver Brand Store](https://brand.naver.com/indeup)
+
+## Official channels
+- [Naver Blog](https://blog.naver.com/indeup_official)
+- [Tistory](https://indeup.tistory.com/)
+- [YouTube](https://www.youtube.com/@indeup)
+- [Instagram](https://www.instagram.com/indeup.kr)
+
+## Notes
+This file is a supplementary index, not a required or ranking-affecting standard for any AI search engine. It does not replace sitemap.xml, robots.txt, on-page HTML content, or structured data (JSON-LD) — those remain the authoritative sources.

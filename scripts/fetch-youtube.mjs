@@ -15,6 +15,7 @@
 import { writeFile, readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import { matchCategories } from "./categorize.mjs";
 
 const PLAYLISTS = {
   longform: "PL1OpYFUPf80FaFynOO1g0MCOptVM5HzNm", // "인디업 맞춤 데스크"
@@ -51,6 +52,9 @@ function parseEntries(xml) {
     const publishedRaw = extractFirst(block, /<published>([\s\S]*?)<\/published>/);
     const thumbnail = extractFirst(block, /<media:thumbnail url="([^"]*)"/);
     const viewsRaw = extractFirst(block, /<media:statistics views="([^"]*)"/);
+    // The playlist feed's <media:group> does include a real per-video
+    // description (confirmed against the live feed) — not fabricated.
+    const description = decodeEntities(extractFirst(block, /<media:description>([\s\S]*?)<\/media:description>/));
 
     const published = publishedRaw ? new Date(publishedRaw) : null;
     if (!videoId || !title || !link || !published || Number.isNaN(published.getTime())) continue;
@@ -62,6 +66,10 @@ function parseEntries(xml) {
       publishedAt: published.toISOString(),
       thumbnail: thumbnail || null,
       viewCount: viewsRaw ? Number(viewsRaw) : null,
+      description,
+      // YouTube's feed has no tag/category field, so this is classified
+      // from the real video title and description only — never invented.
+      categories: matchCategories(`${title} ${description}`),
     });
   }
 

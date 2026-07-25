@@ -24,6 +24,9 @@ export default function TextReveal({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // Positive bottom margin so the reveal starts while the element is still
+    // below the viewport — see Reveal.tsx for why a negative margin here
+    // shows as a blank gap under a fast downward scroll on mobile.
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -31,7 +34,7 @@ export default function TextReveal({
           observer.disconnect();
         }
       },
-      { threshold: 0.2, rootMargin: "0px 0px -60px 0px" }
+      { threshold: 0, rootMargin: "0px 0px 200px 0px" }
     );
     observer.observe(el);
     return () => observer.disconnect();

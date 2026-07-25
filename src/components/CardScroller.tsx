@@ -30,10 +30,12 @@ function buildEdgeMask(canLeft: boolean, canRight: boolean): string {
  * and removed: its click-vs-drag heuristics kept swallowing ordinary clicks
  * on the cards, which matters more than the extra desktop-mouse convenience.
  *
- * The leading (leftmost) visible card stays at full brightness as the
- * "now viewing" slot; every other visible card dims. Edges fade instead of
- * clipping cards off hard, a thin bar below tracks scroll position, and a
- * brief one-time nudge on mount hints that it's scrollable.
+ * Every card stays fully readable at rest (image + title always clear) —
+ * an earlier version dimmed every card except the "leading" one, which read
+ * as broken/too dark at a glance. Cards handle their own hover state
+ * individually. Edges fade instead of clipping cards off hard, a thin bar
+ * below tracks scroll position, and a brief one-time nudge on mount hints
+ * that it's scrollable.
  */
 export default function CardScroller<T>({
   items,
@@ -48,26 +50,21 @@ export default function CardScroller<T>({
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
   const [hintOffset, setHintOffset] = useState(0);
   const [scrollThumb, setScrollThumb] = useState({ left: 0, width: 100 });
+  // The left/right fade reads as a helpful "there's more" hint on desktop,
+  // where the arrow buttons live right next to it — but on a narrow mobile
+  // screen it just dims the first/last card's edge for no clear reason,
+  // which read as a cheap gaussian-blur artifact rather than an affordance.
+  const [isDesktop, setIsDesktop] = useState(false);
 
-  function findLeadingIndex(): number {
-    const el = scrollerRef.current;
-    if (!el) return 0;
-    const containerLeft = el.getBoundingClientRect().left;
-    let closestIndex = 0;
-    let closestDist = Infinity;
-    itemRefs.current.forEach((node, i) => {
-      if (!node) return;
-      const dist = Math.abs(node.getBoundingClientRect().left - containerLeft);
-      if (dist < closestDist) {
-        closestDist = dist;
-        closestIndex = i;
-      }
-    });
-    return closestIndex;
-  }
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 640px)");
+    setIsDesktop(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
 
   function updateScrollState() {
     const el = scrollerRef.current;
@@ -81,20 +78,15 @@ export default function CardScroller<T>({
     });
   }
 
-  function handleScroll() {
-    updateScrollState();
-    setActiveIndex(findLeadingIndex());
-  }
-
   useEffect(() => {
-    handleScroll();
+    updateScrollState();
     const el = scrollerRef.current;
     if (!el) return;
-    el.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll);
+    el.addEventListener("scroll", updateScrollState, { passive: true });
+    window.addEventListener("resize", updateScrollState);
     return () => {
-      el.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
+      el.removeEventListener("scroll", updateScrollState);
+      window.removeEventListener("resize", updateScrollState);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items.length]);
@@ -133,8 +125,8 @@ export default function CardScroller<T>({
         style={{
           transform: `translateX(${hintOffset}px)`,
           transition: "transform 450ms ease-out",
-          WebkitMaskImage: buildEdgeMask(canScrollLeft, canScrollRight),
-          maskImage: buildEdgeMask(canScrollLeft, canScrollRight),
+          WebkitMaskImage: isDesktop ? buildEdgeMask(canScrollLeft, canScrollRight) : "none",
+          maskImage: isDesktop ? buildEdgeMask(canScrollLeft, canScrollRight) : "none",
         }}
       >
         {items.map((item, i) => (
@@ -143,9 +135,7 @@ export default function CardScroller<T>({
             ref={(node) => {
               itemRefs.current[i] = node;
             }}
-            className={`shrink-0 snap-start basis-[85%] transition-all duration-300 ease-out hover:brightness-100 sm:basis-[calc((100%-1.5rem)/2)] lg:basis-[calc((100%-3rem)/3)] ${
-              i === activeIndex ? "scale-100 brightness-100" : "scale-[0.96] brightness-[0.4]"
-            }`}
+            className="shrink-0 snap-start basis-[85%] sm:basis-[calc((100%-1.5rem)/2)] lg:basis-[calc((100%-3rem)/3)]"
           >
             {renderItem(item)}
           </div>

@@ -1,5 +1,21 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
+import {
+  legalName,
+  representativeName,
+  supportPhone,
+  supportPhoneDisplay,
+  supportEmail,
+  businessAddress,
+  businessRegistrationNumber,
+  mailOrderSalesNumber,
+  naverStoreUrl,
+  naverBlogUrl,
+  naverTalkUrl,
+  tistoryUrl,
+  youtubeUrl,
+  instagramUrl,
+} from "@/lib/brand";
 
 function LegalRow({ items }: { items: ReactNode[] }) {
   return (
@@ -20,16 +36,24 @@ export default function Footer() {
   return (
     <footer id="contact" className="bg-[var(--color-primary)] text-white">
       {/* Closing statement — echoes the brand voice one more time before
-          handing off to the utility links, instead of ending abruptly. */}
-      <div className="border-b border-white/10 px-6 py-14 text-center sm:px-12">
+          handing off to the utility links, instead of ending abruptly.
+          Deliberately inverted (white bg / dark text) against the dark
+          footer around it. */}
+      {/* Directly follows SizeCta, which already ends in generous bottom
+          padding — stacking a full py-16 here on top of that read as an
+          unexplained gap pushing this heading down, so this block trims
+          its own top padding while keeping the bottom untouched. */}
+      <div className="border-b border-[var(--color-border)] bg-white px-6 pb-16 pt-10 text-center text-[var(--color-primary)] sm:px-12 sm:pb-20 sm:pt-14">
         <h2 className="mx-auto max-w-2xl text-2xl font-bold leading-tight tracking-[-0.02em] sm:text-3xl">
           지금, 당신의 공간에 맞는
           <br />
-          책상을 만나보세요.
+          책상을 물어보세요.
         </h2>
         <a
-          href="/support/"
-          className="mt-5 inline-flex cursor-pointer items-center gap-2 border-b border-white/50 pb-1 text-base font-medium transition-colors duration-200 hover:border-[var(--color-brand-light)] hover:text-[var(--color-brand-light)]"
+          href={naverTalkUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-5 inline-flex cursor-pointer items-center gap-2 border-b border-[var(--color-primary)]/40 pb-1 text-base font-medium transition-colors duration-200 hover:border-[var(--color-brand)] hover:text-[var(--color-brand)]"
         >
           문의하기
           <span aria-hidden="true">&rarr;</span>
@@ -52,7 +76,7 @@ export default function Footer() {
             </p>
             <div className="mt-6 flex gap-3">
               <a
-                href="https://blog.naver.com/indeup_official"
+                href={naverBlogUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="인디업 네이버 블로그"
@@ -64,7 +88,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://indeup.tistory.com/"
+                href={tistoryUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="인디업 티스토리"
@@ -76,7 +100,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://www.youtube.com/@indeup"
+                href={youtubeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="인디업 유튜브"
@@ -88,7 +112,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://www.instagram.com/indeup.kr"
+                href={instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="인디업 인스타그램"
@@ -124,7 +148,7 @@ export default function Footer() {
                 고객지원
               </a>
               <a
-                href="https://brand.naver.com/indeup"
+                href={naverStoreUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="cursor-pointer text-white/80 transition-colors hover:text-white"
@@ -139,13 +163,23 @@ export default function Footer() {
               Contact
             </p>
             <a
-              href="tel:16685738"
+              href={`tel:${supportPhone.replace(/-/g, "")}`}
               className="mt-4 flex cursor-pointer items-center gap-2 text-2xl font-semibold tracking-[-0.02em] text-white transition-opacity hover:opacity-70"
             >
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M6.5 4h3l1.5 4.5-2 1.5a11 11 0 0 0 5 5l1.5-2 4.5 1.5v3a2 2 0 0 1-2 2C10.5 19.5 4.5 13.5 4.5 6a2 2 0 0 1 2-2z" />
               </svg>
-              1668-5738
+              {supportPhone}
+            </a>
+            <a
+              href={`mailto:${supportEmail}`}
+              className="mt-3 flex cursor-pointer items-center gap-2 text-sm text-white/70 transition-colors hover:text-white"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path d="M3 7l9 6 9-6" />
+              </svg>
+              {supportEmail}
             </a>
           </div>
         </div>
@@ -156,22 +190,32 @@ export default function Footer() {
           <div className="space-y-1">
             <LegalRow
               items={[
-                "스니처",
+                legalName,
                 <>
                   인디업 INDEUP<sup className="ml-0.5">&reg;</sup>
                 </>,
-                "고객센터 1668-5738",
+                supportPhoneDisplay,
               ]}
             />
             <LegalRow
               items={[
-                "대표 하민성",
-                "주소 경남 김해시 동북로473번길 385-14",
+                `대표 ${representativeName}`,
+                `주소 ${businessAddress.addressRegion} ${businessAddress.addressLocality} ${businessAddress.streetAddress}`,
                 <>&copy; {new Date().getFullYear()} INDEUP</>,
+              ]}
+            />
+            <LegalRow
+              items={[
+                `사업자등록번호 ${businessRegistrationNumber}`,
+                `통신판매업신고번호 ${mailOrderSalesNumber}`,
+                "호스팅 제공자 카페24(주)",
               ]}
             />
           </div>
           <div className="flex shrink-0 gap-4">
+            <a href="/terms/" className="cursor-pointer transition-colors hover:text-white/70">
+              이용약관
+            </a>
             <a href="/privacy/" className="cursor-pointer transition-colors hover:text-white/70">
               개인정보처리방침
             </a>

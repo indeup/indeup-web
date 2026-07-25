@@ -2,17 +2,20 @@
 
 import { useEffect, useState } from "react";
 import CardScroller from "@/components/CardScroller";
+import { matchesFilter, type GuideFilter } from "@/lib/guideSearch";
 
-type YoutubePost = {
+export type YoutubePost = {
   id: string;
   title: string;
   link: string;
   publishedAt: string;
   thumbnail: string | null;
   viewCount: number | null;
+  description: string;
+  categories: string[];
 };
 
-type FeedData = {
+export type YoutubeFeedData = {
   updatedAt: string;
   longform: YoutubePost[];
   shorts: YoutubePost[];
@@ -41,7 +44,22 @@ function formatViews(views: number | null): string | null {
   return `조회수 ${views.toLocaleString("ko-KR")}회`;
 }
 
-function VideoCard({ post, onPlay }: { post: YoutubePost; onPlay: (id: string) => void }) {
+/** Turns the real video title into a short, specific CTA instead of a generic "바로 재생하기" for every card. */
+function deriveCtaLabel(title: string, kind: "longform" | "shorts"): string {
+  const cleaned = title.replace(/#\S+/g, "").trim().replace(/\s+/g, " ");
+  const short = cleaned.length > 22 ? `${cleaned.slice(0, 22).trim()}…` : cleaned;
+  return kind === "shorts" ? `${short} 쇼츠 보기` : `${short} 영상 보기`;
+}
+
+function VideoCard({
+  post,
+  kind,
+  onPlay,
+}: {
+  post: YoutubePost;
+  kind: "longform" | "shorts";
+  onPlay: (id: string) => void;
+}) {
   const views = formatViews(post.viewCount);
   return (
     <button
@@ -53,7 +71,7 @@ function VideoCard({ post, onPlay }: { post: YoutubePost; onPlay: (id: string) =
         {/* eslint-disable-next-line @next/next/no-img-element -- thumbnail host is YouTube's CDN, not a fixed local asset next/image can validate. */}
         <img
           src={post.thumbnail ?? FALLBACK_THUMBNAIL}
-          alt=""
+          alt={`인디업 유튜브: ${post.title}`}
           loading="lazy"
           referrerPolicy="no-referrer"
           onError={(e) => {
@@ -89,8 +107,8 @@ function VideoCard({ post, onPlay }: { post: YoutubePost; onPlay: (id: string) =
           {post.title}
         </h3>
         <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-primary)]">
-          바로 재생하기
-          <span aria-hidden="true" className="inline-block transition-transform duration-200 group-hover:translate-x-1">
+          {deriveCtaLabel(post.title, kind)}
+          <span aria-hidden="true" className="inline-block shrink-0 transition-transform duration-200 group-hover:translate-x-1">
             &rarr;
           </span>
         </span>
@@ -156,8 +174,16 @@ function PlayerView({
   );
 }
 
-export default function YoutubeFeed({ kind }: { kind: "longform" | "shorts" }) {
-  const [data, setData] = useState<FeedData | null>(null);
+export default function YoutubeFeed({
+  kind,
+  filter,
+  initialData,
+}: {
+  kind: "longform" | "shorts";
+  filter?: GuideFilter;
+  initialData?: YoutubeFeedData | null;
+}) {
+  const [data, setData] = useState<YoutubeFeedData | null>(initialData ?? null);
   const [failed, setFailed] = useState(false);
   const [playingId, setPlayingId] = useState<string | null>(null);
 
@@ -169,25 +195,26 @@ export default function YoutubeFeed({ kind }: { kind: "longform" | "shorts" }) {
         try {
           const res = await fetch(url, { cache: "no-store" });
           if (!res.ok) continue;
-          const json = (await res.json()) as FeedData;
-          if (!cancelled) setData(json);
+          const json = (await res.json()) as YoutubeFeedData;
+          if (!cancelled && (json.longform?.length || json.shorts?.length)) setData(json);
           return;
         } catch {
           // try the next source
         }
       }
-      if (!cancelled) setFailed(true);
+      if (!cancelled && !initialData) setFailed(true);
     }
 
     load();
     return () => {
       cancelled = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const posts = data ? data[kind] : null;
+  const allPosts = data ? data[kind] : null;
 
-  if (failed || (posts && posts.length === 0)) {
+  if (failed || (allPosts && allPosts.length === 0)) {
     return (
       <div className="rounded-2xl border border-[var(--color-border)] bg-white p-8 text-center sm:p-10">
         <p className="text-base font-semibold text-[var(--color-primary)] sm:text-lg">
@@ -209,7 +236,7 @@ export default function YoutubeFeed({ kind }: { kind: "longform" | "shorts" }) {
     );
   }
 
-  if (!posts) {
+  if (!allPosts) {
     return (
       <div className="flex gap-6 overflow-hidden" aria-hidden="true">
         {Array.from({ length: 3 }).map((_, i) => (
@@ -221,16 +248,30 @@ export default function YoutubeFeed({ kind }: { kind: "longform" | "shorts" }) {
     );
   }
 
-  const playingPost = playingId ? posts.find((p) => p.id === playingId) : undefined;
+  const playingPost = playingId ? allPosts.find((p) => p.id === playingId) : undefined;
   if (playingPost) {
     return <PlayerView post={playingPost} kind={kind} onBack={() => setPlayingId(null)} />;
+  }
+
+  const posts = filter
+    ? allPosts.filter((p) => matchesFilter(filter, `${p.title} ${p.description ?? ""}`, p.categories ?? []))
+    : allPosts;
+
+  if (posts.length === 0) {
+    return (
+      <div className="rounded-2xl border border-dashed border-[var(--color-border)] p-8 text-center sm:p-10">
+        <p className="text-sm text-[var(--color-muted-foreground)] sm:text-base">
+          검색 조건에 맞는 {kind === "shorts" ? "쇼츠" : "영상"}이 없습니다.
+        </p>
+      </div>
+    );
   }
 
   return (
     <CardScroller
       items={posts}
       keyFor={(post) => post.id}
-      renderItem={(post) => <VideoCard post={post} onPlay={setPlayingId} />}
+      renderItem={(post) => <VideoCard post={post} kind={kind} onPlay={setPlayingId} />}
     />
   );
 }

@@ -15,7 +15,7 @@ export default function DimensionShowcase() {
   }
 
   return (
-    <section id="custom" className="bg-[var(--color-primary)] px-6 py-20 text-white sm:px-12 sm:py-28">
+    <section id="custom" className="bg-[var(--color-primary)] px-6 pb-[115px] pt-20 text-white sm:px-12 sm:py-28">
       <div className="mx-auto max-w-6xl">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
           <div>
@@ -70,22 +70,21 @@ export default function DimensionShowcase() {
             onClick={toggleMuted}
             aria-label={muted ? "영상 소리 켜기" : "영상 소리 끄기"}
             aria-pressed={!muted}
-            className="absolute bottom-6 right-6 inline-flex cursor-pointer items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-medium text-[var(--color-primary)] shadow-[0_4px_20px_rgba(0,0,0,0.35)] transition-transform duration-200 hover:scale-105 sm:bottom-8 sm:right-8"
+            className="absolute right-4 top-4 inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-white text-[var(--color-primary)] shadow-[0_4px_16px_rgba(0,0,0,0.3)] transition-transform duration-200 hover:scale-105 sm:right-5 sm:top-5"
           >
             {muted ? (
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <polygon points="4 9 9 9 13 5 13 19 9 15 4 15 4 9" />
                 <line x1="17" y1="9" x2="22" y2="14" />
                 <line x1="22" y1="9" x2="17" y2="14" />
               </svg>
             ) : (
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <polygon points="4 9 9 9 13 5 13 19 9 15 4 15 4 9" />
                 <path d="M17 8a5 5 0 0 1 0 8" />
                 <path d="M19.5 5.5a9 9 0 0 1 0 13" />
               </svg>
             )}
-            {muted ? "소리 켜기" : "소리 끄기"}
           </button>
         </div>
       </div>

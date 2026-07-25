@@ -1,3 +1,5 @@
+import { policyData } from "./policy";
+
 export type ProductFaq = { q: string; a: string };
 
 export type Product = {
@@ -22,8 +24,7 @@ export type Product = {
 
 export const naverStoreUrl = "https://brand.naver.com/indeup";
 
-const leadTime =
-  "주문 내용 확인 후 제작에 들어가며, 일반적으로 7~8영업일이 필요합니다. 주말과 공휴일은 제작 기간에서 제외되고, 주문량과 제품 사양에 따라 일정이 달라질 수 있습니다.";
+export const leadTime = `주문 내용 확인 후 제작에 들어가며, 일반적으로 ${policyData.productionDays}이 필요합니다. ${policyData.productionExcludes}은 제작 기간에서 제외되고, 주문량과 제품 사양에 따라 일정이 달라질 수 있습니다.`;
 
 const shipping =
   "배송 방법과 배송비는 제품과 지역에 따라 달라질 수 있어, 정확한 안내는 네이버 공식 스토어의 상품 상세 정보에서 확인할 수 있습니다.";
@@ -31,13 +32,12 @@ const shipping =
 const assembly =
   "조립에 필요한 부품과 설명서는 제품과 함께 제공됩니다. 조립 방법에 대한 자세한 안내는 고객지원 페이지 또는 네이버 공식 스토어의 상품 상세 정보에서 확인할 수 있습니다.";
 
-const warranty =
-  "인디업 책상은 3년 무상보증을 제공합니다. 보증 대상과 적용 조건은 고객지원 페이지의 보증 안내에서 확인할 수 있습니다.";
+export const warranty = `인디업 책상은 ${policyData.warrantyYears}년 무상보증을 제공합니다. 보증 대상과 적용 조건은 고객지원 페이지의 보증 안내에서 확인할 수 있습니다.`;
 
-const material =
+export const material =
   "아연도금 철제 프레임과 18mm 두께의 E0 등급 LPM 상판을 사용합니다.";
 
-const structure =
+export const structure =
   "프레임 연결 부위는 풀용접으로 이어 흔들림을 줄였고, 표면은 분체도장 후 고온에서 경화해 마감합니다. 바닥 높이 차이를 조정할 수 있는 회전형 수평 조절발을 기본으로 적용합니다.";
 
 const colorInfo =
@@ -76,11 +76,11 @@ export const products: Product[] = [
       },
       {
         q: "제작 기간은 얼마나 걸리나요?",
-        a: "일반적으로 7~8영업일이 필요합니다. 주말과 공휴일은 제외되며 주문량과 사양에 따라 달라질 수 있습니다.",
+        a: `일반적으로 ${policyData.productionDays}이 필요합니다. ${policyData.productionExcludes}은 제외되며 주문량과 사양에 따라 달라질 수 있습니다.`,
       },
       {
         q: "보증기간은 어떻게 되나요?",
-        a: "3년 무상보증을 제공합니다. 보증 대상과 조건은 고객지원 페이지에서 확인할 수 있습니다.",
+        a: `${policyData.warrantyYears}년 무상보증을 제공합니다. 보증 대상과 조건은 고객지원 페이지에서 확인할 수 있습니다.`,
       },
     ],
   },
@@ -114,7 +114,7 @@ export const products: Product[] = [
       },
       {
         q: "보증기간은 어떻게 되나요?",
-        a: "3년 무상보증을 제공합니다. 보증 대상과 조건은 고객지원 페이지에서 확인할 수 있습니다.",
+        a: `${policyData.warrantyYears}년 무상보증을 제공합니다. 보증 대상과 조건은 고객지원 페이지에서 확인할 수 있습니다.`,
       },
     ],
   },
@@ -148,7 +148,7 @@ export const products: Product[] = [
       },
       {
         q: "보증기간은 어떻게 되나요?",
-        a: "3년 무상보증을 제공합니다. 보증 대상과 조건은 고객지원 페이지에서 확인할 수 있습니다.",
+        a: `${policyData.warrantyYears}년 무상보증을 제공합니다. 보증 대상과 조건은 고객지원 페이지에서 확인할 수 있습니다.`,
       },
     ],
   },
@@ -182,7 +182,7 @@ export const products: Product[] = [
       },
       {
         q: "보증기간은 어떻게 되나요?",
-        a: "3년 무상보증을 제공합니다. 보증 대상과 조건은 고객지원 페이지에서 확인할 수 있습니다.",
+        a: `${policyData.warrantyYears}년 무상보증을 제공합니다. 보증 대상과 조건은 고객지원 페이지에서 확인할 수 있습니다.`,
       },
     ],
   },
@@ -216,7 +216,7 @@ export const products: Product[] = [
       },
       {
         q: "보증기간은 어떻게 되나요?",
-        a: "3년 무상보증을 제공합니다. 보증 대상과 조건은 고객지원 페이지에서 확인할 수 있습니다.",
+        a: `${policyData.warrantyYears}년 무상보증을 제공합니다. 보증 대상과 조건은 고객지원 페이지에서 확인할 수 있습니다.`,
       },
     ],
   },
@@ -251,7 +251,7 @@ export const products: Product[] = [
       },
       {
         q: "보증기간은 어떻게 되나요?",
-        a: "3년 무상보증을 제공합니다. 보증 대상과 조건은 고객지원 페이지에서 확인할 수 있습니다.",
+        a: `${policyData.warrantyYears}년 무상보증을 제공합니다. 보증 대상과 조건은 고객지원 페이지에서 확인할 수 있습니다.`,
       },
     ],
   },

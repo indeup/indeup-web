@@ -541,7 +541,7 @@ function formatDepthSpec(result: DimensionResult, smallestBase: number): SpecDis
 function formatHeightSpec(result: DimensionResult, defaultHeight: number): SpecDisplay {
   if (result.status === "infeasible" || result.status === "redirect") return { specLine: "-" };
   if (result.resolvedValue === defaultHeight) return { specLine: "기본사양" };
-  return { optionLine: `+${result.resolvedValue}mm 옵션추가` };
+  return { optionLine: `${result.resolvedValue}mm 옵션추가` };
 }
 
 export function checkFit(input: FitCheckInput): FitCheckOutcome {

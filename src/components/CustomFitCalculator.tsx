@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { checkAllProducts, diagnoseNoMatch, getGlobalBounds, type ProductMatch } from "@/lib/customFit";
+import { naverTalkUrl } from "@/lib/brand";
 
 /** Product photo(s) per product line + variant — "computer" desks additionally show the multi-tap adapter shot. */
 function getProductImages(product: ProductMatch["product"], variantKey: string): string[] {
@@ -417,10 +418,12 @@ export default function CustomFitCalculator() {
               </div>
             </div>
             <a
-              href="/#contact"
+              href={naverTalkUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className="mt-5 inline-flex min-h-[44px] cursor-pointer items-center gap-2 rounded-full bg-[var(--color-brand)] px-5 py-2.5 text-sm font-medium text-white transition-colors duration-200 hover:bg-[var(--color-brand-dark)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand)]"
             >
-              사이즈 제작 문의하기
+              네이버 톡톡으로 문의하기
               <span aria-hidden="true">&rarr;</span>
             </a>
           </div>

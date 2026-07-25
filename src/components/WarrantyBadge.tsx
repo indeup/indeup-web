@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { policyData } from "@/lib/policy";
 
 /**
  * Slot-machine style: cycles through 1 → target repeatedly (blurred, fast)
@@ -60,6 +61,10 @@ export default function WarrantyBadge() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // Positive bottom margin so the reveal starts while the section is
+    // still below the viewport — see Reveal.tsx for why triggering only
+    // after the element is already visible shows as a blank gap under a
+    // fast downward scroll on mobile.
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -67,13 +72,13 @@ export default function WarrantyBadge() {
           observer.disconnect();
         }
       },
-      { threshold: 0.4 }
+      { threshold: 0, rootMargin: "0px 0px 200px 0px" }
     );
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
-  const { display: years, phase } = useSlotCountUp(3, visible);
+  const { display: years, phase } = useSlotCountUp(policyData.warrantyYears, visible);
 
   return (
     <section className="bg-[var(--color-primary)] px-6 py-28 text-center text-white sm:px-12 sm:py-36">
@@ -106,7 +111,7 @@ export default function WarrantyBadge() {
           년.
         </p>
         <p className="mt-8 text-base font-medium uppercase tracking-[0.15em] text-white/60">
-          무료 교환 · 반품 · 배송
+          {policyData.damageSupport}
         </p>
       </div>
     </section>

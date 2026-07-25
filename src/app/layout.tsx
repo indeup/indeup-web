@@ -1,6 +1,18 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
+import ChatWidget from "@/components/ChatWidget";
 import "./globals.css";
+import {
+  siteUrl,
+  brandNameKo,
+  brandNameEn,
+  legalName,
+  supportPhone,
+  businessAddress,
+  logoUrl,
+  officialChannels,
+} from "@/lib/brand";
 
 // Pretendard covers Hangul + Latin in one variable file (weight 45–920);
 // Outfit/Work Sans have no Hangul glyphs, so Korean text was silently
@@ -12,7 +24,6 @@ const pretendard = localFont({
   display: "swap",
 });
 
-const siteUrl = "https://indeup.com";
 const title = "인디업 INDEUP 공식 홈페이지 | 10mm 맞춤 책상";
 // Describes only what's actually on the page today (hero, sizing video,
 // structure/warranty section) — no mention of guide/product pages that
@@ -50,10 +61,23 @@ export const metadata: Metadata = {
   description,
   alternates: {
     canonical: "/",
+    types: {
+      "application/rss+xml": "/rss.xml",
+    },
   },
   robots: {
     index: true,
     follow: true,
+  },
+  appleWebApp: {
+    capable: true,
+    title: brandNameKo,
+    statusBarStyle: "black-translucent",
+  },
+  formatDetection: {
+    // Real desk-size numbers throughout the site ("720mm", "1200mm") were
+    // getting linkified as tap-to-call phone numbers on iOS Safari.
+    telephone: false,
   },
   openGraph: {
     type: "website",
@@ -80,6 +104,24 @@ export const metadata: Metadata = {
   ...(Object.keys(verification).length > 0 && { verification }),
 };
 
+// Analytics IDs, same "only render when a real value is set via env"
+// discipline as the search-console verification tags above — no fake IDs
+// shipped in the static HTML.
+const gaId = process.env.GA_MEASUREMENT_ID;
+const clarityId = process.env.CLARITY_PROJECT_ID;
+const naverAnalyticsId = process.env.NAVER_ANALYTICS_ID;
+
+// Explicit rather than relying on the Next.js default: sets a real
+// device-width viewport for every phone/tablet, keeps pinch-zoom available
+// (never disable it — it's an accessibility requirement), and colors the
+// mobile browser's own address bar / status bar with the brand red so the
+// chrome doesn't read as a plain default-gray browser window.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#b32a2a",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -88,33 +130,24 @@ export default function RootLayout({
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "인디업",
-    alternateName: "INDEUP",
-    legalName: "스니처",
+    name: brandNameKo,
+    alternateName: brandNameEn,
+    legalName,
     url: siteUrl,
-    logo: `${siteUrl}/INDEUP_LOGO.svg`,
-    telephone: "1668-5738",
+    logo: logoUrl,
+    telephone: supportPhone,
     address: {
       "@type": "PostalAddress",
-      streetAddress: "동북로473번길 385-14",
-      addressLocality: "김해시",
-      addressRegion: "경남",
-      addressCountry: "KR",
+      ...businessAddress,
     },
-    sameAs: [
-      "https://brand.naver.com/indeup",
-      "https://blog.naver.com/indeup_official",
-      "https://indeup.tistory.com/",
-      "https://www.youtube.com/@indeup",
-      "https://www.instagram.com/indeup.kr",
-    ],
+    sameAs: [...officialChannels],
   };
 
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "인디업",
-    alternateName: "INDEUP",
+    name: brandNameKo,
+    alternateName: brandNameEn,
     url: siteUrl,
   };
 
@@ -131,8 +164,44 @@ export default function RootLayout({
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
+
+        {gaId && (
+          <>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} strategy="afterInteractive" />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${gaId}');`}
+            </Script>
+          </>
+        )}
+
+        {clarityId && (
+          <Script id="clarity-init" strategy="afterInteractive">
+            {`(function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "${clarityId}");`}
+          </Script>
+        )}
+
+        {naverAnalyticsId && (
+          <>
+            <Script src="//wcs.naver.net/wcslog.js" strategy="afterInteractive" />
+            <Script id="naver-analytics-init" strategy="afterInteractive">
+              {`if (!window.wcs_add) window.wcs_add = {};
+                window.wcs_add["wa"] = "${naverAnalyticsId}";
+                if (window.wcs) { wcs.inflow(); wcs_do(); }`}
+            </Script>
+          </>
+        )}
       </head>
-      <body className="flex min-h-dvh flex-col">{children}</body>
+      <body className="flex min-h-dvh flex-col">
+        {children}
+        <ChatWidget />
+      </body>
     </html>
   );
 }

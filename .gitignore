@@ -46,3 +46,8 @@ next-env.d.ts
 # stray local artifacts
 /INDEUP
 /9.gif
+/verify-*.png
+
+# Playwright
+/playwright-report/
+/test-results/

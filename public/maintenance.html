@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>잠시 후 다시 찾아주세요 | 인디업 INDEUP</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #ffffff;
+    color: #171717;
+    font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", "Apple SD Gothic Neo", Arial, sans-serif;
+  }
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .card {
+    width: 100%;
+    max-width: 640px;
+    text-align: center;
+  }
+  .logo {
+    font-size: clamp(24px, 3vw, 34px);
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: #171717;
+  }
+  .logo span {
+    color: #b32a2a;
+  }
+  .tagline {
+    margin-top: 8px;
+    font-size: clamp(11px, 1vw, 14px);
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #a3a3a3;
+  }
+  .spinner {
+    width: clamp(34px, 4vw, 52px);
+    height: clamp(34px, 4vw, 52px);
+    margin: clamp(36px, 5vw, 56px) auto clamp(28px, 4vw, 40px);
+    border-radius: 50%;
+    border: 3px solid #e5e5e5;
+    border-top-color: #b32a2a;
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  h1 {
+    margin: 0 0 14px;
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 700;
+    color: #171717;
+  }
+  p {
+    margin: 0;
+    font-size: clamp(15px, 1.6vw, 19px);
+    line-height: 1.8;
+    color: #737373;
+  }
+  .contact {
+    margin-top: clamp(28px, 4vw, 44px);
+    padding-top: clamp(20px, 3vw, 28px);
+    border-top: 1px solid #e5e5e5;
+    font-size: clamp(14px, 1.4vw, 17px);
+    color: #737373;
+  }
+  .contact a {
+    color: #b32a2a;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .contact .divider {
+    margin: 0 10px;
+    color: #d4d4d4;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .spinner { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">INDE<span>UP</span></div>
+    <div class="tagline">Made to Fit Your Space</div>
+    <div class="spinner" role="presentation"></div>
+    <h1>더 나은 모습으로 찾아뵙기 위해<br>잠시 준비 중입니다</h1>
+    <p>시스템 업데이트가 진행되고 있습니다.<br>보통 5~10분 이내에 다시 정상적으로 이용하실 수 있어요.<br>잠시 후 새로고침 해주세요.</p>
+    <div class="contact">
+      급하신 문의는
+      <br>
+      고객센터 <a href="tel:16685738">1668-5738</a>
+      <span class="divider">|</span>
+      <a href="https://talk.naver.com/profile/wcs0s3" target="_blank" rel="noreferrer noopener">네이버 톡톡</a>으로 연락 주세요.
+    </div>
+  </div>
+</body>
+</html>

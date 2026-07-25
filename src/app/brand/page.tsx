@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SizeCta from "@/components/SizeCta";
 import Reveal from "@/components/Reveal";
 import SectionNav from "@/components/SectionNav";
 import TextReveal from "@/components/TextReveal";
@@ -128,7 +129,7 @@ const qualityStandards = [
   {
     num: "06",
     title: "3년 무상보증",
-    body: null, // rendered separately to embed the /#contact link
+    body: null, // rendered separately to embed the 고객지원 안내 link
   },
 ];
 
@@ -283,6 +284,12 @@ export default function BrandPage() {
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    // Matches the `{ "@id": ... }` reference in webPageJsonLd.breadcrumb
+    // below — without this, that reference points at nothing, and Google
+    // treats the WebPage's breadcrumb as present-but-empty rather than
+    // resolving it to this list (the exact "itemListElement 입력란이
+    // 누락되었습니다" error Search Console reported for this page).
+    "@id": `${siteUrl}/brand/#breadcrumb`,
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "홈", item: siteUrl },
       { "@type": "ListItem", position: 2, name: "브랜드", item: `${siteUrl}/brand/` },
@@ -407,7 +414,7 @@ export default function BrandPage() {
         </section>
 
         {/* 2. WHO WE ARE — split editorial: heading left, flowing copy right */}
-        <section id="who-we-are" className="border-t border-[var(--color-border)] px-6 py-14 sm:px-12 sm:py-20">
+        <section id="who-we-are" className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-20">
           <Reveal className="mx-auto max-w-6xl">
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-[320px_1fr] lg:gap-16">
               <div>
@@ -440,7 +447,7 @@ export default function BrandPage() {
         </section>
 
         {/* 3. MAKER & SELLER — horizontal flow ribbon */}
-        <section id="maker-seller" className="border-t border-[var(--color-border)] px-6 py-14 sm:px-12 sm:py-20">
+        <section id="maker-seller" className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-20">
           <Reveal className="mx-auto max-w-6xl">
             <div className="max-w-3xl">
               <Eyebrow>Maker &amp; Seller</Eyebrow>
@@ -484,7 +491,7 @@ export default function BrandPage() {
         </section>
 
         {/* 4. MADE TO FIT — split: narrative left, worked example + quote right */}
-        <section id="made-to-fit" className="border-t border-[var(--color-border)] px-6 py-14 sm:px-12 sm:py-20">
+        <section id="made-to-fit" className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-20">
           <Reveal className="mx-auto max-w-6xl">
             <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
               <div>
@@ -542,14 +549,14 @@ export default function BrandPage() {
             </dl>
 
             <p className="mt-8 text-sm text-[var(--color-muted-foreground)]">
-              제품별 조정 가능 범위는 <InlineLink href="/#custom">맞춤 제작 소개</InlineLink>에서 더 확인할 수
+              제품별 조정 가능 범위는 <InlineLink href="/custom-fit/">맞춤 제작 소개</InlineLink>에서 더 확인할 수
               있습니다.
             </p>
           </Reveal>
         </section>
 
         {/* 5. OUR STANDARD — asymmetric bento, 3-year card featured */}
-        <section id="our-standard" className="grain relative overflow-hidden bg-[var(--color-primary)] px-6 py-14 text-white sm:px-12 sm:py-20">
+        <section id="our-standard" className="grain relative overflow-hidden bg-[var(--color-primary)] px-6 py-16 text-white sm:px-12 sm:py-20">
           <Reveal className="relative mx-auto max-w-6xl">
             <div className="max-w-3xl">
               <Eyebrow>
@@ -597,7 +604,7 @@ export default function BrandPage() {
                       <>
                         보증 범위와 적용 조건은 제품 및{" "}
                         <a
-                          href="/#contact"
+                          href="/support/"
                           className="cursor-pointer border-b border-white/40 font-medium text-white transition-colors duration-200 hover:border-[var(--color-brand-light)] hover:text-[var(--color-brand-light)]"
                         >
                           고객지원 안내
@@ -613,7 +620,7 @@ export default function BrandPage() {
         </section>
 
         {/* 6. HOW WE MAKE — connected vertical timeline */}
-        <section id="how-we-make" className="px-6 py-14 sm:px-12 sm:py-20">
+        <section id="how-we-make" className="px-6 py-16 sm:px-12 sm:py-20">
           <Reveal className="mx-auto max-w-6xl">
             <div className="max-w-3xl">
               <Eyebrow>How We Make</Eyebrow>
@@ -652,7 +659,7 @@ export default function BrandPage() {
         </section>
 
         {/* 7. OFFICIAL BRAND — trust badge + CTA */}
-        <section id="official-brand" className="border-t border-[var(--color-border)] px-6 py-14 sm:px-12 sm:py-20">
+        <section id="official-brand" className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-20">
           <Reveal className="mx-auto max-w-6xl">
             <div className="max-w-3xl">
               <Eyebrow>Official Brand</Eyebrow>
@@ -696,7 +703,7 @@ export default function BrandPage() {
         </section>
 
         {/* 8. OUR COLLECTION — horizontal scroll carousel */}
-        <section id="our-collection" className="border-t border-[var(--color-border)] px-6 py-14 sm:px-12 sm:py-20">
+        <section id="our-collection" className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-20">
           <Reveal className="mx-auto max-w-6xl">
             <div className="max-w-3xl">
               <Eyebrow>Our Collection</Eyebrow>
@@ -728,7 +735,7 @@ export default function BrandPage() {
         </section>
 
         {/* 9. OUR PRINCIPLE — manifesto split: big heading left, statement right */}
-        <section id="our-principle" className="grain relative overflow-hidden bg-[var(--color-primary)] px-6 py-14 text-white sm:px-12 sm:py-20">
+        <section id="our-principle" className="grain relative overflow-hidden bg-[var(--color-primary)] px-6 py-16 text-white sm:px-12 sm:py-20">
           <Reveal className="relative mx-auto max-w-6xl">
             <Eyebrow>
               <span className="text-white/50">Our Principle</span>
@@ -775,7 +782,7 @@ export default function BrandPage() {
         </section>
 
         {/* 10. BUILT WITH EXPERIENCE — narrative + example chips */}
-        <section id="experience" className="px-6 py-14 sm:px-12 sm:py-20">
+        <section id="experience" className="px-6 py-16 sm:px-12 sm:py-20">
           <Reveal className="mx-auto max-w-6xl">
             <div className="max-w-3xl">
               <Eyebrow>Built with Experience</Eyebrow>
@@ -812,7 +819,7 @@ export default function BrandPage() {
         </section>
 
         {/* 11. OFFICIAL CHANNELS — single-row ribbon on large screens */}
-        <section id="channels" className="border-t border-[var(--color-border)] px-6 py-14 sm:px-12 sm:py-20">
+        <section id="channels" className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-20">
           <Reveal className="mx-auto max-w-6xl">
             <div className="max-w-3xl">
               <Eyebrow>Official Channels</Eyebrow>
@@ -869,7 +876,7 @@ export default function BrandPage() {
                 제품 보기
               </ArrowButton>
               <a
-                href="/#custom"
+                href="/custom-fit/"
                 className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-white transition-colors duration-200 hover:border-white"
               >
                 맞춤 제작 알아보기
@@ -889,7 +896,7 @@ export default function BrandPage() {
         </section>
 
         {/* 13. FAQ — two columns on large screens */}
-        <section id="faq" className="px-6 py-14 sm:px-12 sm:py-20">
+        <section id="faq" className="px-6 py-16 sm:px-12 sm:py-20">
           <Reveal className="mx-auto max-w-6xl">
             <h2 className="font-bold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
               인디업 브랜드에 대해 자주 묻는 질문
@@ -917,6 +924,7 @@ export default function BrandPage() {
         </section>
       </main>
 
+      <SizeCta />
       <Footer />
     </div>
   );

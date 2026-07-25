@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SizeCta from "@/components/SizeCta";
 import Reveal from "@/components/Reveal";
 import { naverStoreUrl } from "@/lib/products";
 
@@ -51,7 +52,7 @@ const faqs = [
   },
   {
     q: "배송 중 파손되면 어떻게 하나요?",
-    a: "포장 박스와 제품 파손 부위를 사진으로 남겨주신 뒤, 주문자명 또는 주문번호와 함께 네이버 톡톡으로 보내주세요. 사진은 빠른 확인을 위한 절차일 뿐, 파손이 확인되면 예외 없이 무료로 교환해 드립니다.",
+    a: "포장 박스와 제품 파손 부위를 사진으로 남겨주신 뒤, 주문자명 또는 주문번호와 함께 네이버 톡톡으로 보내주세요. 배송 중 파손이나 제작 오류로 확인되면 무료로 교환해 드립니다.",
   },
   {
     q: "부품이 누락되었어요.",
@@ -264,7 +265,7 @@ export default function SupportPage() {
         </section>
 
         {/* 문의 유형 선택 — 무엇으로 왔는지 먼저 고르면 해당 안내로 바로 이동 */}
-        <section className="grain relative overflow-hidden border-t border-white/10 px-6 py-14 sm:px-12 sm:py-16">
+        <section className="grain relative overflow-hidden border-t border-white/10 px-6 py-16 sm:px-12 sm:py-16">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute right-0 top-1/3 h-[420px] w-[420px] translate-x-1/3 rounded-full bg-[var(--color-brand)]/10 blur-[120px]"
@@ -318,7 +319,7 @@ export default function SupportPage() {
         </section>
 
         {/* 주문·배송 확인 + 디지털 보증서 — 짧고 상호보완적인 두 안내를 나란히 배치 */}
-        <section className="grain relative overflow-hidden border-t border-white/10 px-6 py-14 sm:px-12 sm:py-16">
+        <section className="grain relative overflow-hidden border-t border-white/10 px-6 py-16 sm:px-12 sm:py-16">
           <Reveal className="relative mx-auto grid max-w-6xl grid-cols-1 gap-6 sm:grid-cols-2">
             <div
               id="order-shipping"
@@ -381,7 +382,7 @@ export default function SupportPage() {
         </section>
 
         {/* 파손·누락·A/S 문의 */}
-        <section id="damage-as" className="grain relative scroll-mt-24 overflow-hidden border-t border-white/10 px-6 py-14 sm:px-12 sm:py-16">
+        <section id="damage-as" className="grain relative scroll-mt-24 overflow-hidden border-t border-white/10 px-6 py-16 sm:px-12 sm:py-16">
           <Reveal className="relative mx-auto max-w-3xl">
             <div className="flex items-center gap-3">
               <IconBadge>
@@ -401,9 +402,9 @@ export default function SupportPage() {
                 <IconShieldCheck />
               </span>
               <div>
-                <p className="text-base font-bold text-white sm:text-lg">확인 후, 무조건 무료교환</p>
+                <p className="text-base font-bold text-white sm:text-lg">파손·하자 확인 시 무료 교환</p>
                 <p className="mt-1.5 text-sm leading-6 text-white/70 sm:text-base">
-                  사진은 빠르고 정확한 확인을 위한 절차일 뿐입니다. 파손이나 하자가 확인되면 예외 없이 무료로
+                  사진은 빠르고 정확한 확인을 위한 절차일 뿐입니다. 배송 파손이나 제작 하자로 확인되면 무료로
                   교환해 드리니 안심하고 문의해 주세요.
                 </p>
               </div>
@@ -428,7 +429,7 @@ export default function SupportPage() {
         </section>
 
         {/* FAQ */}
-        <section className="grain relative overflow-hidden border-t border-white/10 px-6 py-14 sm:px-12 sm:py-16">
+        <section className="grain relative overflow-hidden border-t border-white/10 px-6 py-16 sm:px-12 sm:py-16">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute bottom-0 left-1/4 h-[380px] w-[380px] translate-y-1/3 rounded-full bg-[var(--color-brand)]/[0.08] blur-[120px]"
@@ -458,6 +459,7 @@ export default function SupportPage() {
         </section>
       </main>
 
+      <SizeCta />
       <Footer />
     </div>
   );

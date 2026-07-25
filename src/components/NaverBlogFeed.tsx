@@ -2,17 +2,20 @@
 
 import { useEffect, useState } from "react";
 import CardScroller from "@/components/CardScroller";
+import { matchesFilter, type GuideFilter } from "@/lib/guideSearch";
 
-type BlogPost = {
+export type BlogPost = {
   id: string;
   title: string;
   link: string;
   pubDate: string;
   summary: string;
   thumbnail: string;
+  tags: string[];
+  categories: string[];
 };
 
-type FeedData = {
+export type BlogFeedData = {
   updatedAt: string;
   posts: BlogPost[];
 };
@@ -46,7 +49,7 @@ function BlogCard({ post }: { post: BlogPost }) {
       {/* eslint-disable-next-line @next/next/no-img-element -- thumbnail host is Naver's CDN and varies per post, not a fixed local asset next/image can validate. */}
       <img
         src={post.thumbnail}
-        alt=""
+        alt={`인디업 블로그: ${post.title}`}
         loading="lazy"
         referrerPolicy="no-referrer"
         onError={(e) => {
@@ -87,8 +90,14 @@ function CardSkeleton() {
   );
 }
 
-export default function NaverBlogFeed() {
-  const [data, setData] = useState<FeedData | null>(null);
+export default function NaverBlogFeed({
+  filter,
+  initialData,
+}: {
+  filter?: GuideFilter;
+  initialData?: BlogFeedData | null;
+}) {
+  const [data, setData] = useState<BlogFeedData | null>(initialData ?? null);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
@@ -99,20 +108,23 @@ export default function NaverBlogFeed() {
         try {
           const res = await fetch(url, { cache: "no-store" });
           if (!res.ok) continue;
-          const json = (await res.json()) as FeedData;
-          if (!cancelled) setData(json);
+          const json = (await res.json()) as BlogFeedData;
+          // Only replace the build-time snapshot if this fetch actually
+          // found something — never downgrade to empty on a bad response.
+          if (!cancelled && json.posts?.length) setData(json);
           return;
         } catch {
           // try the next source
         }
       }
-      if (!cancelled) setFailed(true);
+      if (!cancelled && !initialData) setFailed(true);
     }
 
     load();
     return () => {
       cancelled = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (failed || (data && data.posts.length === 0)) {
@@ -149,9 +161,25 @@ export default function NaverBlogFeed() {
     );
   }
 
+  const posts = filter
+    ? data.posts.filter((p) =>
+        matchesFilter(filter, `${p.title} ${p.summary} ${(p.tags ?? []).join(" ")}`, p.categories ?? [])
+      )
+    : data.posts;
+
+  if (posts.length === 0) {
+    return (
+      <div className="rounded-2xl border border-dashed border-[var(--color-border)] p-8 text-center sm:p-10">
+        <p className="text-sm text-[var(--color-muted-foreground)] sm:text-base">
+          검색 조건에 맞는 네이버 블로그 글이 없습니다.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <CardScroller items={data.posts} keyFor={(post) => post.id} renderItem={(post) => <BlogCard post={post} />} />
+      <CardScroller items={posts} keyFor={(post) => post.id} renderItem={(post) => <BlogCard post={post} />} />
       <p className="mt-6 text-center text-xs text-[var(--color-muted-foreground)]">
         네이버 블로그 글은 하루 4회 자동으로 갱신됩니다.
       </p>

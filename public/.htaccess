@@ -12,10 +12,61 @@
 Options -Indexes -MultiViews
 IndexIgnore *
 
+# ── 서버 내부 정보 노출 최소화 ─────────────────────────────────────
+# ETag는 파일의 inode 번호를 포함해 서버 내부 구조를 유추하는 데 쓰일
+# 수 있습니다. 캐싱은 이미 Last-Modified로 충분히 동작합니다.
+FileETag None
+
 # ── 민감 파일 접근 차단 ────────────────────────────────────────────
+# FilesMatch는 파일명(예: "config")만 검사하므로 ".git/config"처럼 숨김
+# "디렉터리 안의" 파일은 못 걸러냅니다 — 아래 mod_rewrite 규칙으로 경로
+# 전체에 ".git/", ".env" 등이 포함된 요청 자체를 차단해 이 구멍을
+# 막습니다 (지금은 .git 폴더가 배포되지 않지만, 실수로 올라가더라도
+# 저장소 내용이 그대로 노출되는 것을 막기 위한 안전장치입니다).
 <FilesMatch "(^\.|\.(env|git|gitignore|map|log|bak|sql|config|lock)$)">
   Require all denied
 </FilesMatch>
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_URI} (^|/)\.(git|svn|env|hg)(/|$) [NC]
+  RewriteRule ^ - [F,L]
+</IfModule>
+
+# ── 알려진 취약점 스캐너 차단 ──────────────────────────────────────
+# 이 사이트엔 해당 취약점이 존재하지 않지만(정적 사이트), 자동화된
+# 스캐너의 무의미한 반복 요청을 조기에 차단해 불필요한 트래픽을 줄입니다.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP_USER_AGENT} (sqlmap|nikto|nessus|acunetix|nmap|masscan|zgrab|w3af|dirbuster) [NC]
+  RewriteRule ^ - [F,L]
+</IfModule>
+
+# ── 존재하지 않는 서버 실행 파일 차단 ─────────────────────────────────
+# 이 사이트에는 PHP·ASP 등 서버 실행 코드가 전혀 없습니다(HTML·CSS·JS만
+# 배포). 워드프레스 취약점을 노리는 봇들이 자동으로 두드리는 확장자를
+# 미리 차단해 불필요한 요청 처리를 줄입니다.
+<FilesMatch "\.(php|php[0-9]|phtml|asp|aspx|cgi|pl|sh)$">
+  Require all denied
+</FilesMatch>
+
+# ── 비정상 HTTP 메서드 차단 ────────────────────────────────────────
+<LimitExcept GET POST HEAD OPTIONS>
+  Require all denied
+</LimitExcept>
+
+# ── 이미지·영상 무단 도용(핫링크) 방지 ────────────────────────────────
+# 다른 사이트가 인디업 서버의 이미지·영상 URL을 직접 자기 페이지에
+# 끌어다 쓰면 트래픽(대역폭)을 대신 소모하게 됩니다. 검색엔진 이미지
+# 수집과 직접 주소 접속(리퍼러 없음)은 그대로 허용합니다.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP_REFERER} !^$
+  RewriteCond %{HTTP_REFERER} !^https?://(www\.)?indeup\.com [NC]
+  RewriteCond %{HTTP_REFERER} !^https?://([a-z0-9-]+\.)?google\.[a-z.]+ [NC]
+  RewriteCond %{HTTP_REFERER} !^https?://([a-z0-9-]+\.)?naver\.com [NC]
+  RewriteCond %{HTTP_REFERER} !^https?://([a-z0-9-]+\.)?bing\.com [NC]
+  RewriteRule \.(mp4|mov|webm)$ - [F,L]
+</IfModule>
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
@@ -35,14 +86,87 @@ IndexIgnore *
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+  Header always set X-Permitted-Cross-Domain-Policies "none"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
 
-  # Instagram 임베드(iframe)와 Next.js 하이드레이션 인라인 스크립트를
-  # 허용하는 선에서 나머지 출처는 차단합니다.
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.instagram.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self'; frame-src https://www.instagram.com; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+  # Instagram·유튜브 임베드(iframe), GA4·Clarity·네이버 애널리틱스
+  # 추적 스크립트, Next.js 하이드레이션 인라인 스크립트를 허용하는 선에서
+  # 나머지 출처는 차단합니다. (유튜브를 frame-src에서 빠뜨렸던 적이 있어
+  # 책상 가이드 페이지의 영상·쇼츠 재생이 CSP에 막혀 깨진 화면으로
+  # 보였던 적이 있고, 마찬가지로 애널리틱스 스크립트 도메인을
+  # script-src/connect-src에 빠뜨리면 추적 자체가 조용히 실패합니다 —
+  # 새 외부 스크립트를 추가할 때마다 이 목록도 같이 업데이트해야 합니다.)
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.instagram.com https://www.googletagmanager.com https://*.clarity.ms https://wcs.naver.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self'; frame-src https://www.instagram.com https://www.youtube.com https://www.youtube-nocookie.com; connect-src 'self' https://raw.githubusercontent.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://*.clarity.ms https://wcs.naver.net https://cc.naver.com https://*.workers.dev; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+</IfModule>
+
+# ── RSS Content-Type 강제 ─────────────────────────────────────────
+# 정적 호스팅이 .xml 확장자를 기본값(application/xml)으로 서빙하면서,
+# 네이버 서치어드바이저의 RSS 제출 검증이 "형식이 올바르지 않다"며
+# 거부하는 문제가 있었습니다. RSS 표준 MIME 타입을 명시적으로 지정합니다.
+<FilesMatch "^(rss|naver-rss)\.xml$">
+  ForceType application/rss+xml
+</FilesMatch>
+
+# ── 전자명함(vCard) Content-Type 강제 ────────────────────────────────
+# 이 확장자를 서버 기본값(application/octet-stream 등)으로 서빙하면
+# 휴대폰이 "연락처 추가" 대화상자 대신 그냥 파일 다운로드로 처리합니다.
+<FilesMatch "\.vcf$">
+  ForceType text/vcard
+</FilesMatch>
+
+# ── 명함 이미지·연락처 캐시 정책 ──────────────────────────────────────
+# 내용이 자주 바뀔 수 있는 파일이라, 오래 캐시되어 방문자가 구버전을
+# 계속 받는 일이 없도록 짧게 유지합니다.
+<IfModule mod_headers.c>
+  <FilesMatch "^(contact\.vcf|indeup-business-card\.png)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# ── 캐시 정책 ──────────────────────────────────────────────────────
+# _next/static 파일명에는 빌드 해시가 포함되어 내용이 바뀌면 파일명도
+# 바뀌므로 영구 캐시가 안전합니다. 반면 HTML은 매번 새로 확인해야
+# 재배포 직후에도 방문자(특히 모바일 브라우저)가 이전 페이지를 계속
+# 보는 문제가 생기지 않습니다.
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "\.(xml|txt)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
 </IfModule>
 
 # ── 404 처리 ───────────────────────────────────────────────────────
 ErrorDocument 404 /404.html
+
+# ── 배포 중 점검 모드 ──────────────────────────────────────────────
+# FTP로 파일을 하나씩 순차 업로드하는 방식이라(원자적 스왑 불가), 업로드가
+# 진행되는 몇 초~몇 분 동안 새 파일과 이전 파일이 뒤섞여 방문자에게 깨진
+# 화면이 보일 수 있습니다. 배포 스크립트가 업로드 시작 직전에 루트에
+# maintenance.flag 파일을 먼저 올리고, 모든 파일 업로드가 끝난 뒤 이
+# 파일을 가장 마지막에 삭제합니다 — 그 사이 모든 요청은 자체완결형(외부
+# 리소스 없음) 점검 안내 페이지로 응답합니다. maintenance.html 자신은
+# 제외해야 무한 리다이렉트 루프가 생기지 않습니다.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{DOCUMENT_ROOT}/maintenance.flag -f
+  RewriteCond %{REQUEST_URI} !^/maintenance\.html$
+  RewriteRule ^ - [R=503,L]
+</IfModule>
+ErrorDocument 503 /maintenance.html
+<IfModule mod_headers.c>
+  <Files "maintenance.html">
+    Header set Cache-Control "no-store"
+  </Files>
+</IfModule>
 
 # ── .well-known 은 인증서/소유확인용이라 절대 차단하지 않음 ──────────

@@ -11,6 +11,7 @@
 import { writeFile, readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import { matchCategories } from "./categorize.mjs";
 
 const RSS_URL = "https://rss.blog.naver.com/indeup_official.xml";
 const MAX_POSTS = 12;
@@ -60,18 +61,25 @@ function parseItems(xml) {
       const guid = extractTag(block, "guid") || link;
       const pubDateRaw = extractTag(block, "pubDate");
       const description = extractTag(block, "description");
+      const tagRaw = decodeEntities(extractTag(block, "tag"));
 
       const pubDate = pubDateRaw ? new Date(pubDateRaw) : null;
 
       if (!title || !link || !pubDate || Number.isNaN(pubDate.getTime())) return null;
+
+      const summary = extractSummary(description);
+      const tags = tagRaw ? tagRaw.split(",").map((t) => t.trim()).filter(Boolean) : [];
+      const categories = matchCategories([title, tags.join(" ")].join(" "));
 
       return {
         id: guid,
         title,
         link,
         pubDate: pubDate.toISOString(),
-        summary: extractSummary(description),
+        summary,
         thumbnail: extractThumbnail(description) || FALLBACK_THUMBNAIL,
+        tags,
+        categories,
       };
     })
     .filter((item) => item !== null);

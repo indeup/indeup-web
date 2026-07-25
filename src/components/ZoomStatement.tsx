@@ -1,6 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+import Image from "next/image";
+import { useSmoothScrollProgress } from "@/lib/useSmoothScrollProgress";
+import { useStaticFallback } from "@/lib/useStaticFallback";
+import Reveal from "@/components/Reveal";
 
 const captionLines = [
   ["매일 앉는 자리일수록,", "더 정확해야 합니다."],
@@ -23,33 +27,24 @@ function easeInOutCubic(t: number) {
 
 function PinnedZoom() {
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const [progress, setProgress] = useState(0);
 
   // Position is handled by native `position: sticky` below — the browser
   // pins/releases it in perfect sync with scroll in both directions, with
   // none of the one-frame lag a JS-computed fixed/absolute switch had (that
   // lag showed up as a snap on pin-in and a gap of page background on
-  // release). This effect only needs to read scroll position to drive the
-  // content reveal.
-  useEffect(() => {
-    function update() {
-      const el = wrapperRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const scrollable = Math.max(rect.height - vh, 0);
-      setProgress(
-        scrollable > 0 ? Math.min(Math.max(-rect.top / scrollable, 0), 1) : 0
-      );
-    }
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-    };
-  }, []);
+  // release). `progress` itself eases toward the raw scroll fraction rather
+  // than snapping to it — on a touchscreen, the finger moves the page
+  // exactly 1:1, and mapping that straight onto the zoom/reveal made it feel
+  // mechanically rigid; easing restores the lag a scroll-driven animation is
+  // expected to have.
+  const progress = useSmoothScrollProgress(() => {
+    const el = wrapperRef.current;
+    if (!el) return 0;
+    const rect = el.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const scrollable = Math.max(rect.height - vh, 0);
+    return scrollable > 0 ? Math.min(Math.max(-rect.top / scrollable, 0), 1) : 0;
+  });
 
   // Phase 0 (0 -> 0.12): hold — headline sits still at full size so it's
   // actually readable before anything starts moving.
@@ -70,10 +65,10 @@ function PinnedZoom() {
   const bgOpacity = Math.min(Math.max((progress - 0.4) / 0.16, 0), 1);
 
   return (
-    <div id="brand" ref={wrapperRef} className="relative" style={{ height: `${SCROLL_SPAN_VH}dvh` }}>
+    <div id="brand" ref={wrapperRef} className="relative" style={{ height: `calc(${SCROLL_SPAN_VH} * var(--vh-unit))` }}>
       <div
         className="sticky top-0 w-full overflow-hidden bg-[var(--color-primary)]"
-        style={{ height: "100dvh" }}
+        style={{ height: "calc(100 * var(--vh-unit))" }}
       >
         <div
           className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-6"
@@ -89,7 +84,7 @@ function PinnedZoom() {
           <h2
             className="text-center font-extrabold leading-[1.05] tracking-[-0.03em]"
             style={{
-              fontSize: "clamp(2.25rem, 6vw, 5rem)",
+              fontSize: "clamp(1.75rem, 6vw, 5rem)",
               transform: `scale(${textScale})`,
               transition: "transform 200ms ease-out",
               backgroundImage: photoUrl,
@@ -185,40 +180,47 @@ function PinnedZoom() {
 /** Reduced-motion fallback: the end state as a normal static block, no scroll-linked scaling. */
 function StaticStatement() {
   return (
-    <section id="brand" className="bg-[var(--color-primary)] px-6 py-32 text-center text-white sm:px-12 sm:py-40">
-      <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/50">
-        <span className="text-[var(--color-brand-light)]">01</span> · Indeup Design Principle
-      </p>
-      <div className="mx-auto mt-4 inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-[var(--color-primary)]">
-        Made in Korea
-      </div>
-      <h2
-        className="mx-auto mt-6 max-w-4xl font-bold leading-[1.1] tracking-[-0.03em]"
-        style={{ fontSize: "clamp(2.25rem, 5.5vw, 4.5rem)" }}
-      >
-        Precision-Fit
-        <br />
-        Desk Solutions
-      </h2>
-      <div className="mx-auto mt-8 flex max-w-xl flex-col gap-2">
-        {captionLines.map((block) => (
-          <p key={block[0]} className="text-base leading-7 text-white/60">
-            {block.join(" ")}
-          </p>
-        ))}
-      </div>
+    <section id="brand" className="bg-[var(--color-primary)] px-6 py-32 text-white sm:px-12 sm:py-40">
+      <Reveal>
+        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/50">
+          <span className="text-[var(--color-brand-light)]">01</span> · Indeup Design Principle
+        </p>
+        <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-[var(--color-primary)]">
+          Made in Korea
+        </div>
+        <h2
+          className="mt-6 max-w-4xl font-bold leading-[1.1] tracking-[-0.03em]"
+          style={{ fontSize: "clamp(1.75rem, 5.5vw, 4.5rem)" }}
+        >
+          Precision-Fit
+          <br />
+          Desk Solutions
+        </h2>
+        <div className="mt-8 flex max-w-xl flex-col gap-2">
+          {captionLines.map((block) => (
+            <p key={block[0]} className="text-base leading-7 text-white/60">
+              {block.join(" ")}
+            </p>
+          ))}
+        </div>
+        {/* Mobile only — desktop already shows the photo via the pinned-zoom
+            background, so this static fallback is the one place mobile
+            visitors never see it without this image. */}
+        <div className="relative mt-8 aspect-[4/3] w-full overflow-hidden rounded-2xl shadow-[0_12px_32px_rgba(0,0,0,0.35)] sm:hidden">
+          <Image
+            src="/indeup_series.jpg"
+            alt="인디업 책상 시리즈"
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+        </div>
+      </Reveal>
     </section>
   );
 }
 
 export default function ZoomStatement() {
-  const [reducedMotion, setReducedMotion] = useState(false);
-
-  useEffect(() => {
-    setReducedMotion(
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    );
-  }, []);
-
-  return reducedMotion ? <StaticStatement /> : <PinnedZoom />;
+  const useStatic = useStaticFallback();
+  return useStatic ? <StaticStatement /> : <PinnedZoom />;
 }

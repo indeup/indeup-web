@@ -57,8 +57,21 @@ export default function InstagramReels() {
   const firstCardRef = useRef<HTMLDivElement>(null);
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
+  // Hidden on mobile by request — desktop keeps it. Checked in JS (not just
+  // a `hidden` CSS class) so the embed script and its iframes never load on
+  // mobile at all, rather than loading invisibly.
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const query = window.matchMedia("(max-width: 767px)");
+    setIsMobile(query.matches);
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) return;
     function process() {
       window.instgrm?.Embeds.process();
     }
@@ -81,7 +94,7 @@ export default function InstagramReels() {
     script.async = true;
     script.addEventListener("load", process);
     document.body.appendChild(script);
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     const scroller = scrollerRef.current;
@@ -106,6 +119,8 @@ export default function InstagramReels() {
     const step = (firstCardRef.current?.offsetWidth ?? 340) + 24;
     scroller.scrollBy({ left: dir * step, behavior: "smooth" });
   }
+
+  if (isMobile) return null;
 
   return (
     <section className="border-b border-[var(--color-border)] px-6 py-24 sm:px-12">

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SizeCta from "@/components/SizeCta";
 import Reveal from "@/components/Reveal";
 import { products, getProduct, naverStoreUrl } from "@/lib/products";
 
@@ -141,7 +142,7 @@ export default async function ProductDetailPage({
         </nav>
 
         {/* Hero */}
-        <section className="px-6 py-14 sm:px-12 sm:py-20">
+        <section className="px-6 py-16 sm:px-12 sm:py-20">
           <div className="mx-auto max-w-6xl">
             <div className="max-w-2xl">
               <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-muted-foreground)]">
@@ -168,10 +169,10 @@ export default async function ProductDetailPage({
                   <span aria-hidden="true">&rarr;</span>
                 </a>
                 <a
-                  href="/#custom"
+                  href="/custom-fit/"
                   className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[var(--color-primary)]/25 px-6 py-3 text-sm font-medium text-[var(--color-primary)] transition-colors duration-200 hover:border-[var(--color-primary)]"
                 >
-                  맞춤 제작 문의
+                  사이즈 제작 가능 여부 확인
                 </a>
               </div>
             </div>
@@ -190,7 +191,7 @@ export default async function ProductDetailPage({
         </section>
 
         {/* Spec sheet */}
-        <section className="border-t border-[var(--color-border)] px-6 py-14 sm:px-12 sm:py-20">
+        <section className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-20">
           <Reveal className="mx-auto max-w-3xl">
             <h2 className="font-bold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
               제품 정보
@@ -210,53 +211,8 @@ export default async function ProductDetailPage({
           </Reveal>
         </section>
 
-        {/* WAYBLE-style dark showcase — real brand photography, honestly
-            captioned (not claimed as customer-submitted installation
-            photos, since they aren't). */}
-        <section className="grain relative overflow-hidden bg-[var(--color-primary)] px-6 py-14 text-white sm:px-12 sm:py-20">
-          <Reveal className="relative mx-auto max-w-6xl">
-            <h2 className="font-bold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
-              인디업이 만드는 방식
-            </h2>
-            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="overflow-hidden rounded-2xl">
-                {/* eslint-disable-next-line @next/next/no-img-element -- fixed
-                    editorial photo, not a next/image layout fit. */}
-                <img
-                  src="/indeup_series.jpg"
-                  alt="인디업 책상과 프레임 라인업"
-                  className="h-full w-full object-cover"
-                  style={{ aspectRatio: "4 / 3" }}
-                />
-                <div className="mt-4">
-                  <p className="font-bold tracking-[-0.01em]">인디업 제품 라인업</p>
-                  <p className="mt-1 text-sm text-white/60">
-                    공간에 맞춰 제작하는 책상과 프레임을 함께 소개합니다.
-                  </p>
-                </div>
-              </div>
-              <div className="overflow-hidden rounded-2xl">
-                {/* eslint-disable-next-line @next/next/no-img-element -- fixed
-                    editorial photo, not a next/image layout fit. */}
-                <img
-                  src="/indeup_desk.jpg"
-                  alt="인디업 책상 마감 디테일"
-                  className="h-full w-full object-cover"
-                  style={{ aspectRatio: "4 / 3" }}
-                />
-                <div className="mt-4">
-                  <p className="font-bold tracking-[-0.01em]">마감과 디테일</p>
-                  <p className="mt-1 text-sm text-white/60">
-                    아연도금 프레임과 분체도장으로 표면을 마감합니다.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-        </section>
-
         {/* Reviews — honest framing: no fabricated testimonials or ratings. */}
-        <section className="border-t border-[var(--color-border)] px-6 py-14 sm:px-12 sm:py-20">
+        <section className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-20">
           <Reveal className="mx-auto max-w-3xl">
             <h2 className="font-bold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
               고객 후기
@@ -283,7 +239,7 @@ export default async function ProductDetailPage({
         </section>
 
         {/* FAQ */}
-        <section className="border-t border-[var(--color-border)] px-6 py-14 sm:px-12 sm:py-20">
+        <section className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-20">
           <Reveal className="mx-auto max-w-3xl">
             <h2 className="font-bold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
               {product.title}에 대해 자주 묻는 질문
@@ -311,7 +267,7 @@ export default async function ProductDetailPage({
         </section>
 
         {/* Related products */}
-        <section className="border-t border-[var(--color-border)] px-6 py-14 sm:px-12 sm:py-20">
+        <section className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-20">
           <Reveal className="mx-auto max-w-6xl">
             <h2 className="font-bold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
               다른 제품도 살펴보세요
@@ -355,6 +311,7 @@ export default async function ProductDetailPage({
         </section>
       </main>
 
+      <SizeCta />
       <Footer />
     </div>
   );

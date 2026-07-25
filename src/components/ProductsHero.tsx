@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+import { useSmoothScrollProgress } from "@/lib/useSmoothScrollProgress";
+import { useStaticFallback } from "@/lib/useStaticFallback";
 
 const chips = ["국내 제조·판매", "10mm 맞춤 제작", "3년 무상보증"];
 
@@ -34,31 +36,21 @@ function ScrollCue({ opacity }: { opacity: number }) {
 
 function PinnedHero() {
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const [progress, setProgress] = useState(0);
 
   // Same sticky + scroll-progress technique as the homepage's pinned zoom
   // statement: a tall wrapper holds the scroll range, the visible frame is
-  // `position: sticky` so it pins/releases perfectly in sync with scroll,
-  // and everything inside is driven by how far through that range we are.
-  useEffect(() => {
-    function update() {
-      const el = wrapperRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const scrollable = Math.max(rect.height - vh, 0);
-      setProgress(
-        scrollable > 0 ? Math.min(Math.max(-rect.top / scrollable, 0), 1) : 0
-      );
-    }
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-    };
-  }, []);
+  // `position: sticky` so it pins/releases perfectly in sync with scroll.
+  // `progress` eases toward the raw scroll fraction instead of snapping to
+  // it — see useSmoothScrollProgress for why a straight 1:1 mapping to
+  // touch-scroll position reads as mechanically rigid.
+  const progress = useSmoothScrollProgress(() => {
+    const el = wrapperRef.current;
+    if (!el) return 0;
+    const rect = el.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const scrollable = Math.max(rect.height - vh, 0);
+    return scrollable > 0 ? Math.min(Math.max(-rect.top / scrollable, 0), 1) : 0;
+  });
 
   const stage = (start: number, span: number) =>
     Math.min(Math.max((progress - start) / span, 0), 1);
@@ -71,16 +63,16 @@ function PinnedHero() {
   const cueOpacity = 1 - Math.min(progress / 0.06, 1);
 
   return (
-    <div ref={wrapperRef} className="relative" style={{ height: `${SCROLL_SPAN_VH}dvh` }}>
+    <div ref={wrapperRef} className="relative" style={{ height: `calc(${SCROLL_SPAN_VH} * var(--vh-unit))` }}>
       <div
         className="grain sticky top-0 flex items-center justify-center overflow-hidden bg-[var(--color-primary)] px-6 text-center text-white sm:px-12"
-        style={{ height: "100dvh" }}
+        style={{ height: "calc(100 * var(--vh-unit))" }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element -- fixed
             full-bleed hero background, not a next/image layout fit. */}
         <img
           src="/jump.gif"
-          alt="인디업 책상 위에 올라서도 흔들림 없는 내구성"
+          alt="아연도금 철제 프레임과 풀용접 구조의 인디업 책상"
           className="absolute inset-0 h-full w-full object-cover opacity-60"
           style={{ objectPosition: "center 65%" }}
         />
@@ -100,7 +92,7 @@ function PinnedHero() {
           <h1
             className="mt-6 max-w-3xl font-bold leading-[1.15] tracking-[-0.03em]"
             style={{
-              fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+              fontSize: "clamp(1.75rem, 6vw, 4.5rem)",
               opacity: headlineT,
               transform: `translateY(${24 * (1 - headlineT)}px)`,
               transition: "opacity 300ms ease-out, transform 300ms ease-out",
@@ -163,7 +155,7 @@ function StaticHero() {
         </span>
         <h1
           className="mt-6 max-w-3xl font-bold leading-[1.15] tracking-[-0.03em]"
-          style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}
+          style={{ fontSize: "clamp(1.75rem, 6vw, 4.5rem)" }}
         >
           공간에 맞는
           <br />
@@ -190,11 +182,6 @@ function StaticHero() {
 }
 
 export default function ProductsHero() {
-  const [reducedMotion, setReducedMotion] = useState(false);
-
-  useEffect(() => {
-    setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-  }, []);
-
-  return reducedMotion ? <StaticHero /> : <PinnedHero />;
+  const useStatic = useStaticFallback();
+  return useStatic ? <StaticHero /> : <PinnedHero />;
 }

@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SizeCta from "@/components/SizeCta";
 import HeroSlider from "@/components/HeroSlider";
 import DimensionShowcase from "@/components/DimensionShowcase";
 import ZoomStatement from "@/components/ZoomStatement";
@@ -39,6 +40,7 @@ export default function Home() {
         <InstagramReels />
       </main>
 
+      <SizeCta />
       <Footer />
     </div>
   );
