@@ -10,6 +10,7 @@
     { "id": "no-delivery-date-promise", "description": "정확한 출고일/배송 도착일 단정 금지", "patterns": ["정확히.*일에.*도착", "반드시.*까지.*배송"] },
     { "id": "no-absolute-exchange", "description": "'무조건/예외 없이' 식 절대적 교환·보증 표현 금지", "patterns": ["무조건.*교환", "예외 없이.*교환", "100%.*가능", "절대.*파손되지"] },
     { "id": "no-unsafe-use", "description": "위험한 사용(올라서기, 뛰기 등) 권장 금지", "patterns": ["올라서도.*안전", "뛰어도.*괜찮", "위에서.*뛰어"] },
+    { "id": "no-max-load-figure", "description": "시험성적서로 확인되지 않은 최대하중 수치/안전 보장 표현 금지 (2026-07-26 운영자 지시)", "patterns": ["최대\\s*하중\\s*\\d+\\s*kg", "\\d+\\s*kg\\s*하중\\s*대응", "성인이?\\s*올라가도\\s*견고", "성인\\s*점프\\s*테스트", "절대\\s*흔들리지\\s*않", "파손\\s*걱정\\s*없"] },
     { "id": "no-pii-echo", "description": "고객이 입력한 전화번호/카드번호/계좌번호/주민번호를 답변에 그대로 반복 금지", "patterns": ["전화번호는.*입니다", "카드번호는", "계좌번호는"] },
     { "id": "no-fabricated-spec", "description": "홈페이지·공식 데이터에 없는 제품 사양(색상, 사이즈, 옵션) 생성 금지", "patterns": [] },
     { "id": "no-admin-credentials", "description": "관리자 계정/비밀번호/API 키 노출 금지", "patterns": ["비밀번호는", "API.?키는", "api_key", "password is"] },

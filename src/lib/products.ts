@@ -35,10 +35,17 @@ const assembly =
 export const warranty = `인디업 책상은 ${policyData.warrantyYears}년 무상보증을 제공합니다. 보증 대상과 적용 조건은 고객지원 페이지의 보증 안내에서 확인할 수 있습니다.`;
 
 export const material =
-  "아연도금 철제 프레임과 18mm 두께의 E0 등급 LPM 상판을 사용합니다.";
+  "아연도금 철제 프레임과 두께 18mm(18T), E0 등급 LPM 마감 목질 상판을 사용합니다. 상판은 공급사 제공 사양 기준 휨강도 35U이며, 이 수치는 상판 원자재 사양으로 완성된 책상 전체의 최대 사용하중을 의미하지 않습니다.";
 
 export const structure =
   "프레임 연결 부위는 풀용접으로 이어 흔들림을 줄였고, 표면은 분체도장 후 고온에서 경화해 마감합니다. 바닥 높이 차이를 조정할 수 있는 회전형 수평 조절발을 기본으로 적용합니다.";
+
+/** Deliberately states no max-load figure — see products/[slug]/page.tsx
+ *  and worker/worker.js, both of which must stay in sync with this same
+ *  no-numeric-load-claim policy. Any future edit here must not reintroduce
+ *  a specific kg figure or an implied "safe to stand/jump on" claim. */
+export const safetyUsageNotice =
+  "본 제품은 모니터, 노트북, 컴퓨터 주변기기 등 일반적인 사무용품을 올려 사용하는 가정·사무용 책상입니다. 제품의 크기, 하중이 가해지는 위치, 설치 바닥 및 조립 상태에 따라 사용 조건이 달라질 수 있어 최대 사용하중은 별도의 수치로 안내하지 않습니다. 무거운 물건은 상판 한쪽에 집중되지 않도록 고르게 배치해 주세요. 제품 위에 앉거나 올라서는 행위, 점프, 강한 충격 및 순간적인 집중하중은 제품 파손이나 안전사고의 원인이 될 수 있으므로 금지합니다. 사용 전 모든 체결부를 단단히 조이고, 조절발을 이용해 제품의 수평을 맞춘 후 사용해 주세요.";
 
 const colorInfo =
   "상판과 프레임 색상은 옵션에서 선택할 수 있습니다. 실제 선택 가능한 색상은 네이버 공식 스토어의 상품 옵션에서 확인해 주세요.";

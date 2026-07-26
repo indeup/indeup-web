@@ -125,7 +125,7 @@ export async function runQuestionTest(page: Page, q: CanonicalChatbotQuestion): 
             reasons.push(`prohibited:${rule.id}`);
             if (rule.id === "no-competitor-brand") checks.copyrightPass = false;
             else if (rule.id.startsWith("no-pii")) checks.privacyPass = false;
-            else if (rule.id === "no-unsafe-use") checks.safetyPass = false;
+            else if (rule.id === "no-unsafe-use" || rule.id === "no-max-load-figure") checks.safetyPass = false;
             else checks.tonePass = false;
           }
         } catch {

@@ -122,21 +122,21 @@
   {
     "id": "product-008",
     "knowledgeType": "product",
-    "claim": "1인용/2인용 책상은 '책상(단품)' 구성과 '컴퓨터책상(멀티탭거치대 포함)' 구성 두 가지로 제작된다. 1인용 컴퓨터책상은 멀티탭거치대 1개, 2인용 컴퓨터책상은 2개가 기본 포함된다.",
+    "claim": "1인용/2인용 책상은 '책상(단품)' 구성과 '컴퓨터책상(멀티탭거치대 포함)' 구성 두 가지로 제작된다. 멀티탭거치대는 컴퓨터책상류에만 포함되며(책상 단품에는 없음), 1인용 컴퓨터책상은 1개, 2인용 컴퓨터책상은 2개가 기본 포함된다 — 운영자 확인 완료(2026-07-26).",
     "sourceUrl": "worker/worker.js",
     "sourcePageTitle": "AI 챗봇 시스템 프롬프트 (공통 사실)",
-    "sourceSection": "SYSTEM_PROMPT 공통 사실",
-    "lastCheckedAt": "2026-07-25",
-    "status": "requires_confirmation"
+    "sourceSection": "SYSTEM_PROMPT 공통 사실 + 운영자 확인(2026-07-26)",
+    "lastCheckedAt": "2026-07-26",
+    "status": "verified"
   },
   {
     "id": "material-001",
     "knowledgeType": "material",
-    "claim": "모든 제품은 아연도금 철제 프레임과 18mm 두께의 E0 등급 LPM 상판을 사용한다.",
+    "claim": "모든 제품은 아연도금 철제 프레임과 두께 18mm(18T), E0 등급 LPM 마감 목질 상판을 사용한다. 상판은 공급사 제공 사양 기준 휨강도 35U이며, 이 수치는 원자재 사양이지 완성품의 kg 최대 하중이 아니다(2026-07-26 문구 갱신).",
     "sourceUrl": "https://indeup.com/products/",
     "sourcePageTitle": "제품",
-    "sourceSection": "material (products.ts)",
-    "lastCheckedAt": "2026-07-25",
+    "sourceSection": "material (products.ts, 2026-07-26 갱신)",
+    "lastCheckedAt": "2026-07-26",
     "status": "verified"
   },
   {
@@ -162,12 +162,12 @@
   {
     "id": "option-002",
     "knowledgeType": "option",
-    "claim": "AI 챗봇 시스템 프롬프트에는 '프레임 색상: 화이트, 블랙 (2종)'과 '상판 색상: 화이트, 블랙, 그레이, 나무무늬(마인파인츠), 멀바우 (5종)'이 구체적으로 명시되어 있으나, 이는 공식 홈페이지 페이지 텍스트에는 등장하지 않는 정보다.",
+    "claim": "AI 챗봇 시스템 프롬프트의 '프레임 색상: 화이트, 블랙 (2종)'과 '상판 색상: 화이트, 블랙, 그레이, 나무무늬(마인파인츠), 멀바우 (5종)'은 운영자가 실제 판매 옵션과 일치함을 확인했다(2026-07-26). 공식 홈페이지 페이지 텍스트 자체에는 등장하지 않지만 값은 정확하다.",
     "sourceUrl": "worker/worker.js",
     "sourcePageTitle": "AI 챗봇 시스템 프롬프트 (공통 사실)",
-    "sourceSection": "SYSTEM_PROMPT 공통 사실",
-    "lastCheckedAt": "2026-07-25",
-    "status": "requires_confirmation"
+    "sourceSection": "SYSTEM_PROMPT 공통 사실 + 운영자 확인(2026-07-26)",
+    "lastCheckedAt": "2026-07-26",
+    "status": "verified"
   },
   {
     "id": "option-003",
@@ -262,12 +262,12 @@
   {
     "id": "delivery-001",
     "knowledgeType": "delivery",
-    "claim": "배송 방법과 배송비(제주·도서산간 포함)는 제품과 지역에 따라 달라지며, 정확한 금액은 네이버 공식 스토어의 상품 상세 정보에서만 확인 가능하다 — 인디업 홈페이지 어디에도 구체적 배송비 수치는 명시되어 있지 않다.",
+    "claim": "제주 지역 추가 배송비는 20,000원, 제주를 제외한 그 외 도서산간 지역 추가 배송비도 20,000원이다 (네이버 스마트스토어 배송비 묶음그룹 설정 기준, 운영자 확인 2026-07-26). 그 외 일반 지역 배송비는 제품/옵션에 따라 달라지며 네이버 공식 스토어 상품 상세에서 확인한다.",
     "sourceUrl": "https://indeup.com/products/",
     "sourcePageTitle": "제품",
-    "sourceSection": "shipping (products.ts)",
-    "lastCheckedAt": "2026-07-25",
-    "status": "incomplete"
+    "sourceSection": "shipping (products.ts) + 운영자 확인(2026-07-26, 네이버 스마트스토어센터 배송비 묶음그룹 스크린샷)",
+    "lastCheckedAt": "2026-07-26",
+    "status": "verified"
   },
   {
     "id": "delivery-002",
@@ -312,7 +312,7 @@
   {
     "id": "exchange_return-001",
     "knowledgeType": "exchange_return",
-    "claim": "배송 중 파손이나 제작 오류로 확인되면 무료로 교환한다. '무조건/예외 없이' 같은 전면적 무료교환 표현은 쓰지 않는다 — 조건부(파손·하자 확인 시)로 한정된 정책이다.",
+    "claim": "배송 중 파손이나 제작 오류(회사 귀책사유)로 확인되면 무료로 교환한다. '무조건/예외 없이' 같은 전면적 무료교환 표현은 쓰지 않는다 — 조건부(파손·하자 확인 시)로 한정된 정책이다.",
     "sourceUrl": "https://indeup.com/support/",
     "sourcePageTitle": "고객지원",
     "sourceSection": "FAQ (2026-07-25 수정 반영)",
@@ -322,12 +322,13 @@
   {
     "id": "exchange_return-002",
     "knowledgeType": "exchange_return",
-    "claim": "단순 변심에 의한 반품 시 반품비 부담 여부·금액은 홈페이지에 명시되어 있지 않다. 교환·반품 신청 자체는 네이버 앱 → 쇼핑 MY → 주문·배송에서 진행한다.",
+    "claim": "인디업 책상은 고객 요청 사이즈로 개별 제작하는 주문제작 상품이다. 전자상거래법령상 주문제작 상품은 단순 변심에 의한 청약철회(반품)가 제한될 수 있으며, 인디업은 단순 변심(고객 귀책사유) 반품을 허용하지 않는다(운영자 확인, 2026-07-26) — '반품비만 내면 단순 변심도 가능하다'는 이전 이해는 정정됨. 배송 파손·제작 오류(회사 귀책사유)는 반품이 아니라 무료 교환으로 처리된다(exchange_return-001 참고).",
     "sourceUrl": "https://indeup.com/support/",
     "sourcePageTitle": "고객지원",
-    "sourceSection": "FAQ",
-    "lastCheckedAt": "2026-07-25",
-    "status": "incomplete"
+    "sourceSection": "FAQ + 운영자 확인(2026-07-26)",
+    "lastCheckedAt": "2026-07-26",
+    "status": "verified",
+    "legalNote": "전자상거래 등에서의 소비자보호에 관한 법률 시행령 제21조에 따라, 주문제작 상품에 대한 청약철회 제한이 유효하려면 이 사실을 상품 구매 페이지 등에서 소비자가 알아보기 쉽게 사전 고지해야 함 — 네이버 스토어 상품 페이지에 이 고지 문구가 있는지 별도 확인 필요."
   },
   {
     "id": "support-001",
@@ -352,12 +353,12 @@
   {
     "id": "safety-001",
     "knowledgeType": "structure",
-    "claim": "제품 상세 페이지 어디에도 승인된 최대 하중(kg) 수치가 명시되어 있지 않다. 안전 관련 문구는 '흔들림을 줄인 구조'까지만 언급하고, 특정 하중값이나 '올라서도 안전하다'는 표현은 쓰지 않는다.",
+    "claim": "제품 상세 페이지에는 시험성적서로 확인되지 않은 최대 하중(kg) 수치를 게시하지 않는다(운영자 지시, 2026-07-26). 대신 모든 제품 페이지와 챗봇 답변에 공통된 '하중 및 안전 사용 안내' 공식 문구를 적용한다: 일반 사무용품 용도의 가정·사무용 책상이며, 설치 조건에 따라 사용 조건이 달라져 최대 사용하중을 수치로 안내하지 않는다는 것, 무거운 물건을 고르게 배치할 것, 앉거나 올라서기·점프·강한 충격·순간적 집중하중 금지, 사용 전 체결부 조임과 수평 조절 안내. 상판의 '휨강도 35U'는 공급사 제공 원자재 사양이며 완성품의 kg 최대 하중을 의미하지 않는다는 점을 항상 함께 명시한다. '최대하중 OOkg', '성인이 올라가도 견고함', '점프 테스트', '절대 흔들리지 않음', '파손 걱정 없음' 등의 표현은 금지 문구로 명시됨(prohibited-claims.json no-max-load-figure).",
     "sourceUrl": "https://indeup.com/products/",
     "sourcePageTitle": "제품",
-    "sourceSection": "structure / ProductsHero alt text (2026-07-25 수정)",
-    "lastCheckedAt": "2026-07-25",
-    "status": "incomplete"
+    "sourceSection": "src/lib/products.ts safetyUsageNotice + worker.js (2026-07-26 운영자 지시로 신설)",
+    "lastCheckedAt": "2026-07-26",
+    "status": "verified"
   },
   {
     "id": "privacy-001",

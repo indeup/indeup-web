@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SizeCta from "@/components/SizeCta";
 import Reveal from "@/components/Reveal";
-import { products, getProduct, naverStoreUrl } from "@/lib/products";
+import { products, getProduct, naverStoreUrl, safetyUsageNotice } from "@/lib/products";
 
 const siteUrl = "https://indeup.com";
 
@@ -215,6 +215,7 @@ export default async function ProductDetailPage({
               <SpecRow label="배송" value={product.shipping} />
               <SpecRow label="조립" value={product.assembly} />
               <SpecRow label="무상보증" value={product.warranty} />
+              <SpecRow label="하중 및 안전 사용 안내" value={safetyUsageNotice} />
             </dl>
           </Reveal>
         </section>
