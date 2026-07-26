@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-26T09:01:44.439Z",
+  "updatedAt": "2026-07-26T15:47:29.129Z",
   "source": {
     "longform": "https://www.youtube.com/feeds/videos.xml?playlist_id=PL1OpYFUPf80FaFynOO1g0MCOptVM5HzNm",
     "shorts": "https://www.youtube.com/feeds/videos.xml?playlist_id=PL1OpYFUPf80Hftiq_7t9v24x2QojnGVRW"
@@ -19,7 +19,7 @@
       "link": "https://www.youtube.com/watch?v=v8tkY1OLrNc",
       "publishedAt": "2026-05-14T05:08:21.000Z",
       "thumbnail": "https://i3.ytimg.com/vi/v8tkY1OLrNc/hqdefault.jpg",
-      "viewCount": 10
+      "viewCount": 11
     },
     {
       "id": "0tUOEzAUfvY",
@@ -117,7 +117,7 @@
       "link": "https://www.youtube.com/shorts/mPZj_jHUxrc",
       "publishedAt": "2026-05-15T04:37:28.000Z",
       "thumbnail": "https://i2.ytimg.com/vi/mPZj_jHUxrc/hqdefault.jpg",
-      "viewCount": 1315
+      "viewCount": 1316
     },
     {
       "id": "OkweU1hjQ5I",
