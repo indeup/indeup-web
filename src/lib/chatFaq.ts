@@ -86,8 +86,8 @@ export const chatFaqs: ChatFaqEntry[] = [
   {
     id: "exchange-return",
     keywordGroups: [["교환", "반품", "어디"], ["교환", "신청"], ["반품", "신청"]],
-    answer: "네이버 앱의 쇼핑 MY, 주문·배송에서 해당 주문을 선택하면 교환·반품을 신청할 수 있습니다.",
-    linkIds: ["support"],
+    answer: "네이버 톡톡으로 고객센터에 문의해 주세요. 가장 빠르게 확인해 드립니다. 배송 파손이나 제작 오류로 확인되면 무료로 교환해 드립니다. 인디업 책상은 고객님만을 위한 사이즈로 제작하는 맞춤형 상품이라, 단순 변심이나 사용 흔적이 있는 경우의 반품은 어려운 점 양해 부탁드립니다.",
+    linkIds: ["naverTalk"],
   },
   {
     id: "naver-talk",
