@@ -22,7 +22,7 @@ const STORAGE_KEY = "indeup-chat-widget-v2";
 
 type DisplayMessage =
   | { role: "user"; content: string }
-  | { role: "assistant"; response: ChatResponse; feedback?: "helpful" | "not-helpful" };
+  | { role: "assistant"; response: ChatResponse; logKey?: string; feedback?: "helpful" | "not-helpful" };
 
 /** Every open starts fresh at the quick-start menu (see handleOpen) rather
  *  than silently resuming an old conversation — on mobile especially, a
@@ -409,7 +409,11 @@ export default function ChatWidget() {
         throw new Error("bad response");
       }
       const response = data as ChatResponse;
-      appendMessages([{ role: "assistant", response }]);
+      // logKey rides alongside the ChatResponse contract fields rather than
+      // inside it — it's internal bookkeeping for the feedback buttons
+      // below, never rendered, so it doesn't belong in the shared contract.
+      const logKey = "logKey" in data && typeof data.logKey === "string" ? data.logKey : undefined;
+      appendMessages([{ role: "assistant", response, logKey }]);
       trackEvent("chat_intent_detected", { intent: response.intent });
       if (response.products?.length) {
         trackEvent("chat_product_recommended", { productIds: response.products.map((p) => p.productId) });
@@ -466,15 +470,30 @@ export default function ChatWidget() {
   }
 
   function setFeedback(index: number, value: "helpful" | "not-helpful") {
+    const target = messages[index];
     setMessages((prev) => prev.map((m, i) => (i === index && m.role === "assistant" ? { ...m, feedback: value } : m)));
     trackEvent("chat_feedback", { index, value });
+    // Fire-and-forget: this is telemetry for later human review (see
+    // handleFeedback in worker.js), not part of the chat's critical path, so
+    // a failed/slow request here should never block or error out the UI.
+    // Scripted quick-start/FAQ answers never got a logKey (no AI call, no KV
+    // log to attach to), so there's nothing meaningful to send for those.
+    if (CHAT_ENDPOINT && target?.role === "assistant" && target.logKey) {
+      fetch(`${CHAT_ENDPOINT.replace(/\/$/, "")}/feedback`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ logKey: target.logKey, feedback: value }),
+      }).catch(() => {});
+    }
     if (value === "not-helpful") {
       // Auto-improve in the moment: immediately ask the model to try again
       // with the signal that its last answer missed the mark, rather than
       // making the customer pick from a menu. The retried answer becomes
       // the new last message and gets its own feedback prompt, so this can
-      // repeat if needed — a real prompt-tuning pipeline from aggregated
-      // feedback would need a human reviewing the KV logs, which this isn't.
+      // repeat if needed. Aggregated feedback for actually promoting good
+      // answers into static FAQ/guide content still needs a human reviewing
+      // the KV logs (qa: + fb: records) — this endpoint only makes that
+      // review possible, it doesn't automate the review itself.
       sendUserText("방금 답변이 도움이 되지 않았어요. 다른 방식으로 다시 설명해주세요.");
     }
   }

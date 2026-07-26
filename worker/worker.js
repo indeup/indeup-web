@@ -302,6 +302,45 @@ function isBusinessHoursNow() {
   return !["Sat", "Sun"].includes(weekday) && hour >= 9 && hour < 17;
 }
 
+// qa:<epoch-ms>:<8 lowercase-hex chars from crypto.randomUUID> — matches
+// exactly how the key is built below, so this endpoint can't be used to
+// write against an arbitrary/guessed KV key.
+const FEEDBACK_LOG_KEY_PATTERN = /^qa:\d+:[0-9a-f]{8}$/;
+
+/** Records a customer's 도움됐어요/다시 답변 받기 click against the qa: log
+ *  entry ChatWidget got back as `logKey` — stored as its own fb: record
+ *  (not a rewrite of the original qa: entry) so this never races with that
+ *  entry's own ctx.waitUntil write. Lets a human filter KV later for
+ *  answers that were actually confirmed good, instead of reading every
+ *  logged turn blind (see the answer-content field this pairs with). */
+async function handleFeedback(request, env, origin) {
+  if (!env.CHAT_LOG) return jsonResponse({ ok: false }, 200, origin);
+
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return jsonResponse({ error: "잘못된 요청 형식입니다." }, 400, origin);
+  }
+
+  const logKey = body?.logKey;
+  const feedback = body?.feedback;
+  if (typeof logKey !== "string" || !FEEDBACK_LOG_KEY_PATTERN.test(logKey)) {
+    return jsonResponse({ error: "잘못된 요청입니다." }, 400, origin);
+  }
+  if (feedback !== "helpful" && feedback !== "not-helpful") {
+    return jsonResponse({ error: "잘못된 요청입니다." }, 400, origin);
+  }
+
+  const key = `fb:${Date.now()}:${crypto.randomUUID().slice(0, 8)}`;
+  await env.CHAT_LOG.put(
+    key,
+    JSON.stringify({ refKey: logKey, feedback, timestamp: new Date().toISOString() }),
+    { expirationTtl: QA_LOG_TTL_SECONDS }
+  );
+  return jsonResponse({ ok: true }, 200, origin);
+}
+
 export default {
   async fetch(request, env, ctx) {
     const origin = request.headers.get("Origin") || "";
@@ -316,6 +355,10 @@ export default {
 
     if (request.method !== "POST") {
       return jsonResponse({ error: "POST 요청만 허용됩니다." }, 405, origin);
+    }
+
+    if (new URL(request.url).pathname === "/feedback") {
+      return handleFeedback(request, env, origin);
     }
 
     if (env.CHAT_LOG) {
@@ -405,7 +448,12 @@ export default {
       }
     }
 
-    const result = parsed ?? (apiCallFailed ? SERVICE_UNAVAILABLE_RESPONSE : FALLBACK_RESPONSE);
+    // Always a fresh object — FALLBACK_RESPONSE/SERVICE_UNAVAILABLE_RESPONSE
+    // are shared module-level consts reused across requests in the same
+    // isolate, so mutating them in place (result.answer = ..., result.logKey
+    // = ... below) would leak one request's data into another's fallback
+    // response. Shallow-copying here makes every mutation below request-scoped.
+    const result = { ...(parsed ?? (apiCallFailed ? SERVICE_UNAVAILABLE_RESPONSE : FALLBACK_RESPONSE)) };
 
     if (result.needsHumanSupport && !isBusinessHoursNow()) {
       // 전화 상담은 운영시간에만 가능하지만, 네이버 톡톡은 시간 제약 없이
@@ -416,6 +464,7 @@ export default {
 
     if (env.CHAT_LOG) {
       const lastUserMessage = [...messages].reverse().find((m) => m.role === "user");
+      const key = `qa:${Date.now()}:${crypto.randomUUID().slice(0, 8)}`;
       const record = {
         question: maskPII(lastUserMessage?.content ?? ""),
         // 실제로 고객에게 어떤 답변이 나갔는지 남겨두는 항목 — 나중에 "그때
@@ -432,8 +481,12 @@ export default {
         turnCount: messages.length,
         timestamp: new Date().toISOString(),
       };
-      const key = `qa:${Date.now()}:${crypto.randomUUID().slice(0, 8)}`;
       ctx.waitUntil(env.CHAT_LOG.put(key, JSON.stringify(record), { expirationTtl: QA_LOG_TTL_SECONDS }));
+      // 프런트엔드가 이 답변에 대한 도움됐어요/아니에요 피드백을 나중에
+      // /feedback으로 보낼 때 어떤 로그와 연결할지 알 수 있도록 키를
+      // 응답에 함께 실어 보냅니다. 답변 문장이 아니라 별도 JSON 필드라
+      // 화면에 노출되지 않고, ChatWidget이 내부적으로만 사용합니다.
+      result.logKey = key;
     }
 
     return jsonResponse(result, 200, origin);
