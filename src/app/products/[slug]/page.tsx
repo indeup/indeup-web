@@ -110,6 +110,14 @@ export default async function ProductDetailPage({
       alternateName: "INDEUP",
       url: siteUrl,
     },
+    // Machine-readable versions of the same real facts already shown in the
+    // on-page spec table (SpecRow) below — lets AI answer engines (Google AI
+    // Overview, Naver AI 브리핑 등) cite warranty/material precisely instead
+    // of parsing prose, without adding any offers/rating claim we can't back.
+    additionalProperty: [
+      { "@type": "PropertyValue", name: "소재", value: product.material },
+      { "@type": "PropertyValue", name: "무상보증", value: product.warranty },
+    ],
   };
 
   return (

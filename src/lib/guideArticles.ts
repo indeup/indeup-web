@@ -73,9 +73,9 @@ export const guideArticles: GuideArticle[] = [
   },
   {
     slug: "computer-desk-depth-500-600-700",
-    title: "컴퓨터 책상 깊이 500·600·700mm 차이",
+    title: "컴퓨터 책상 깊이 300~700mm, 일반 책상형과 무엇이 다른가",
     description:
-      "모니터, 키보드, PC 본체까지 올려두는 컴퓨터 책상에서 깊이 500·600·700mm가 실제로 어떻게 다른지 정리합니다.",
+      "모니터, 키보드, PC 본체까지 올려두는 컴퓨터 책상형은 깊이 300mm부터 선택할 수 있습니다 — 깊이 500·600·700mm만 있는 일반 책상형과 실제로 어떻게 다른지 정리합니다.",
     categories: ["컴퓨터 책상", "책상 깊이"],
     sections: [
       {

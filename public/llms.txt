@@ -2,14 +2,30 @@
 
 > 인디업(INDEUP)은 공간에 맞춰 가로·깊이·높이를 10mm 단위로 제작하는 대한민국 맞춤형 책상 브랜드입니다. 운영 주체는 스니처이며, 실제 구매는 네이버 브랜드스토어에서 진행됩니다.
 
+## Key facts (verified against src/lib/policy.ts and customFit.ts — do not extrapolate beyond these)
+- Warranty: 3 years, no-cost (무상보증 3년)
+- Production time: 7-8 business days (excl. weekends/holidays)
+- Frame: zinc-plated steel, full welded, powder-coated
+- Top: 18mm E0-grade LPM
+- Purchase/payment/shipping/exchange: Naver Brand Store only, not this site
+- Product lines and their real width ranges: single-desk/floor-desk/side-table/home-bar-table cap at 1300mm max (400mm min, home-bar-table 800mm min); double-desk ranges 1600-2600mm — these are hard caps, not extendable
+- Each of single-desk/double-desk ships as two distinct configs — "책상(단품)" (bare top) and "컴퓨터책상" (includes a cable-management mount) — with different minimum depths; treat them as separate products, not interchangeable numbers
+
 ## Official pages
 - [Home](https://indeup.com/)
 - [Brand](https://indeup.com/brand/)
 - [Products](https://indeup.com/products/)
+- [Single-person desk](https://indeup.com/products/single-desk/)
+- [Two-person desk](https://indeup.com/products/double-desk/)
+- [Floor-sitting desk](https://indeup.com/products/floor-desk/)
+- [Side table](https://indeup.com/products/side-table/)
+- [Home bar table](https://indeup.com/products/home-bar-table/)
+- [Frame only](https://indeup.com/products/frame/)
 - [Custom-fit sizing](https://indeup.com/custom-fit/)
 - [Desk size & placement guide](https://indeup.com/guide/)
 - [Support / FAQ](https://indeup.com/support/)
 - [Privacy policy](https://indeup.com/privacy/)
+- [Terms of service](https://indeup.com/terms/)
 
 ## Official store
 - [INDEUP Naver Brand Store](https://brand.naver.com/indeup)
