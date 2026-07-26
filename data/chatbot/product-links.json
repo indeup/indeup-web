@@ -1,0 +1,63 @@
+{
+  "note": "productId/linkId 매핑의 실제 배포 소스는 src/lib/chatCatalog.ts 및 src/lib/customFit.ts입니다. 이 파일은 그 값을 테스트/문서화 목적으로 스냅샷한 것이며, 실제 코드가 항상 우선합니다(값이 바뀌면 이 파일도 다시 생성해야 함).",
+  "products": [
+    {
+      "productId": "single-desk",
+      "name": "인디업 1인용 책상",
+      "detailUrl": "/products/single-desk/",
+      "genericPurchaseUrl": "https://brand.naver.com/indeup",
+      "hasUniversalPurchaseUrl": false,
+      "exactSkuPurchase": "customFit 사이즈 계산기에서 가로 mm를 입력해야 정확한 SKU 링크 노출",
+      "missingSkuWidths": {
+        "computer": [400, 500],
+        "note": "1인용 컴퓨터책상은 400/500mm 폭에 대한 네이버 상품 링크가 아직 없음 — 이 폭으로 계산기에서 조회하면 일반 스토어 링크로 대체됨"
+      }
+    },
+    {
+      "productId": "double-desk",
+      "name": "인디업 2인용 책상",
+      "detailUrl": "/products/double-desk/",
+      "genericPurchaseUrl": "https://brand.naver.com/indeup",
+      "hasUniversalPurchaseUrl": false,
+      "exactSkuPurchase": "customFit 사이즈 계산기에서 가로 mm를 입력해야 정확한 SKU 링크 노출 (1600~2600mm 전체 폭에 일반형/컴퓨터형 모두 등록됨)",
+      "missingSkuWidths": null
+    },
+    {
+      "productId": "floor-desk",
+      "name": "인디업 좌식 책상",
+      "detailUrl": "/products/floor-desk/",
+      "genericPurchaseUrl": "https://brand.naver.com/indeup",
+      "hasUniversalPurchaseUrl": false,
+      "exactSkuPurchase": "customFit 사이즈 계산기에서 가로 mm를 입력해야 정확한 SKU 링크 노출 (400~1300mm 전체 등록됨)",
+      "missingSkuWidths": null
+    },
+    {
+      "productId": "side-table",
+      "name": "인디업 사이드테이블",
+      "detailUrl": "/products/side-table/",
+      "genericPurchaseUrl": "https://brand.naver.com/indeup",
+      "hasUniversalPurchaseUrl": false,
+      "exactSkuPurchase": "customFit 사이즈 계산기에서 가로 mm를 입력해야 정확한 SKU 링크 노출 (400~1300mm 전체 등록됨)",
+      "missingSkuWidths": null
+    },
+    {
+      "productId": "home-bar-table",
+      "name": "인디업 홈바테이블",
+      "detailUrl": "/products/home-bar-table/",
+      "genericPurchaseUrl": "https://brand.naver.com/indeup",
+      "hasUniversalPurchaseUrl": true,
+      "universalPurchaseUrl": "https://brand.naver.com/indeup/products/11914922638",
+      "exactSkuPurchase": "전체 사이즈가 하나의 네이버 상품 페이지로 커버되어 계산기 없이도 바로 구매 버튼 노출 가능",
+      "missingSkuWidths": null
+    },
+    {
+      "productId": "frame",
+      "name": "인디업 프레임",
+      "detailUrl": "/products/frame/",
+      "genericPurchaseUrl": "https://brand.naver.com/indeup",
+      "hasUniversalPurchaseUrl": false,
+      "exactSkuPurchase": "사이즈 계산기 대상 아님(inquiryOnly) — 상담을 통해서만 정확한 사양 확인, 항상 일반 스토어 링크만 제공",
+      "missingSkuWidths": null
+    }
+  ]
+}

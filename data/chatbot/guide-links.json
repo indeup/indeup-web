@@ -1,0 +1,13 @@
+{
+  "note": "실제 배포 소스는 src/lib/chatCatalog.ts의 guideLinks. AI는 이 id만 반환하고 href는 절대 직접 생성하지 않는다(worker.js 답변 원칙 8).",
+  "links": [
+    { "id": "products", "label": "전체 제품 보기", "href": "/products/", "type": "internal_guide" },
+    { "id": "customFit", "label": "사이즈 제작 가능 여부 확인", "href": "/custom-fit/", "type": "internal_guide" },
+    { "id": "support", "label": "고객지원 보기", "href": "/support/", "type": "support" },
+    { "id": "delivery", "label": "주문·배송 안내", "href": "/support/#order-shipping", "type": "support" },
+    { "id": "assembly", "label": "조립 방법 확인", "href": "/support/", "type": "support" },
+    { "id": "damageSupport", "label": "파손·누락·A/S 안내", "href": "/support/#damage-as", "type": "support" },
+    { "id": "naverTalk", "label": "네이버 톡톡 상담", "href": "https://talk.naver.com/profile/wcs0s3", "type": "naver_talk" },
+    { "id": "storeAll", "label": "공식 스토어에서 구매하기", "href": "https://brand.naver.com/indeup", "type": "official_store" }
+  ]
+}

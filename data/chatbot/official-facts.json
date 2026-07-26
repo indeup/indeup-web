@@ -1,0 +1,412 @@
+[
+  {
+    "id": "brand-001",
+    "knowledgeType": "brand",
+    "claim": "인디업(INDEUP)은 스니처(회사)가 운영하는 맞춤 책상 제작·판매 브랜드이며, 인디업 공식 홈페이지(indeup.com)를 직접 운영한다.",
+    "sourceUrl": "https://indeup.com/privacy/",
+    "sourcePageTitle": "개인정보처리방침",
+    "sourceSection": "제1조 (총칙) / 사업자 정보",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "brand-002",
+    "knowledgeType": "brand",
+    "claim": "사업자 대표: 하민성. 연락처: 1668-5738. 주소: 경남 김해시 동북로473번길 385-14.",
+    "sourceUrl": "https://indeup.com/privacy/",
+    "sourcePageTitle": "개인정보처리방침",
+    "sourceSection": "개인정보 보호책임자/사업자 정보",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "brand-003",
+    "knowledgeType": "brand",
+    "claim": "인디업 홈페이지(indeup.com)에서는 자체 결제가 불가능하며, 실제 주문·결제·배송·교환·환불은 네이버 브랜드스토어(brand.naver.com/indeup)에서만 이루어진다.",
+    "sourceUrl": "https://indeup.com/products/",
+    "sourcePageTitle": "제품",
+    "sourceSection": "구매 CTA / naverStoreUrl",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "brand-004",
+    "knowledgeType": "brand",
+    "claim": "인디업은 책상을 주문 제작(맞춤 사이즈) 방식으로 직접 만든다. 기성품을 사입해 재판매하는 유통사가 아니다.",
+    "sourceUrl": "https://indeup.com/brand/",
+    "sourcePageTitle": "브랜드",
+    "sourceSection": "브랜드 소개",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "brand-005",
+    "knowledgeType": "brand",
+    "claim": "고객 문의는 네이버 톡톡(talk.naver.com/profile/wcs0s3) 또는 고객지원 페이지(/support/)를 통해 접수한다. 전화 상담은 평일 오전 9시~오후 5시에만 가능하다.",
+    "sourceUrl": "https://indeup.com/support/",
+    "sourcePageTitle": "고객지원",
+    "sourceSection": "문의 방법",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "product-001",
+    "knowledgeType": "product",
+    "claim": "인디업은 1인용 책상, 2인용 책상, 좌식 책상, 사이드테이블, 홈바테이블, 프레임(단독) 총 6개 제품 라인을 판매한다.",
+    "sourceUrl": "https://indeup.com/products/",
+    "sourcePageTitle": "제품",
+    "sourceSection": "제품 목록",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "product-002",
+    "knowledgeType": "product",
+    "claim": "1인용 책상: 원룸, 작은 방, 서재, 홈오피스처럼 한 사람이 사용하는 공간에 어울린다.",
+    "sourceUrl": "https://indeup.com/products/single-desk/",
+    "sourcePageTitle": "1인용 책상",
+    "sourceSection": "recommendedSpace",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "product-003",
+    "knowledgeType": "product",
+    "claim": "2인용 책상: 부부, 커플과 두 사람이 함께 앉아 각자의 작업 공간을 나누어 쓰고 싶은 자리에 어울린다.",
+    "sourceUrl": "https://indeup.com/products/double-desk/",
+    "sourcePageTitle": "2인용 책상",
+    "sourceSection": "recommendedSpace",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "product-004",
+    "knowledgeType": "product",
+    "claim": "좌식 책상: 좌식 생활 공간, 거실과 좌식 작업 환경처럼 바닥에 앉아 사용하는 자리에 어울린다.",
+    "sourceUrl": "https://indeup.com/products/floor-desk/",
+    "sourcePageTitle": "좌식 책상",
+    "sourceSection": "recommendedSpace",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "product-005",
+    "knowledgeType": "product",
+    "claim": "사이드테이블: 소파 옆, 침대 옆, 틈새 공간처럼 넉넉하지 않은 자리에 필요한 만큼만 채우고 싶을 때 어울린다.",
+    "sourceUrl": "https://indeup.com/products/side-table/",
+    "sourcePageTitle": "사이드테이블",
+    "sourceSection": "recommendedSpace",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "product-006",
+    "knowledgeType": "product",
+    "claim": "홈바테이블: 홈바, 서서 사용하는 작업대와 공간을 나누는 용도처럼 일반 책상보다 높은 자리가 필요할 때 어울린다. 다만 출고 시 기본 높이는 720mm(일반 책상과 동일)이며, 바(bar) 높이로 쓰려면 500~1000mm 범위 안에서 높이를 직접 지정해야 한다.",
+    "sourceUrl": "https://indeup.com/products/home-bar-table/",
+    "sourcePageTitle": "홈바테이블",
+    "sourceSection": "recommendedSpace + customFit.ts height rule",
+    "lastCheckedAt": "2026-07-25",
+    "status": "requires_confirmation"
+  },
+  {
+    "id": "product-007",
+    "knowledgeType": "product",
+    "claim": "프레임(단독) 제품은 상판이 포함되지 않은 프레임만의 구성이며, 보유 중이거나 별도로 준비한 상판에 맞춰 사용한다. 상담을 통해서만 확인 가능하며(inquiryOnly), 사이즈 계산기에는 반영되지 않는다.",
+    "sourceUrl": "https://indeup.com/products/frame/",
+    "sourcePageTitle": "프레임",
+    "sourceSection": "recommendedSpace + customFit.ts (width/depth/height: null, inquiryOnly: true)",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "product-008",
+    "knowledgeType": "product",
+    "claim": "1인용/2인용 책상은 '책상(단품)' 구성과 '컴퓨터책상(멀티탭거치대 포함)' 구성 두 가지로 제작된다. 1인용 컴퓨터책상은 멀티탭거치대 1개, 2인용 컴퓨터책상은 2개가 기본 포함된다.",
+    "sourceUrl": "worker/worker.js",
+    "sourcePageTitle": "AI 챗봇 시스템 프롬프트 (공통 사실)",
+    "sourceSection": "SYSTEM_PROMPT 공통 사실",
+    "lastCheckedAt": "2026-07-25",
+    "status": "requires_confirmation"
+  },
+  {
+    "id": "material-001",
+    "knowledgeType": "material",
+    "claim": "모든 제품은 아연도금 철제 프레임과 18mm 두께의 E0 등급 LPM 상판을 사용한다.",
+    "sourceUrl": "https://indeup.com/products/",
+    "sourcePageTitle": "제품",
+    "sourceSection": "material (products.ts)",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "structure-001",
+    "knowledgeType": "structure",
+    "claim": "프레임 연결 부위는 풀용접으로 이어 흔들림을 줄였고, 표면은 분체도장 후 고온에서 경화해 마감한다. 바닥 높이 차이를 조정할 수 있는 회전형 수평 조절발이 기본 적용된다.",
+    "sourceUrl": "https://indeup.com/products/",
+    "sourcePageTitle": "제품",
+    "sourceSection": "structure (products.ts)",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "option-001",
+    "knowledgeType": "option",
+    "claim": "상판·프레임 색상은 옵션으로 선택 가능하나, 실제 선택 가능한 정확한 색상 목록은 네이버 공식 스토어의 상품 옵션에서만 확인할 수 있다 — 인디업 공식 홈페이지 자체에는 구체적 색상명이 명시되어 있지 않다.",
+    "sourceUrl": "https://indeup.com/products/",
+    "sourcePageTitle": "제품",
+    "sourceSection": "colorInfo (products.ts)",
+    "lastCheckedAt": "2026-07-25",
+    "status": "incomplete"
+  },
+  {
+    "id": "option-002",
+    "knowledgeType": "option",
+    "claim": "AI 챗봇 시스템 프롬프트에는 '프레임 색상: 화이트, 블랙 (2종)'과 '상판 색상: 화이트, 블랙, 그레이, 나무무늬(마인파인츠), 멀바우 (5종)'이 구체적으로 명시되어 있으나, 이는 공식 홈페이지 페이지 텍스트에는 등장하지 않는 정보다.",
+    "sourceUrl": "worker/worker.js",
+    "sourcePageTitle": "AI 챗봇 시스템 프롬프트 (공통 사실)",
+    "sourceSection": "SYSTEM_PROMPT 공통 사실",
+    "lastCheckedAt": "2026-07-25",
+    "status": "requires_confirmation"
+  },
+  {
+    "id": "option-003",
+    "knowledgeType": "option",
+    "claim": "전선홀 위치와 방향은 설치 환경과 전선 방향에 맞춰 선택할 수 있다. 정확한 옵션 구성은 네이버 공식 스토어 상품 옵션에서 확인해야 한다.",
+    "sourceUrl": "https://indeup.com/products/",
+    "sourcePageTitle": "제품",
+    "sourceSection": "optionInfo (products.ts)",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "size-001",
+    "knowledgeType": "size",
+    "claim": "가로와 높이는 제품별 선택 범위 안에서 10mm 단위로 조정해 제작한다(1인용/좌식/사이드테이블/홈바테이블은 continuous 10mm 단위 최대 +900mm). 2인용 책상은 1600~2600mm 기본폭에 +50/+100/+150mm 3개 옵션만 선택 가능한 고정형(fixed) 방식이라 임의의 10mm 단위 폭 지정이 불가능하다.",
+    "sourceUrl": "https://indeup.com/custom-fit/",
+    "sourcePageTitle": "맞춤 제작",
+    "sourceSection": "customFit.ts productFitConfigs",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "size-002",
+    "knowledgeType": "size",
+    "claim": "1인용 책상 가로 범위: 400~1300mm 기본값에서 10mm 단위로 최대 +900mm까지 확장 가능(즉 최대 약 2200mm까지 이론상 확장). 깊이: 책상(단품) 500/600/700mm, 컴퓨터책상 300~700mm. 높이: 기본 720mm, 500~1000mm 범위에서 10mm 단위 조정.",
+    "sourceUrl": "https://indeup.com/custom-fit/",
+    "sourcePageTitle": "맞춤 제작",
+    "sourceSection": "customFit.ts productFitConfigs['single-desk']",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "size-003",
+    "knowledgeType": "size",
+    "claim": "2인용 책상 가로 범위: 1600/1800/2000/2200/2400/2600mm 기본값에 +50/+100/+150mm 옵션만 가능(고정형). 깊이: 단품·컴퓨터책상 모두 300~700mm. 높이: 기본 720mm, 500~750mm 범위(750mm 초과 1000mm 미만은 별도 확인 필요 구간).",
+    "sourceUrl": "https://indeup.com/custom-fit/",
+    "sourcePageTitle": "맞춤 제작",
+    "sourceSection": "customFit.ts productFitConfigs['double-desk']",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "size-004",
+    "knowledgeType": "size",
+    "claim": "좌식 책상 가로 범위: 400~1300mm 기본값에서 10mm 단위 최대 +900mm. 깊이: 300~700mm. 높이: 기본 320mm, 300~500mm 범위 10mm 단위. 510mm 이상 요청 시 1인용 책상으로 안내(redirect)한다.",
+    "sourceUrl": "https://indeup.com/custom-fit/",
+    "sourcePageTitle": "맞춤 제작",
+    "sourceSection": "customFit.ts productFitConfigs['floor-desk']",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "size-005",
+    "knowledgeType": "size",
+    "claim": "사이드테이블 가로 범위: 400~1300mm 기본값에서 10mm 단위 최대 +900mm. 깊이: 200/300/400mm(최대 400mm), 410mm 이상 요청 시 1인용 책상으로 안내한다. 높이: 기본 720mm, 500~1000mm 범위 10mm 단위.",
+    "sourceUrl": "https://indeup.com/custom-fit/",
+    "sourcePageTitle": "맞춤 제작",
+    "sourceSection": "customFit.ts productFitConfigs['side-table']",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "size-006",
+    "knowledgeType": "size",
+    "claim": "홈바테이블 가로 범위: 800~1300mm 기본값에서 10mm 단위 최대 +900mm. 깊이: 300/400mm(최대 450mm). 높이: 기본 720mm, 500~1000mm 범위 10mm 단위. 제품명에 가로 수치가 노출되지 않는다(hideWidthInName).",
+    "sourceUrl": "https://indeup.com/custom-fit/",
+    "sourcePageTitle": "맞춤 제작",
+    "sourceSection": "customFit.ts productFitConfigs['home-bar-table']",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "size-007",
+    "knowledgeType": "size",
+    "claim": "정확한 제작 가능 여부는 가로·깊이·높이 3개 수치를 모두 입력하는 사이즈 계산기(/custom-fit/)에서만 최종 확정된다. 단일 수치만으로는 참고용 판단만 가능하다.",
+    "sourceUrl": "https://indeup.com/custom-fit/",
+    "sourcePageTitle": "맞춤 제작",
+    "sourceSection": "customFit.ts checkAllProducts/diagnoseNoMatch",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "production-001",
+    "knowledgeType": "production",
+    "claim": "제작 기간은 통상 7~8영업일이며, 주말 및 공휴일은 제외되고 주문량과 제품 사양에 따라 일정이 달라질 수 있다.",
+    "sourceUrl": "https://indeup.com/support/",
+    "sourcePageTitle": "고객지원",
+    "sourceSection": "FAQ / policy.ts productionDays",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "delivery-001",
+    "knowledgeType": "delivery",
+    "claim": "배송 방법과 배송비(제주·도서산간 포함)는 제품과 지역에 따라 달라지며, 정확한 금액은 네이버 공식 스토어의 상품 상세 정보에서만 확인 가능하다 — 인디업 홈페이지 어디에도 구체적 배송비 수치는 명시되어 있지 않다.",
+    "sourceUrl": "https://indeup.com/products/",
+    "sourcePageTitle": "제품",
+    "sourceSection": "shipping (products.ts)",
+    "lastCheckedAt": "2026-07-25",
+    "status": "incomplete"
+  },
+  {
+    "id": "delivery-002",
+    "knowledgeType": "delivery",
+    "claim": "주문·배송 조회는 네이버 앱 → 쇼핑 MY → 주문·배송에서 확인한다.",
+    "sourceUrl": "https://indeup.com/support/",
+    "sourcePageTitle": "고객지원",
+    "sourceSection": "FAQ",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "assembly-001",
+    "knowledgeType": "assembly",
+    "claim": "조립에 필요한 부품과 설명서는 제품과 함께 제공된다. 조립 방법 자세한 안내는 고객지원 페이지 또는 네이버 공식 스토어 상품 상세에서 확인한다.",
+    "sourceUrl": "https://indeup.com/products/",
+    "sourcePageTitle": "제품",
+    "sourceSection": "assembly (products.ts)",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "warranty-001",
+    "knowledgeType": "warranty",
+    "claim": "인디업 책상은 3년 무상보증을 제공한다. 구매 완료 시 네이버 N컬렉션 디지털 보증서가 자동 발급되며 별도 회원가입·종이 보증서 등록이 필요 없다.",
+    "sourceUrl": "https://indeup.com/support/",
+    "sourcePageTitle": "고객지원",
+    "sourceSection": "FAQ / policy.ts warrantyYears",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "warranty-002",
+    "knowledgeType": "warranty",
+    "claim": "보증 대상·적용 조건의 세부 범위(어떤 하자까지 보증 대상인지)는 고객지원 페이지에 구체적으로 나열되어 있지 않고 '문의 시 확인 후 안내'로 처리된다.",
+    "sourceUrl": "https://indeup.com/support/",
+    "sourcePageTitle": "고객지원",
+    "sourceSection": "FAQ",
+    "lastCheckedAt": "2026-07-25",
+    "status": "incomplete"
+  },
+  {
+    "id": "exchange_return-001",
+    "knowledgeType": "exchange_return",
+    "claim": "배송 중 파손이나 제작 오류로 확인되면 무료로 교환한다. '무조건/예외 없이' 같은 전면적 무료교환 표현은 쓰지 않는다 — 조건부(파손·하자 확인 시)로 한정된 정책이다.",
+    "sourceUrl": "https://indeup.com/support/",
+    "sourcePageTitle": "고객지원",
+    "sourceSection": "FAQ (2026-07-25 수정 반영)",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "exchange_return-002",
+    "knowledgeType": "exchange_return",
+    "claim": "단순 변심에 의한 반품 시 반품비 부담 여부·금액은 홈페이지에 명시되어 있지 않다. 교환·반품 신청 자체는 네이버 앱 → 쇼핑 MY → 주문·배송에서 진행한다.",
+    "sourceUrl": "https://indeup.com/support/",
+    "sourcePageTitle": "고객지원",
+    "sourceSection": "FAQ",
+    "lastCheckedAt": "2026-07-25",
+    "status": "incomplete"
+  },
+  {
+    "id": "support-001",
+    "knowledgeType": "support",
+    "claim": "파손·누락·A/S 문의 시 포장 박스와 파손 부위 사진, 주문자명 또는 주문번호를 네이버 톡톡으로 전달해야 한다.",
+    "sourceUrl": "https://indeup.com/support/",
+    "sourcePageTitle": "고객지원",
+    "sourceSection": "FAQ",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "support-002",
+    "knowledgeType": "support",
+    "claim": "전화 상담은 평일 오전 9시~오후 5시에만 가능하다. 이 시간 외에는 네이버 톡톡으로 시간 제약 없이 문의를 남길 수 있다.",
+    "sourceUrl": "worker/worker.js",
+    "sourcePageTitle": "AI 챗봇 (POLICY.operatingHours)",
+    "sourceSection": "isBusinessHoursNow / POLICY",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "safety-001",
+    "knowledgeType": "structure",
+    "claim": "제품 상세 페이지 어디에도 승인된 최대 하중(kg) 수치가 명시되어 있지 않다. 안전 관련 문구는 '흔들림을 줄인 구조'까지만 언급하고, 특정 하중값이나 '올라서도 안전하다'는 표현은 쓰지 않는다.",
+    "sourceUrl": "https://indeup.com/products/",
+    "sourcePageTitle": "제품",
+    "sourceSection": "structure / ProductsHero alt text (2026-07-25 수정)",
+    "lastCheckedAt": "2026-07-25",
+    "status": "incomplete"
+  },
+  {
+    "id": "privacy-001",
+    "knowledgeType": "privacy",
+    "claim": "AI 챗봇 대화 중 질문 내용은 마스킹 후 Cloudflare KV에 최대 180일간 보관되며 이후 자동 삭제된다. 다만 이 마스킹은 로그 저장 시점에만 적용되고, Anthropic(응답 생성 AI 모델)으로 전달되는 대화 원문 자체는 마스킹되지 않는다.",
+    "sourceUrl": "https://indeup.com/privacy/",
+    "sourcePageTitle": "개인정보처리방침",
+    "sourceSection": "제2조/제3조/제6조 + worker.js maskPII 적용 범위 실측 확인",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "privacy-002",
+    "knowledgeType": "privacy",
+    "claim": "AI 챗봇 응답 생성을 위해 질문 내용이 Anthropic PBC(미국)로, 호스팅을 위해 Cloudflare Inc.로 국외 이전된다 — 개인정보처리방침 제6조에 명시.",
+    "sourceUrl": "https://indeup.com/privacy/",
+    "sourcePageTitle": "개인정보처리방침",
+    "sourceSection": "제6조 (개인정보의 국외 이전)",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "terms-001",
+    "knowledgeType": "terms",
+    "claim": "이용약관은 홈페이지 이용에 관한 일반 조건을 규정하며, 실제 매매계약(주문·결제)은 네이버 브랜드스토어 이용약관이 적용된다.",
+    "sourceUrl": "https://indeup.com/terms/",
+    "sourcePageTitle": "이용약관",
+    "sourceSection": "총칙",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "guide-001",
+    "knowledgeType": "guide",
+    "claim": "가이드(/guide/) 섹션은 GitHub 콘텐츠 피드를 그대로 읽어와 렌더링하는 블로그성 콘텐츠로, 제품 스펙의 공식 근거로 사용하지 않는다.",
+    "sourceUrl": "https://indeup.com/guide/",
+    "sourcePageTitle": "가이드",
+    "sourceSection": "guideArticles.ts",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  },
+  {
+    "id": "link-001",
+    "knowledgeType": "product",
+    "claim": "제품 추천 카드(ProductCard)는 정확한 사이즈를 모르는 시점이라 항상 '공식 스토어 전체보기'로 연결된다. 홈바테이블만 예외적으로 전 사이즈 공통 1개 네이버 상품 URL을 가지고 있어 바로 구매 버튼이 뜬다. 나머지 4개 사이즈 제품(1인용/2인용/좌식/사이드테이블)의 정확한 사이즈별 구매 링크는 사이즈 계산기(customFit)에서 실제 mm를 입력해야만 노출된다.",
+    "sourceUrl": "src/lib/chatCatalog.ts, src/lib/customFit.ts",
+    "sourcePageTitle": "코드 — 링크 매핑",
+    "sourceSection": "productCatalog / naverProductIds",
+    "lastCheckedAt": "2026-07-25",
+    "status": "verified"
+  }
+]

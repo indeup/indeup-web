@@ -379,10 +379,25 @@ export default {
       parsed = validateChatResponse(toolUse?.input);
     } else {
       apiCallFailed = true;
-      const errText = await anthropicRes.text();
-      // 결제 잔액 부족(402/insufficient credit), 요금 한도 초과, 인증 오류 등
-      // 원인은 로그에만 남기고 고객에게는 절대 노출하지 않습니다.
+      // Anthropic 오류 응답 본문은 요청 헤더(API 키)나 고객이 보낸 메시지를
+      // 그대로 되돌려주지 않는 오류 설명 텍스트이므로 기록해도 안전하지만,
+      // 혹시 모를 과도한 길이를 막기 위해 500자로 자릅니다. 결제 잔액
+      // 부족(402/insufficient credit), 요금 한도 초과, 인증 오류 등 실제
+      // 원인은 고객에게는 절대 노출하지 않고 여기(로그 + KV)에만 남깁니다.
+      const errText = (await anthropicRes.text()).slice(0, 500);
       console.error("Anthropic API error:", anthropicRes.status, errText);
+      if (env.CHAT_LOG) {
+        // 실시간 로그 탭 없이도 Cloudflare 대시보드의 KV 브라우저에서
+        // "err:" 접두사 키를 열어 상태 코드/본문을 사후에 확인할 수 있도록
+        // 별도 보관합니다. 장애 진단용이라 QA 로그(180일)보다 짧게 7일만.
+        ctx.waitUntil(
+          env.CHAT_LOG.put(
+            `err:${Date.now()}`,
+            JSON.stringify({ status: anthropicRes.status, body: errText, timestamp: new Date().toISOString() }),
+            { expirationTtl: 60 * 60 * 24 * 7 }
+          )
+        );
+      }
     }
 
     const result = parsed ?? (apiCallFailed ? SERVICE_UNAVAILABLE_RESPONSE : FALLBACK_RESPONSE);

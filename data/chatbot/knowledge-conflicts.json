@@ -1,0 +1,92 @@
+[
+  {
+    "id": "conflict-001",
+    "item": "제품 색상(상판 5종/프레임 2종) 및 컴퓨터책상 멀티탭거치대 수량(1인용 1개/2인용 2개)",
+    "pageA": { "source": "src/lib/products.ts (colorInfo)", "value": "\"실제 선택 가능한 색상은 네이버 공식 스토어의 상품 옵션에서 확인해 주세요\" — 구체적 색상명 없음" },
+    "pageB": { "source": "worker/worker.js SYSTEM_PROMPT 공통 사실", "value": "프레임 화이트/블랙 2종, 상판 화이트/블랙/그레이/나무무늬(마인파인츠)/멀바우 5종, 컴퓨터책상 멀티탭거치대 1인용 1개·2인용 2개로 구체적 명시" },
+    "currentChatbotAnswer": "챗봇은 시스템 프롬프트에 박힌 구체적 색상 5종/2종과 멀티탭 개수를 확정적으로 답한다",
+    "risk": "네이버 스토어의 실제 판매 옵션이 바뀌거나 처음부터 이 5종/2종과 다르면, 고객에게 잘못된 옵션 정보를 확정적으로 안내하게 됨 — 홈페이지 텍스트 자체는 이 값을 명시하지 않아 검증 불가",
+    "requiresUserConfirmation": true,
+    "recommendedUnification": "이 색상/옵션 값이 실제 네이버 스토어 판매 옵션과 정확히 일치하는지 운영자가 확인한 뒤, policy.ts에 공식 값으로 등록하고 worker.js는 그 값만 참조하도록 통일. 확인 전까지는 챗봇이 구체적 색상 목록을 확정 답변하지 않고 \"정확한 색상 옵션은 네이버 스토어에서 확인해달라\"로 완화하는 것을 권장"
+  },
+  {
+    "id": "conflict-002",
+    "item": "홈바테이블 기본 높이 vs '서서 사용하는 높이' 마케팅 문구",
+    "pageA": { "source": "src/lib/products.ts (recommendedSpace, FAQ)", "value": "\"홈바, 서서 사용하는 작업대\", \"일반 책상보다 얼마나 높게 제작되나요?\" — 서서 쓰는 높은 테이블이라는 인상" },
+    "pageB": { "source": "src/lib/customFit.ts productFitConfigs['home-bar-table']", "value": "defaultHeight: 720mm (일반 책상과 동일). 500~1000mm 범위에서 직접 높이를 지정해야 바 높이가 됨" },
+    "currentChatbotAnswer": "사이즈 계산기로 실제 계산할 때는 정확한 기본값(720mm)이 반영되지만, 일반 대화형 답변에서는 \"높게 제작된다\"는 인상만 전달되고 기본값이 데스크 높이라는 점은 언급되지 않을 수 있음",
+    "risk": "고객이 커스터마이징 없이 기본 사양으로 주문하면 기대한 '바 높이'가 아니라 일반 책상 높이(720mm)로 제작될 수 있음",
+    "requiresUserConfirmation": true,
+    "recommendedUnification": "홈바테이블 페이지·챗봇 답변 모두에 \"기본 높이는 720mm이며, 바 테이블처럼 높게 쓰려면 주문 시 500~1000mm 범위에서 높이를 직접 지정해야 한다\"를 명시하도록 통일"
+  },
+  {
+    "id": "conflict-003",
+    "item": "무상보증 기간",
+    "pageA": { "source": "src/lib/policy.ts warrantyYears", "value": "3" },
+    "pageB": { "source": "src/app/support/page.tsx, src/lib/products.ts, worker/worker.js", "value": "3년 무상보증 — 모두 policy.ts를 참조하거나 동일 값을 하드코딩" },
+    "currentChatbotAnswer": "3년으로 일관 (실제 라이브 테스트로 재확인됨)",
+    "risk": "충돌 없음 — 단일 소스(policy.ts)로 통일되어 있고 실측으로도 확인됨",
+    "requiresUserConfirmation": false,
+    "recommendedUnification": "현행 유지. 향후 policy.ts 값을 바꾸면 worker.js도 반드시 함께 수정 (파일 상단 주석에 이미 명시됨)"
+  },
+  {
+    "id": "conflict-004",
+    "item": "제작 기간",
+    "pageA": { "source": "src/lib/policy.ts productionDays", "value": "7~8영업일" },
+    "pageB": { "source": "src/app/support/page.tsx, src/lib/products.ts", "value": "7~8영업일 — 동일" },
+    "currentChatbotAnswer": "7~8영업일로 일관 (실측 확인됨)",
+    "risk": "충돌 없음",
+    "requiresUserConfirmation": false,
+    "recommendedUnification": "현행 유지"
+  },
+  {
+    "id": "conflict-005",
+    "item": "배송비 (일반 지역 및 제주·도서산간)",
+    "pageA": { "source": "src/lib/products.ts shipping", "value": "\"배송비는 제품과 지역에 따라 달라질 수 있어, 네이버 공식 스토어에서 확인\" — 구체적 금액 없음" },
+    "pageB": { "source": "인디업 홈페이지 전체 (support/privacy/terms 포함)", "value": "구체적 배송비·제주/도서산간 추가비 수치가 어디에도 없음" },
+    "currentChatbotAnswer": "가격/배송비 관련 질문은 needsHumanSupport=true로 네이버 톡톡 상담 연결 (추측하지 않음 — 정상 동작)",
+    "risk": "정보 누락이지 페이지 간 충돌은 아님. 현재는 안전하게 처리되고 있으나, 관리자가 실제 금액을 제공하면 답변 품질을 높일 수 있음",
+    "requiresUserConfirmation": true,
+    "recommendedUnification": "제주/도서산간 배송비를 실제 수치로 확정해 policy.ts에 추가할지 여부 결정 필요. 확정 전까지는 현재처럼 상담 연결 유지 권장"
+  },
+  {
+    "id": "conflict-006",
+    "item": "단순 변심 반품비",
+    "pageA": { "source": "src/app/support/page.tsx", "value": "반품 신청 방법(네이버 앱 경로)만 안내, 금액 언급 없음" },
+    "pageB": { "source": "인디업 홈페이지 전체", "value": "반품비 금액이 어디에도 명시되어 있지 않음" },
+    "currentChatbotAnswer": "반품비 질문은 needsHumanSupport=true로 상담 연결 (추측하지 않음)",
+    "risk": "정보 누락. 페이지 간 충돌은 아님",
+    "requiresUserConfirmation": true,
+    "recommendedUnification": "실제 반품비 정책(왕복 배송비 고객 부담 여부 등)을 확정해 support 페이지와 policy.ts에 명시할지 결정 필요"
+  },
+  {
+    "id": "conflict-007",
+    "item": "승인된 최대 하중",
+    "pageA": { "source": "src/lib/products.ts structure", "value": "\"흔들림을 줄인 구조\"까지만 언급, 구체적 kg 수치 없음" },
+    "pageB": { "source": "인디업 홈페이지 전체", "value": "최대 하중 수치가 어디에도 없음" },
+    "currentChatbotAnswer": "하중 질문에는 구체적 kg를 만들어내지 않고 일반적 구조 설명만 제공, 필요 시 상담 연결",
+    "risk": "정보 누락이지만 안전 측면에서는 오히려 '단정하지 않음'이 올바른 기본값. 다만 고객이 실사용 중 궁금해하는 빈도가 높은 항목이라 실제 시험/인증 수치가 있다면 제공하는 게 신뢰도에 도움",
+    "requiresUserConfirmation": true,
+    "recommendedUnification": "실제 하중 테스트 수치가 있다면 policy.ts에 추가. 없다면 \"특정 하중 시험 수치는 제공하지 않으며, 일반적인 사무용 책상 용도로 설계되었다\"는 표준 문구를 확정해 챗봇·페이지에 동일하게 반영"
+  },
+  {
+    "id": "conflict-008",
+    "item": "사람이 책상 위에 올라가는 것에 대한 안전 표현",
+    "pageA": { "source": "public/jump.gif (products 페이지 히어로 배경)", "value": "사람이 책상 위에 올라선 모습을 담은 이미지 — alt 텍스트는 2026-07-25 수정 완료했으나 이미지 자체는 그대로" },
+    "pageB": { "source": "worker/worker.js SYSTEM_PROMPT 보안·기밀 보호 및 챗봇 실측 답변", "value": "\"올라서거나 뛰는 것은 권장하지 않는다\"로 안전하게 답변 (라이브 테스트로 확인됨)" },
+    "currentChatbotAnswer": "챗봇 텍스트 답변 자체는 안전하지만, 같은 사이트의 히어로 이미지가 상반된 인상을 줌",
+    "risk": "텍스트와 비주얼이 서로 다른 메시지를 줌 — 챗봇이 아무리 안전하게 답해도 고객이 실제로 본 이미지가 '올라서도 되는 것처럼' 보이면 신뢰도/안전 인식에 혼선을 줄 수 있음",
+    "requiresUserConfirmation": true,
+    "recommendedUnification": "jump.gif를 사람이 올라서지 않는 다른 연출로 교체할지 여부를 운영자가 결정 (이전 보고에서 이미 플래그된 항목, 계속 미해결)"
+  },
+  {
+    "id": "conflict-009",
+    "item": "개인정보 수집 및 AI 대화 저장 여부",
+    "pageA": { "source": "src/app/privacy/page.tsx 제2조/제3조/제6조", "value": "질문 내용 마스킹 후 180일 보관, Anthropic/Cloudflare 국외이전 고지" },
+    "pageB": { "source": "worker/worker.js maskPII + KV put 실제 동작 (네트워크 실측)", "value": "마스킹은 KV 로그 저장에만 적용되고, Anthropic으로 전달되는 대화 원문은 마스킹되지 않은 그대로 전송됨 — 정책 문구와 실제 동작이 일치함(정책이 이미 이 전송 사실을 고지하고 있음)" },
+    "currentChatbotAnswer": "해당 없음 (정책·구현 일치, 실측 확인 완료)",
+    "risk": "충돌 없음. 다만 '마스킹된다'는 문구만 읽으면 Anthropic 전송분까지 마스킹되는 것으로 오해할 여지가 있어 문구 명확화를 권장",
+    "requiresUserConfirmation": false,
+    "recommendedUnification": "제3조 문구에 \"마스킹은 자사 로그 보관에 적용되며, AI 응답 생성을 위해 Anthropic으로 전달되는 대화 내용에는 별도 마스킹이 적용되지 않는다\"는 문장을 추가하는 것을 권장 (선택 사항)"
+  }
+]

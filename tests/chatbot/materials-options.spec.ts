@@ -1,9 +1,9 @@
 import { test } from "@playwright/test";
 import { loadQuestionsForCategory, runQuestionTest } from "./qa-runner";
 
-// Category L — assembly, damage, exchange/return, warranty, A/S (35 questions).
-const questions = loadQuestionsForCategory(["L_assembly_as"]);
-test.describe("assembly, damage, exchange/return and A/S", () => {
+// Category J — materials, structure, color, and options (35 questions).
+const questions = loadQuestionsForCategory(["J_materials"]);
+test.describe("materials, structure, color and options", () => {
   for (const q of questions) {
     test(`${q.id}: ${q.canonicalQuestion}`, async ({ page }) => {
       await runQuestionTest(page, q);

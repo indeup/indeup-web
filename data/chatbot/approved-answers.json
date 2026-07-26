@@ -1,0 +1,16 @@
+{
+  "note": "테스트에서 factualAccuracyPass를 판정할 때 참조하는 승인된 핵심 수치/문구 스니펫. 실제 챗봇 답변 문장이 이 값과 '의미상' 일치하는지 확인하는 용도이며, 답변을 이 문구 그대로 강제하지 않는다.",
+  "entries": [
+    { "factId": "warranty-001", "mustContain": ["3년"], "mustNotContain": ["1년", "2년", "5년"] },
+    { "factId": "production-001", "mustContain": ["7~8영업일"], "mustNotContain": [] },
+    { "factId": "support-002", "mustContain": ["평일", "9시", "5시"], "mustNotContain": ["24시간 전화"] },
+    { "factId": "brand-003", "mustContain": ["네이버"], "mustNotContain": ["쿠팡", "지마켓", "11번가"] },
+    { "factId": "exchange_return-001", "mustContain": ["파손", "교환"], "mustNotContain": ["무조건", "예외 없이"] },
+    { "factId": "material-001", "mustContain": [], "mustNotContain": ["원목", "MDF 등급 미표기"] },
+    { "factId": "size-002-width", "mustContain": [], "mustNotContain": [], "note": "1인용 가로 400~1300mm 기본 + 최대 900mm 추가 확장 (customFit 계산기로만 최종 확정)" },
+    { "factId": "size-003-width", "mustContain": [], "mustNotContain": [], "note": "2인용은 1600/1800/2000/2200/2400/2600mm 고정 베이스 + 50/100/150mm 옵션만 가능 (임의 10mm 폭 지정 불가)" },
+    { "factId": "size-004-height", "mustContain": [], "mustNotContain": [], "note": "좌식책상 기본 높이 320mm, 범위 300~500mm" },
+    { "factId": "safety-001", "mustContain": [], "mustNotContain": ["kg까지 안전", "최대 하중은 ", "올라서도 안전"] },
+    { "factId": "privacy-001", "mustContain": [], "mustNotContain": ["저장하지 않습니다", "전혀 보관되지 않"] }
+  ]
+}
