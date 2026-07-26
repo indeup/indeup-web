@@ -157,6 +157,9 @@ function ProductCard({ productId, reason, onDetail, onPurchase }: { productId: s
       <div className="p-3.5">
         <p className="text-sm font-bold text-[var(--color-primary)]">{product.name}</p>
         <p className="mt-1 text-xs leading-5 text-[var(--color-muted-foreground)]">{reason}</p>
+        <p className="mt-1 text-[10px] leading-4 text-[var(--color-muted-foreground)]">
+          사진은 제품 라인 참고용이며, 실제 구성(단품/컴퓨터책상 등)은 다를 수 있습니다.
+        </p>
         <div className="mt-3 flex flex-wrap gap-2">
           <Link
             href={product.detailUrl}
