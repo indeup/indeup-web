@@ -1,7 +1,15 @@
 {
-  "updatedAt": "2026-07-28T21:46:37.391Z",
+  "updatedAt": "2026-07-29T10:14:08.905Z",
   "source": "https://rss.blog.naver.com/indeup_official.xml",
   "posts": [
+    {
+      "id": "https://blog.naver.com/indeup_official/224361604924",
+      "title": "집에서도 사무실 같은 1100x600 책상 활용법",
+      "link": "https://blog.naver.com/indeup_official/224361604924?fromRss=true&trackingCode=rss",
+      "pubDate": "2026-07-29T04:03:57.000Z",
+      "summary": "최근 집에서 보내는 시간이 늘어나면서 일을 하거나 공부하는 환경에 많은 관심을 두게 됩니다. 거실이나 방 한쪽에 나만의 작업 공간을 만들면 집중력이 크게 높아지는데 이때 중요한 것이 바로 적절한 가…",
+      "thumbnail": "https://blogthumb.pstatic.net/MjAyNjA3MjlfODQg/MDAxNzg1Mjk3NjcwODM2.TzMcEx4L9A46BKu9uAmwX_X0-gm-8nQRpOHo0DsuOQgg.pu1uevB6iCa_TtTLfTgUQPJmY9hbwtTu9uJM9bMjNd0g.JPEG/%C0%CE%B5%F0%BE%F7_1100%C3%A5%BB%F3_%C4%C4%C7%BB%C5%CD%C3%A5%BB%F3_01.jpeg?type=s3"
+    },
     {
       "id": "https://blog.naver.com/indeup_official/224360488022",
       "title": "원룸 자취러들 추천! 좌식책상900 사용 후기",
@@ -89,14 +97,6 @@
       "pubDate": "2026-06-18T02:46:53.000Z",
       "summary": "집안 구조를 바꾸거나 이사를 갈 때 꼭 애매하게 남는 공간들이 생기기 마련입니다. 특히 베란다 창가나 거실 소파 옆, 혹은 복도 끝 틈새 공간은 무언가를 놓기에는 좁고 비워두기에는 아쉬운 대표적인…",
       "thumbnail": "https://blogthumb.pstatic.net/MjAyNjA2MThfMjk0/MDAxNzgxNzUwNTE1OTE3.s_vokYD7Fr8s2yMlQqoNBoaTr5PQsbuxsI86ky9E_e0g.WSdp8DHzkzAtg0r16pYk5_BmsNo4DY-5HjWOcsopt2cg.JPEG/창가_사이드테이블_틈새_베란다_보조_1000x400.jpeg?type=s3"
-    },
-    {
-      "id": "https://blog.naver.com/indeup_official/224319563025",
-      "title": "인디업 책상 제작인증 2026년 06월 16일 출고인증",
-      "link": "https://blog.naver.com/indeup_official/224319563025?fromRss=true&trackingCode=rss",
-      "pubDate": "2026-06-18T00:55:34.000Z",
-      "summary": "인디업은 1cm 단위 맞춤 제작으로 공간에 꼭 맞는 책상을 만드는 브랜드입니다. 아연각관 프레임과 고강도 상판으로 흔들림 없이 견고하며, 실용성과 디자인을 동시에 만족시키는 데스크를 제안합니다. 각…",
-      "thumbnail": "https://blogthumb.pstatic.net/MjAyNjA2MThfNyAg/MDAxNzgxNzQzOTIwODA3.NuywXhzgz3tlrlwbVWHKyXAPChdJ8tuO-P_b38V9mv4g.2OPd0DNY3A8NzzYpazrn9ibBFEFOSMvKz3nzEDNbP3wg.JPEG/제작인증_copy.jpg?type=s3"
     }
   ]
 }
