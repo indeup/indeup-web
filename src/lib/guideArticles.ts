@@ -68,6 +68,8 @@ const GUIDE_ARTICLES_UPDATED_AT_2026_08_02 = "2026-08-02";
 
 const singleDesk = productFitConfigs["single-desk"];
 const doubleDesk = productFitConfigs["double-desk"];
+const sideTable = productFitConfigs["side-table"];
+const homeBarTable = productFitConfigs["home-bar-table"];
 
 const handWrittenGuideArticles: GuideArticle[] = [
   {
@@ -399,6 +401,59 @@ const handWrittenGuideArticles: GuideArticle[] = [
     relatedProduct: { label: "고객지원에 문의하기", href: "/support/" },
     publishedAt: GUIDE_ARTICLES_PUBLISHED_AT,
     updatedAt: GUIDE_ARTICLES_UPDATED_AT_2026_08_02,
+  },
+  {
+    slug: "side-table-home-bar-table-placement",
+    title: "사이드테이블·홈바테이블, 틈새 공간엔 어떤 게 맞을까",
+    description:
+      "소파 옆, 침대 옆, 주방과 거실 사이 같은 좁은 공간에 사이드테이블과 홈바테이블 중 어떤 걸 놓아야 할지 실제 제작 사이즈 기준으로 비교합니다.",
+    categories: ["공간 배치"],
+    sections: [
+      {
+        heading: "사이드테이블과 홈바테이블, 가장 큰 차이",
+        body: [
+          "두 제품 모두 좁은 틈새 공간에 놓는 보조 테이블이지만, 만들어지는 폭과 깊이 범위, 그리고 사용 방식이 다릅니다.",
+        ],
+        table: {
+          headers: ["항목", "사이드테이블 / 홈바테이블"],
+          rows: [
+            [
+              "가로",
+              `사이드테이블 ${sideTable.width!.bases[0]}~${sideTable.width!.bases[sideTable.width!.bases.length - 1]}mm · 홈바테이블 ${homeBarTable.width!.bases[0]}~${homeBarTable.width!.bases[homeBarTable.width!.bases.length - 1]}mm`,
+            ],
+            [
+              "세로(깊이)",
+              `사이드테이블 ${sideTable.depth!.variants[0].bases[0]}~${sideTable.depth!.variants[0].hardMax}mm · 홈바테이블 ${homeBarTable.depth!.variants[0].bases[0]}~${homeBarTable.depth!.variants[0].hardMax}mm(양면사용 가능 구조)`,
+            ],
+            [
+              "높이",
+              `두 제품 모두 기본 ${sideTable.height!.defaultHeight}mm, ${sideTable.height!.min}~${sideTable.height!.max}mm 범위에서 조정`,
+            ],
+          ],
+        },
+      },
+      {
+        heading: "이런 자리엔 사이드테이블이 어울립니다",
+        body: [
+          `소파 옆이나 침대 옆처럼 한쪽에서만 사용하는 좁은 틈새 공간에 맞습니다. 가로 ${sideTable.width!.bases[0]}mm부터 제작되어, 다른 가구 사이 좁은 자리에도 들어갑니다.`,
+        ],
+      },
+      {
+        heading: "이런 자리엔 홈바테이블이 어울립니다",
+        body: [
+          "주방과 거실 사이, 아일랜드 옆처럼 양쪽에서 마주보고 쓰거나 지나다니며 걸터앉는 자리에 맞습니다. 양면사용 가능 구조라 공간을 나누는 용도로도 쓸 수 있습니다.",
+        ],
+      },
+      {
+        heading: "서서 쓰는 높은 테이블도, 낮은 협탁도 가능합니다",
+        body: [
+          `두 제품 모두 기본 높이 ${sideTable.height!.defaultHeight}mm를 기준으로 ${sideTable.height!.min}~${sideTable.height!.max}mm 범위에서 10mm 단위로 조정할 수 있습니다. 서서 잠깐 작업하는 높은 테이블로도, 소파 옆에 낮게 두는 협탁으로도 만들 수 있습니다.`,
+          "정확한 사이즈가 아직 정해지지 않았다면 책상 가이드 페이지의 '내 공간 책상 사이즈 계산기'로 공간 정보를 입력해 대략적인 권장 사이즈부터 확인해보세요.",
+        ],
+      },
+    ],
+    relatedProduct: { label: "사이드테이블 자세히 보기", href: "/products/side-table/" },
+    publishedAt: "2026-08-04",
   },
 ];
 
