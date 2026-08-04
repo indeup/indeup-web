@@ -291,6 +291,14 @@ const faqs = [
     q: "보증기간은 얼마나 되나요?",
     a: "인디업 책상은 3년 무상보증을 제공합니다. 보증 대상과 적용 조건은 고객지원 페이지의 보증 안내에서 확인할 수 있습니다.",
   },
+  {
+    q: "지금 보고 있는 이 사이트가 인디업 공식 홈페이지가 맞나요?",
+    a: `네, indeup.com은 인디업 공식 홈페이지입니다. 실제 구매는 공식 네이버 브랜드스토어(${naverStoreUrl})에서 진행됩니다.`,
+  },
+  {
+    q: "인디업 공식 채널은 어디인가요?",
+    a: "네이버 브랜드스토어, 네이버 블로그, 티스토리, 유튜브, 인스타그램이 인디업 공식 채널입니다. 각 채널 링크는 이 페이지와 하단 푸터에서 확인할 수 있습니다.",
+  },
 ];
 
 export default function BrandPage() {
@@ -341,6 +349,16 @@ export default function BrandPage() {
     breadcrumb: { "@id": `${siteUrl}/brand/#breadcrumb` },
   };
 
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+
   return (
     <div className="flex flex-1 flex-col bg-white text-[var(--color-primary)]">
       <Header />
@@ -349,6 +367,7 @@ export default function BrandPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toSafeJsonLdString(breadcrumbJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toSafeJsonLdString(organizationJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toSafeJsonLdString(webPageJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toSafeJsonLdString(faqJsonLd) }} />
 
       <main className="flex-1">
         {/* Breadcrumb */}
