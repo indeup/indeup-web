@@ -29,7 +29,7 @@ function ArrowButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={direction === "left" ? "이전 릴스" : "다음 릴스"}
-      className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-transform duration-200 hover:scale-110 hover:bg-[var(--color-brand-dark)] disabled:cursor-not-allowed disabled:bg-[var(--color-border)] disabled:hover:scale-100"
+      className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-[var(--color-primary)] text-white transition-transform duration-200 hover:scale-110 hover:opacity-85 disabled:cursor-not-allowed disabled:bg-[var(--color-border)] disabled:hover:scale-100"
     >
       <svg
         viewBox="0 0 24 24"
@@ -57,6 +57,13 @@ export default function InstagramReels() {
   const firstCardRef = useRef<HTMLDivElement>(null);
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
+  // Only 3 cards exist today, which don't fill the section's full width on
+  // wide screens — left-aligning them then dumps all the slack space on the
+  // right, reading as "cut off" rather than intentional. Center the row
+  // instead whenever it isn't actually wide enough to need scrolling; once
+  // enough real posts exist to overflow, this naturally reverts to the
+  // normal start-aligned scroller.
+  const [hasOverflow, setHasOverflow] = useState(false);
   // Hidden on mobile by request — desktop keeps it. Checked in JS (not just
   // a `hidden` CSS class) so the embed script and its iframes never load on
   // mobile at all, rather than loading invisibly.
@@ -103,6 +110,7 @@ export default function InstagramReels() {
       if (!scroller) return;
       setAtStart(scroller.scrollLeft <= 2);
       setAtEnd(scroller.scrollLeft + scroller.clientWidth >= scroller.scrollWidth - 2);
+      setHasOverflow(scroller.scrollWidth > scroller.clientWidth + 2);
     }
     update();
     scroller.addEventListener("scroll", update, { passive: true });
@@ -124,12 +132,12 @@ export default function InstagramReels() {
 
   return (
     <section className="border-b border-[var(--color-border)] px-6 py-24 sm:px-12">
-      <div className="mx-auto max-w-6xl">
-        <p className="text-sm font-semibold uppercase tracking-[0.15em] text-[var(--color-muted-foreground)]">
+      <div className="mx-auto max-w-[1600px]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[var(--color-muted-foreground)]">
           @indeup.kr
         </p>
         <h2
-          className="mt-4 font-bold tracking-[-0.02em]"
+          className="mt-4 font-semibold tracking-[-0.02em]"
           style={{ fontSize: "var(--type-h2)" }}
         >
           인스타그램에서도 확인하세요.
@@ -140,7 +148,9 @@ export default function InstagramReels() {
 
         <div
           ref={scrollerRef}
-          className="no-scrollbar mt-10 flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth"
+          className={`no-scrollbar mt-10 flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth ${
+            hasOverflow ? "" : "justify-center"
+          }`}
         >
           {reelUrls.map((url, i) => (
             <div
@@ -177,10 +187,12 @@ export default function InstagramReels() {
           ))}
         </div>
 
-        <div className="mt-8 flex justify-center gap-3">
-          <ArrowButton direction="left" onClick={() => scrollByCard(-1)} disabled={atStart} />
-          <ArrowButton direction="right" onClick={() => scrollByCard(1)} disabled={atEnd} />
-        </div>
+        {hasOverflow && (
+          <div className="mt-8 flex justify-center gap-3">
+            <ArrowButton direction="left" onClick={() => scrollByCard(-1)} disabled={atStart} />
+            <ArrowButton direction="right" onClick={() => scrollByCard(1)} disabled={atEnd} />
+          </div>
+        )}
       </div>
     </section>
   );

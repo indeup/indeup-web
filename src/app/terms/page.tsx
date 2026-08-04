@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/terms/",
   },
+  openGraph: {
+    title: "이용약관 | 인디업 INDEUP",
+    description: "인디업(INDEUP) 공식 홈페이지의 이용약관입니다.",
+    url: "/terms/",
+  },
 };
 
 function Article({
@@ -38,17 +43,17 @@ export default function TermsPage() {
           <p className="text-sm font-semibold uppercase tracking-[0.15em] text-[var(--color-muted-foreground)]">
             Terms
           </p>
-          <h1 className="mt-4 font-bold tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
+          <h1 className="mt-4 font-semibold tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
             이용약관
           </h1>
-          <p className="mt-6 text-base leading-7 text-[var(--color-secondary)]">
+          <p className="mt-6 text-base leading-[1.4] text-[var(--color-secondary)]">
             {legalName}(이하 &lsquo;회사&rsquo;)는 인디업(INDEUP) 공식 홈페이지(이하
             &lsquo;홈페이지&rsquo;)를 운영하며, 본 약관은 홈페이지가 제공하는 정보 열람
             서비스의 이용조건 및 절차, 회사와 이용자의 권리·의무 및 책임사항을
             규정함을 목적으로 합니다.
           </p>
 
-          <div className="mt-10 flex flex-col gap-10 text-base leading-7 text-[var(--color-secondary)]">
+          <div className="mt-10 flex flex-col gap-10 text-base leading-[1.4] text-[var(--color-secondary)]">
             <Article num={1} title="목적">
               <p>
                 본 약관은 회사가 운영하는 홈페이지를 이용함에 있어 회사와

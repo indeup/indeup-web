@@ -2,12 +2,16 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { policyData } from "@/lib/policy";
-import { getProductLink, getGuideLink, type GuideLinkId } from "@/lib/chatCatalog";
+import { getProductLink, getGuideLink, resolveCatalogId, type GuideLinkId } from "@/lib/chatCatalog";
 import { matchFaq } from "@/lib/chatFaq";
 import type { ChatResponse } from "@/lib/chatTypes";
 import { checkAllProducts, diagnoseNoMatch, type ProductMatch, type NoMatchDiagnosis, type ResolvedDimension } from "@/lib/customFit";
+import { ColorDotsRow } from "@/components/ColorSwatches";
+import { computePriceForMatch, getStartingPrice } from "@/lib/pricing";
+import PriceBlock from "@/components/PriceBlock";
 
 /**
  * Endpoint of the Cloudflare Worker proxy (see /worker/worker.js). The
@@ -22,7 +26,33 @@ const STORAGE_KEY = "indeup-chat-widget-v2";
 
 type DisplayMessage =
   | { role: "user"; content: string }
-  | { role: "assistant"; response: ChatResponse; logKey?: string; feedback?: "helpful" | "not-helpful" };
+  | {
+      role: "assistant";
+      response: ChatResponse;
+      logKey?: string;
+      feedback?: "helpful" | "not-helpful";
+      /** Set only by the local "WxDxH" shorthand short-circuit below (never by the AI) — lets the
+       *  size-check widget this message renders auto-fill and auto-run instead of making the
+       *  customer retype the exact numbers they just typed in their question. */
+      dims?: { width: number; depth: number; height: number };
+    };
+
+/**
+ * Matches an unambiguous "가로x세로x높이" shorthand customers commonly type
+ * instead of using the size-check form fields (e.g. "1230x460x750",
+ * "1230×460×750mm 얼마예요"). Deliberately narrow — three 2~5 digit numbers
+ * joined by "x"/"×"/"*" — to avoid misreading unrelated numbers (order
+ * numbers, phone numbers) as a size. Skips a match immediately followed by
+ * "cm" since the fields below assume mm; a hand-typed cm triple is rare
+ * enough to just leave to the AI's unit-conversion handling instead of
+ * silently mis-scaling it by 10x.
+ */
+function parseSizeShorthand(text: string): { width: number; depth: number; height: number } | null {
+  const match = text.match(/(\d{2,5})\s*[x×X*]\s*(\d{2,5})\s*[x×X*]\s*(\d{2,5})(?!\s*cm)/);
+  if (!match) return null;
+  const [, w, d, h] = match;
+  return { width: Number(w), depth: Number(d), height: Number(h) };
+}
 
 /** Every open starts fresh at the quick-start menu (see handleOpen) rather
  *  than silently resuming an old conversation — on mobile especially, a
@@ -59,14 +89,20 @@ function renderWithBold(text: string) {
   });
 }
 
+/** Cycled by the loading indicator while waiting on the AI worker — the last
+ *  entry is shown briefly right as the response actually arrives, before the
+ *  real answer bubble replaces it (see the "완료" flash in sendUserText). */
+const LOADING_PHRASES = ["답변을 작성하는 중...", "답변을 찾고 있습니다..."];
+const LOADING_DONE_TEXT = "답변이 완료되었습니다";
+
 const QUICK_START: { id: string; label: string; response: ChatResponse }[] = [
   {
     id: "find-product",
     label: "내 공간에 맞는 제품 찾기",
     response: {
       intent: "clarification",
-      answer: "몇 명이 사용할 책상인가요?",
-      quickReplies: ["1명 사용", "2명 사용", "바닥에 앉아 사용", "보조 테이블로 사용"],
+      answer: "어떤 방법으로 도와드릴까요?",
+      quickReplies: ["원하는 책상 사이즈 입력", "내방 공간에 맞는 책상 추천받기"],
       needsHumanSupport: false,
     },
   },
@@ -124,21 +160,32 @@ function toApiMessages(messages: DisplayMessage[]) {
   return messages.map((m) => (m.role === "user" ? { role: "user" as const, content: m.content } : { role: "assistant" as const, content: m.response.answer }));
 }
 
-function LinkButton({ id, onNavigate }: { id: string; onNavigate: (id: GuideLinkId, isExternal: boolean) => void }) {
+function LinkButton({
+  id,
+  onNavigate,
+  hrefOverride,
+}: {
+  id: string;
+  onNavigate: (id: GuideLinkId, isExternal: boolean) => void;
+  /** Carries a dimension match (from parseSizeShorthand) on to /custom-fit/ so its
+   *  confirmation prompt still works after this extra chat → page hop. */
+  hrefOverride?: string;
+}) {
   const link = getGuideLink(id);
   if (!link) return null;
-  const isExternal = link.href.startsWith("http");
+  const href = hrefOverride ?? link.href;
+  const isExternal = href.startsWith("http");
   const className =
-    "min-h-11 inline-flex items-center rounded-full border border-[var(--color-brand)] px-4 py-2 text-sm font-semibold text-[var(--color-brand)] transition-colors hover:bg-[var(--color-brand)] hover:text-white";
+    "min-h-11 inline-flex items-center rounded-full border border-[var(--color-primary)]/25 px-4 py-2 text-sm font-semibold text-[var(--color-primary)] transition-colors hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white";
   if (isExternal) {
     return (
-      <a data-testid={`chat-link-${id}`} href={link.href} target="_blank" rel="noreferrer noopener" className={className} onClick={() => onNavigate(id as GuideLinkId, true)}>
+      <a data-testid={`chat-link-${id}`} href={href} target="_blank" rel="noreferrer noopener" className={className} onClick={() => onNavigate(id as GuideLinkId, true)}>
         {link.label}
       </a>
     );
   }
   return (
-    <Link data-testid={`chat-link-${id}`} href={link.href} className={className} onClick={() => onNavigate(id as GuideLinkId, false)}>
+    <Link data-testid={`chat-link-${id}`} href={href} className={className} onClick={() => onNavigate(id as GuideLinkId, false)}>
       {link.label}
     </Link>
   );
@@ -148,6 +195,10 @@ function ProductCard({ productId, reason, onDetail, onPurchase }: { productId: s
   const product = getProductLink(productId);
   if (!product || !product.isActive) return null;
   const storeAll = getGuideLink("storeAll");
+  // No exact size has been resolved here (this is a general line recommendation,
+  // not a /custom-fit/ match) — so only the cheapest listed row can be shown, as
+  // a "부터" starting price, not a specific 최대혜택가.
+  const startingPrice = getStartingPrice(productId);
 
   return (
     <div className="overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white">
@@ -155,16 +206,19 @@ function ProductCard({ productId, reason, onDetail, onPurchase }: { productId: s
         <Image src={product.imageUrl} alt={product.name} fill sizes="360px" className="object-cover" />
       </div>
       <div className="p-3.5">
-        <p className="text-sm font-bold text-[var(--color-primary)]">{product.name}</p>
+        <p className="text-sm font-semibold text-[var(--color-primary)]">{product.name}</p>
         <p className="mt-1 text-xs leading-5 text-[var(--color-muted-foreground)]">{reason}</p>
-        <p className="mt-1 text-[10px] leading-4 text-[var(--color-muted-foreground)]">
-          사진은 제품 라인 참고용이며, 실제 구성(단품/컴퓨터책상 등)은 다를 수 있습니다.
-        </p>
+        {startingPrice && (
+          <p className="mt-1.5 text-sm font-semibold text-[var(--color-accent)]">
+            {startingPrice.discountPrice.toLocaleString("ko-KR")}원부터
+          </p>
+        )}
+        <ColorDotsRow className="mt-2.5" showTop={productId !== "frame"} />
         <div className="mt-3 flex flex-wrap gap-2">
           <Link
             href={product.detailUrl}
             onClick={() => onDetail(productId)}
-            className="min-h-11 inline-flex items-center rounded-full bg-[var(--color-brand)] px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+            className="min-h-11 inline-flex items-center rounded-full bg-[var(--color-primary)] px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90"
           >
             제품 자세히 보기
           </Link>
@@ -174,7 +228,7 @@ function ProductCard({ productId, reason, onDetail, onPurchase }: { productId: s
               target="_blank"
               rel="noreferrer noopener"
               onClick={() => onPurchase(productId)}
-              className="min-h-11 inline-flex items-center rounded-full border border-[var(--color-border)] px-4 py-2 text-xs font-semibold text-[var(--color-primary)] transition-colors hover:border-[var(--color-brand)]"
+              className="min-h-11 inline-flex items-center rounded-full bg-[var(--color-accent)] px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90"
             >
               공식 스토어에서 구매하기
             </a>
@@ -184,7 +238,7 @@ function ProductCard({ productId, reason, onDetail, onPurchase }: { productId: s
               target="_blank"
               rel="noreferrer noopener"
               onClick={() => onPurchase(productId)}
-              className="min-h-11 inline-flex items-center rounded-full border border-[var(--color-border)] px-4 py-2 text-xs font-semibold text-[var(--color-primary)] transition-colors hover:border-[var(--color-brand)]"
+              className="min-h-11 inline-flex items-center rounded-full bg-[var(--color-accent)] px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90"
             >
               공식 스토어 전체보기
             </a>
@@ -199,56 +253,89 @@ function ProductCard({ productId, reason, onDetail, onPurchase }: { productId: s
  *  in the browser — no AI round-trip, no chance of the model mis-guessing a
  *  size. Exact same source of truth as the calculator page, just embedded
  *  so a size question can be answered in the chat itself. */
-function SizeCheckForm() {
-  const [width, setWidth] = useState("");
-  const [depth, setDepth] = useState("");
-  const [height, setHeight] = useState("");
+function SizeCheckForm({ initial }: { initial?: { width: number; depth: number; height: number } }) {
+  const [width, setWidth] = useState(initial ? String(initial.width) : "");
+  const [depth, setDepth] = useState(initial ? String(initial.depth) : "");
+  const [height, setHeight] = useState(initial ? String(initial.height) : "");
   const [result, setResult] = useState<{ kind: "match"; matches: ProductMatch[] } | { kind: "none"; diagnosis: NoMatchDiagnosis } | null>(null);
   const naverTalk = getGuideLink("naverTalk");
 
-  function handleCheck() {
+  function handleCheck(source: "form" | "chat_text" = "form") {
     const w = Number(width);
     const d = Number(depth);
     const h = Number(height);
     if (!w || !d || !h) return;
-    trackEvent("chat_size_check_submitted", { width: w, depth: d, height: h });
+    trackEvent("chat_size_check_submitted", { width: w, depth: d, height: h, source });
     const matches = checkAllProducts(w, d, h);
     setResult(matches.length > 0 ? { kind: "match", matches: matches.slice(0, 3) } : { kind: "none", diagnosis: diagnoseNoMatch(w, d, h) });
   }
 
+  // A message that already carried "initial" came from parseSizeShorthand
+  // (the customer typed the size directly in chat) — run the check
+  // immediately so the result appears without the customer re-entering the
+  // same three numbers into the fields above.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (initial) handleCheck("chat_text");
+  }, []);
+
   const digitsOnly = (v: string) => v.replace(/[^0-9]/g, "").slice(0, 5);
 
   function formatDim(label: string, dim: ResolvedDimension) {
-    const parts = [dim.specLine, dim.optionLine].filter(Boolean);
-    return `${label} ${dim.resolvedValue}mm${parts.length ? ` · ${parts.join(" · ")}` : ""}`;
+    return (
+      <>
+        {label} {dim.resolvedValue}mm
+        {dim.specLine && <> · {dim.specLine}</>}
+        {dim.optionLine && (
+          <>
+            {" "}
+            · <span className="font-semibold text-[var(--color-accent)]">{dim.optionLine}</span>
+          </>
+        )}
+      </>
+    );
   }
 
   return (
     <div className="w-[92%] rounded-2xl border border-[var(--color-border)] bg-white p-3.5">
       <div className="grid grid-cols-3 gap-2">
         {[
-          { label: "가로(mm)", value: width, set: setWidth },
-          { label: "세로(mm)", value: depth, set: setDepth },
-          { label: "높이(mm)", value: height, set: setHeight },
-        ].map((f) => (
-          <label key={f.label} className="block">
-            <span className="text-[10px] font-semibold text-[var(--color-muted-foreground)]">{f.label}</span>
-            <input
-              type="text"
-              inputMode="numeric"
-              value={f.value}
-              onChange={(e) => f.set(digitsOnly(e.target.value))}
-              className="mt-1 h-10 w-full rounded-lg border border-[var(--color-border)] px-2 text-sm outline-none focus:border-[var(--color-brand)]"
-            />
-          </label>
-        ))}
+          { key: "width" as const, label: "가로(mm)", value: width, set: setWidth },
+          { key: "depth" as const, label: "세로(mm)", value: depth, set: setDepth },
+          { key: "height" as const, label: "높이(mm)", value: height, set: setHeight },
+        ].map((f) => {
+          // Only the specific dimension(s) that actually caused the "no
+          // match" — not all three — get flagged red, so the customer can
+          // see at a glance exactly which number to change instead of
+          // re-guessing all three.
+          const problem = result?.kind === "none" ? result.diagnosis[f.key] : undefined;
+          return (
+            <label key={f.label} className="block">
+              <span className={`text-[10px] font-semibold ${problem ? "text-[var(--color-accent)]" : "text-[var(--color-muted-foreground)]"}`}>
+                {f.label}
+              </span>
+              <input
+                type="text"
+                inputMode="numeric"
+                value={f.value}
+                onChange={(e) => f.set(digitsOnly(e.target.value))}
+                className={`mt-1 h-10 w-full rounded-full border bg-[var(--color-muted)] px-3 text-center text-sm outline-none focus:bg-white ${
+                  problem
+                    ? "border-[var(--color-accent)] text-[var(--color-accent)] focus:border-[var(--color-accent)]"
+                    : "border-[var(--color-border)] focus:border-[var(--color-primary)]"
+                }`}
+              />
+              {problem && <p className="mt-1 text-[10px] leading-4 font-semibold text-[var(--color-accent)]">{problem}</p>}
+            </label>
+          );
+        })}
       </div>
 
       <button
         type="button"
-        onClick={handleCheck}
+        onClick={() => handleCheck("form")}
         disabled={!width || !depth || !height}
-        className="mt-3 min-h-10 w-full rounded-full bg-[var(--color-brand)] text-sm font-semibold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+        className="mt-3 min-h-10 w-full rounded-full bg-[var(--color-primary)] text-sm font-semibold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
       >
         제작 가능 여부 확인
       </button>
@@ -256,7 +343,7 @@ function SizeCheckForm() {
       {result?.kind === "match" && (
         <div className="mt-3 flex flex-col gap-3">
           {result.matches.map((m) => {
-            const product = getProductLink(m.product);
+            const product = getProductLink(resolveCatalogId(m.product, m.variantKey));
             return (
               <div key={`${m.product}-${m.variantKey}`} className="overflow-hidden rounded-xl border border-[var(--color-border)]">
                 {product && (
@@ -266,12 +353,8 @@ function SizeCheckForm() {
                 )}
                 <div className="p-2.5">
                   <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--color-muted-foreground)]">{m.displayLabel}</p>
-                  <p className="text-xs font-bold text-[var(--color-primary)]">{m.productName}</p>
-                  {product && (
-                    <p className="mt-0.5 text-[10px] leading-4 text-[var(--color-muted-foreground)]">
-                      사진은 제품 라인 참고용이며, 실제 구성(멀티탭거치대 포함 여부 등)은 위 제품명을 기준으로 합니다.
-                    </p>
-                  )}
+                  <p className="text-xs font-semibold text-[var(--color-primary)]">{m.productName}</p>
+                  <ColorDotsRow className="mt-1.5" showTop={m.product !== "frame"} />
 
                   <div className="mt-1.5 flex flex-col gap-0.5 text-[11px] leading-5 text-[var(--color-muted-foreground)]">
                     <span>{formatDim("가로", m.width)}</span>
@@ -280,6 +363,10 @@ function SizeCheckForm() {
                   </div>
 
                   {m.anyInquiry && <p className="mt-1 text-[10px] text-[var(--color-muted-foreground)]">일부 옵션은 별도 확인이 필요합니다.</p>}
+
+                  <div className="mt-1.5">
+                    <PriceBlock price={computePriceForMatch(m)} />
+                  </div>
 
                   <p className="mt-1.5 text-[10px] leading-4 text-[var(--color-muted-foreground)]">
                     아래 버튼으로 이동한 뒤, 위 옵션값과 동일하게 선택하고 구매해 주세요.
@@ -290,7 +377,7 @@ function SizeCheckForm() {
                     target="_blank"
                     rel="noreferrer noopener"
                     onClick={() => trackEvent("chat_purchase_clicked", { productId: m.product, source: "size_check" })}
-                    className="mt-1.5 inline-flex min-h-9 items-center rounded-full bg-[var(--color-brand)] px-3 py-1.5 text-xs font-semibold text-white"
+                    className="mt-1.5 inline-flex min-h-9 items-center rounded-full bg-[var(--color-accent)] px-3 py-1.5 text-xs font-semibold text-white"
                   >
                     이 사이즈로 구매하기
                   </a>
@@ -303,16 +390,13 @@ function SizeCheckForm() {
 
       {result?.kind === "none" && (
         <div className="mt-3 rounded-xl border border-[var(--color-border)] p-2.5 text-xs leading-5 text-[var(--color-muted-foreground)]">
-          <p>입력하신 사이즈로 제작 가능한 제품을 찾지 못했습니다.</p>
-          {result.diagnosis.width && <p className="mt-1">{result.diagnosis.width}</p>}
-          {result.diagnosis.depth && <p className="mt-1">{result.diagnosis.depth}</p>}
-          {result.diagnosis.height && <p className="mt-1">{result.diagnosis.height}</p>}
+          <p>입력하신 사이즈로 제작 가능한 제품을 찾지 못했습니다. 위에 빨간색으로 표시된 칸을 확인해 주세요.</p>
           {naverTalk && (
             <a
               href={naverTalk.href}
               target="_blank"
               rel="noreferrer noopener"
-              className="mt-2 inline-flex min-h-9 items-center rounded-full border border-[var(--color-border)] px-3 py-1.5 text-xs font-semibold text-[var(--color-primary)] hover:border-[var(--color-brand)]"
+              className="mt-2 inline-flex min-h-9 items-center rounded-full border border-[var(--color-border)] px-3 py-1.5 text-xs font-semibold text-[var(--color-primary)] hover:border-[var(--color-primary)]"
             >
               네이버 톡톡으로 문의하기
             </a>
@@ -324,7 +408,12 @@ function SizeCheckForm() {
 }
 
 export default function ChatWidget() {
-  const [open, setOpen] = useState(false);
+  // /chat/ exists specifically to be linked from outside the site (e.g. a
+  // 네이버 톡톡 quick-menu button) — a visitor arriving there wants the chat
+  // panel immediately, not a closed FAB they still have to tap.
+  const pathname = usePathname();
+  const isDedicatedChatPage = pathname === "/chat" || pathname === "/chat/";
+  const [open, setOpen] = useState(() => isDedicatedChatPage);
   const [messages, setMessages] = useState<DisplayMessage[]>([]);
   // Only used to show/hide the "이전 대화 이어보기" recall button — starting
   // false and flipping true post-mount is a normal client-only feature
@@ -333,18 +422,55 @@ export default function ChatWidget() {
   const [hasSavedHistory, setHasSavedHistory] = useState(false);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  // Cycles through while `loading` is true so a slow response reads as
+  // "still working", not "stuck on the same word" — see the effect below.
+  const [loadingText, setLoadingText] = useState(LOADING_PHRASES[0]);
   const [liveAnnouncement, setLiveAnnouncement] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const hasOpenedOnce = useRef(false);
+  // Nudge bubble next to the closed FAB — reappears any time the widget is
+  // closed (not a one-time-forever dismissal), so it keeps inviting a
+  // visitor back rather than only ever showing once per browser.
+  const [showHint, setShowHint] = useState(false);
+  const hintTimerRef = useRef<number | null>(null);
+
+  function scheduleHint(delayMs: number) {
+    if (typeof window === "undefined") return;
+    if (hintTimerRef.current) window.clearTimeout(hintTimerRef.current);
+    hintTimerRef.current = window.setTimeout(() => setShowHint(true), delayMs);
+  }
 
   useEffect(() => {
     setHasSavedHistory(loadSavedMessages() !== null);
   }, []);
 
   useEffect(() => {
+    scheduleHint(1500);
+    return () => {
+      if (hintTimerRef.current) window.clearTimeout(hintTimerRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function dismissHint() {
+    setShowHint(false);
+  }
+
+  useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, loading]);
+
+  useEffect(() => {
+    if (!loading) return;
+    setLoadingText(LOADING_PHRASES[0]);
+    let i = 0;
+    const timer = window.setInterval(() => {
+      i = (i + 1) % LOADING_PHRASES.length;
+      setLoadingText(LOADING_PHRASES[i]);
+    }, 1800);
+    return () => window.clearInterval(timer);
+  }, [loading]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -366,6 +492,20 @@ export default function ChatWidget() {
     if (eventName) trackEvent(eventName, { intent: response.intent });
   }
 
+  // Local matches (size-shorthand, FAQ) used to appear instantly with no
+  // loading state at all — jarring next to the AI path's loading bubble, and
+  // inconsistent enough that it read as two different bots. Every answer now
+  // shows the same ~1s loading→"완료" beat regardless of where it came from.
+  async function revealAfterLoadingBeat(newMessages: DisplayMessage[]) {
+    setLoading(true);
+    setLoadingText(LOADING_PHRASES[0]);
+    await new Promise((resolve) => setTimeout(resolve, 1550));
+    setLoadingText(LOADING_DONE_TEXT);
+    await new Promise((resolve) => setTimeout(resolve, 450));
+    setLoading(false);
+    appendMessages(newMessages);
+  }
+
   async function sendUserText(rawText: string, opts?: { viaQuickReply?: boolean }) {
     const text = rawText.trim();
     if (!text || loading) return;
@@ -376,6 +516,36 @@ export default function ChatWidget() {
     if (textareaRef.current) textareaRef.current.style.height = "auto";
     trackEvent(opts?.viaQuickReply ? "chat_quick_reply_clicked" : "chat_question_submitted", { text });
 
+    // Checked before matchFaq deliberately: a literal "1230x650x780" is a
+    // much stronger, more specific signal than any FAQ keyword match, but a
+    // question like "1230x650x780 얼마인가요" also contains "얼마인가요" —
+    // which the generic price FAQ (keywordGroups: [["얼마인가요"]]) would
+    // otherwise catch first and answer with a vague "가격은 옵션에 따라
+    // 달라집니다" instead of this exact size's real computed price.
+    const dims = parseSizeShorthand(text);
+    if (dims) {
+      const matches = checkAllProducts(dims.width, dims.depth, dims.height);
+      // Naming the matched product line(s) here (not just "결과를 보여드릴게요")
+      // matters beyond the customer's own reading — this text is what the AI
+      // sees as conversation history on the next turn. Without it, a later
+      // follow-up like "2인용으로 하면요?" has no way to know 1230mm only
+      // matched 1인용 lines, and the AI can't apply its own "치수 제약 우선"
+      // rule to a fact it was never actually told.
+      const matchedNames = [...new Set(matches.map((m) => m.productName))].join(", ");
+      const response: ChatResponse = {
+        intent: "size_check",
+        answer:
+          matches.length > 0
+            ? `가로 ${dims.width}mm · 세로 ${dims.depth}mm · 높이 ${dims.height}mm 기준으로 확인해보니 ${matchedNames}(으)로 제작 가능합니다. 자세한 옵션과 가격은 바로 아래에서 확인해 주세요.`
+            : `가로 ${dims.width}mm · 세로 ${dims.depth}mm · 높이 ${dims.height}mm는 제작 가능한 범위를 벗어난 것 같아요. 아래 안내를 확인해 주세요.`,
+        linkIds: ["customFit"],
+        needsHumanSupport: matches.length === 0,
+      };
+      await revealAfterLoadingBeat([{ role: "assistant", response, dims }]);
+      trackEvent("chat_intent_detected", { intent: "size_check_local" });
+      return;
+    }
+
     const faqHit = matchFaq(text);
     if (faqHit) {
       const response: ChatResponse = {
@@ -385,18 +555,26 @@ export default function ChatWidget() {
         quickReplies: faqHit.quickReplies,
         needsHumanSupport: false,
       };
-      appendMessages([{ role: "assistant", response }]);
+      await revealAfterLoadingBeat([{ role: "assistant", response }]);
       trackEvent("chat_intent_detected", { intent: "faq", faqId: faqHit.id });
       return;
     }
 
     setLoading(true);
     try {
-      const res = await fetch(CHAT_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: toApiMessages(withUser) }),
-      });
+      const minDelay = new Promise((resolve) => setTimeout(resolve, 1550));
+      const [res] = await Promise.all([
+        fetch(CHAT_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages: toApiMessages(withUser) }),
+        }),
+        // Real AI latency is almost always well over a second, but this
+        // guarantees the loading beat never gets skipped even on a
+        // freakishly fast response — every answer path now has the same
+        // floor (see revealAfterLoadingBeat above).
+        minDelay,
+      ]);
 
       if (res.status === 429) {
         appendMessages([{ role: "assistant", response: RATE_LIMIT_RESPONSE }]);
@@ -413,6 +591,11 @@ export default function ChatWidget() {
       // inside it — it's internal bookkeeping for the feedback buttons
       // below, never rendered, so it doesn't belong in the shared contract.
       const logKey = "logKey" in data && typeof data.logKey === "string" ? data.logKey : undefined;
+      // A brief "완료" flash so the loading bubble doesn't just vanish and
+      // get replaced instantly — a small, deliberate beat that reads as "the
+      // answer just landed" rather than an abrupt cut.
+      setLoadingText(LOADING_DONE_TEXT);
+      await new Promise((resolve) => setTimeout(resolve, 450));
       appendMessages([{ role: "assistant", response, logKey }]);
       trackEvent("chat_intent_detected", { intent: response.intent });
       if (response.products?.length) {
@@ -430,6 +613,7 @@ export default function ChatWidget() {
 
   function handleOpen() {
     setOpen(true);
+    dismissHint();
     // Always land on the fresh quick-start menu, not wherever the last
     // conversation left off — "이전 대화 이어보기" on that menu is the
     // explicit opt-in for anyone who actually wants it back.
@@ -442,6 +626,7 @@ export default function ChatWidget() {
 
   function handleClose() {
     setOpen(false);
+    scheduleHint(4000);
     // Reset immediately on close too (not just deferred to the next open) —
     // the conversation itself is already safe in sessionStorage from the
     // persistence effect, so this can't lose anything "이전 대화 이어보기"
@@ -510,14 +695,14 @@ export default function ChatWidget() {
 
       {open && (
         <div data-testid="chat-panel" className="flex h-[min(78vh,600px)] w-[min(92vw,380px)] flex-col overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white shadow-[0_16px_48px_rgba(0,0,0,0.22)] sm:h-[680px] sm:w-[420px]">
-          <div className="border-b-2 border-[var(--color-brand)] bg-[var(--color-primary)] px-4 pb-3.5 pt-4 text-white">
+          <div className="border-b border-[var(--color-border)] bg-white px-4 pb-3.5 pt-4">
             <div className="flex items-start justify-between">
               <div>
                 <div className="flex items-center gap-2">
-                  <Image src="/INDEUP_LOGO_WHITE.svg" alt="인디업 INDEUP" width={64} height={23} />
-                  <span className="rounded-full bg-[var(--color-brand)] px-1.5 py-0.5 text-[9px] font-bold tracking-wide">BETA</span>
+                  <Image src="/INDEUP_LOGO.svg" alt="인디업 INDEUP" width={64} height={23} />
+                  <span className="rounded-full bg-[var(--color-primary)] px-1.5 py-0.5 text-[9px] font-bold tracking-wide text-white">BETA</span>
                 </div>
-                <p className="mt-1.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">Made to Fit Your Space</p>
+                <p className="mt-1.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--color-muted-foreground)]">Made to Fit Your Space</p>
               </div>
               <div className="flex items-center gap-1">
                 {messages.length > 0 && (
@@ -525,7 +710,7 @@ export default function ChatWidget() {
                     type="button"
                     onClick={resetToMenu}
                     aria-label="처음 화면으로 돌아가기"
-                    className="flex h-8 items-center rounded-full px-2.5 text-[11px] font-semibold text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+                    className="flex h-8 items-center rounded-full px-2.5 text-[11px] font-semibold text-[var(--color-muted-foreground)] transition-colors hover:bg-[var(--color-muted)] hover:text-[var(--color-primary)]"
                   >
                     처음으로
                   </button>
@@ -534,7 +719,7 @@ export default function ChatWidget() {
                   type="button"
                   onClick={handleClose}
                   aria-label="채팅 닫기"
-                  className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+                  className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-[var(--color-muted-foreground)] transition-colors hover:bg-[var(--color-muted)] hover:text-[var(--color-primary)]"
                 >
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                     <line x1="18" y1="6" x2="6" y2="18" />
@@ -547,7 +732,7 @@ export default function ChatWidget() {
 
           {messages.length === 0 ? (
             <div className="flex flex-1 flex-col justify-center gap-3 overflow-y-auto px-5 py-6">
-              <p className="text-center text-base font-bold text-[var(--color-primary)]">어떤 도움이 필요하신가요?</p>
+              <p className="text-center text-base font-semibold text-[var(--color-primary)]">어떤 도움이 필요하신가요?</p>
               <div className="mt-2 flex flex-col gap-2.5">
                 {QUICK_START.map((item) => (
                   <button
@@ -555,7 +740,7 @@ export default function ChatWidget() {
                     type="button"
                     data-testid={`quick-start-${item.id}`}
                     onClick={() => pushScripted(item.label, item.response, "chat_quick_start_selected")}
-                    className="min-h-11 rounded-xl border border-[var(--color-border)] px-4 py-3 text-left text-sm font-medium text-[var(--color-primary)] transition-colors hover:border-[var(--color-brand)] hover:bg-[var(--color-muted)]"
+                    className="min-h-11 rounded-full border border-[var(--color-border)] bg-white px-4 py-3 text-left text-sm font-medium text-[var(--color-primary)] transition-colors hover:border-[var(--color-primary)] hover:bg-[var(--color-muted)]"
                   >
                     {item.label}
                   </button>
@@ -565,15 +750,14 @@ export default function ChatWidget() {
                 <button
                   type="button"
                   onClick={resumeSavedConversation}
-                  className="min-h-9 text-center text-xs font-semibold text-[var(--color-brand)] underline underline-offset-2"
+                  className="min-h-9 text-center text-xs font-semibold text-[var(--color-primary)] underline underline-offset-2"
                 >
                   이전 대화 이어보기
                 </button>
               )}
               <p className="mt-4 text-center text-[11px] leading-6 text-[var(--color-muted-foreground)]">
-                베타 서비스로 답변이 정확하지 않을 수 있습니다.
-                <br />
-                정확한 안내는 고객센터({policyData.operatingHours}) 또는 네이버 톡톡으로 문의해 주세요.
+                베타 서비스로 답변이 정확하지 않을 수 있습니다. 정확한 안내는 고객센터({policyData.operatingHours}) 또는
+                네이버 톡톡으로 문의해 주세요.
               </p>
             </div>
           ) : (
@@ -581,11 +765,11 @@ export default function ChatWidget() {
               {messages.map((m, i) =>
                 m.role === "user" ? (
                   <div key={i} data-testid="chat-message-user" className="flex justify-end">
-                    <div className="max-w-[85%] whitespace-pre-wrap rounded-2xl bg-[var(--color-brand)] px-3.5 py-2.5 text-sm leading-6 text-white">{m.content}</div>
+                    <div className="max-w-[85%] whitespace-pre-wrap rounded-2xl bg-[var(--color-muted)] px-4 py-2.5 text-sm leading-6 text-[var(--color-primary)]">{m.content}</div>
                   </div>
                 ) : (
                   <div key={i} data-testid="chat-message-assistant" className="flex flex-col items-start gap-2">
-                    <div data-testid="chat-message-answer" className="max-w-[92%] whitespace-pre-wrap rounded-2xl bg-[var(--color-muted)] px-3.5 py-2.5 text-sm leading-6 text-[var(--color-primary)]">
+                    <div data-testid="chat-message-answer" className="max-w-[92%] whitespace-pre-wrap px-0.5 text-sm leading-6 text-[var(--color-primary)]">
                       {renderWithBold(m.response.answer)}
                     </div>
 
@@ -619,6 +803,11 @@ export default function ChatWidget() {
                             <LinkButton
                               key={id}
                               id={id}
+                              hrefOverride={
+                                id === "customFit" && m.dims
+                                  ? `/custom-fit/?width=${m.dims.width}&depth=${m.dims.depth}&height=${m.dims.height}`
+                                  : undefined
+                              }
                               onNavigate={(navId, isExternal) => {
                                 trackEvent("chat_link_clicked", { linkId: navId });
                                 if (!isExternal) setOpen(false);
@@ -629,7 +818,7 @@ export default function ChatWidget() {
                       );
                     })()}
 
-                    {m.response.linkIds?.includes("customFit") && <SizeCheckForm />}
+                    {m.response.linkIds?.includes("customFit") && <SizeCheckForm initial={m.dims} />}
 
                     {(() => {
                       if (!m.response.quickReplies || m.response.quickReplies.length === 0) return null;
@@ -647,7 +836,7 @@ export default function ChatWidget() {
                               type="button"
                               data-testid="chat-quick-reply"
                               onClick={() => sendUserText(reply, { viaQuickReply: true })}
-                              className="min-h-11 rounded-full border border-[var(--color-brand-light)] bg-white px-4 py-2 text-sm font-medium text-[var(--color-brand)] transition-colors hover:bg-[var(--color-muted)]"
+                              className="min-h-11 rounded-full border border-[var(--color-border)] bg-white px-4 py-2 text-sm font-medium text-[var(--color-primary)] transition-colors hover:border-[var(--color-primary)] hover:bg-[var(--color-muted)]"
                             >
                               {reply}
                             </button>
@@ -661,10 +850,10 @@ export default function ChatWidget() {
                         {!m.feedback ? (
                           <div className="flex items-center gap-2 text-[11px] text-[var(--color-muted-foreground)]">
                             <span>답변이 도움이 되었나요?</span>
-                            <button type="button" onClick={() => setFeedback(i, "helpful")} className="min-h-8 rounded-full border border-[var(--color-border)] px-2.5 py-1 font-semibold hover:border-[var(--color-brand)]">
+                            <button type="button" onClick={() => setFeedback(i, "helpful")} className="min-h-8 rounded-full border border-[var(--color-border)] px-2.5 py-1 font-semibold hover:border-[var(--color-primary)]">
                               도움됐어요
                             </button>
-                            <button type="button" onClick={() => setFeedback(i, "not-helpful")} className="min-h-8 rounded-full border border-[var(--color-border)] px-2.5 py-1 font-semibold hover:border-[var(--color-brand)]">
+                            <button type="button" onClick={() => setFeedback(i, "not-helpful")} className="min-h-8 rounded-full border border-[var(--color-border)] px-2.5 py-1 font-semibold hover:border-[var(--color-primary)]">
                               다시 답변 받기
                             </button>
                           </div>
@@ -683,8 +872,8 @@ export default function ChatWidget() {
               )}
               {loading && (
                 <div className="flex justify-start">
-                  <div className="rounded-2xl bg-[var(--color-muted)] px-3.5 py-2.5 text-sm text-[var(--color-muted-foreground)]" role="status">
-                    답변 작성 중...
+                  <div className="rounded-2xl bg-[var(--color-muted)] px-3.5 py-2.5 text-sm" role="status">
+                    <span className="chat-loading-shimmer font-medium">{loadingText}</span>
                   </div>
                 </div>
               )}
@@ -705,7 +894,7 @@ export default function ChatWidget() {
               placeholder="궁금한 점을 입력하세요"
               maxLength={2000}
               rows={1}
-              className="max-h-[120px] flex-1 resize-none rounded-2xl border border-[var(--color-border)] px-4 py-2.5 text-sm leading-6 outline-none focus:border-[var(--color-brand)]"
+              className="max-h-[120px] flex-1 resize-none rounded-3xl border border-[var(--color-border)] bg-[var(--color-muted)] px-4 py-2.5 text-sm leading-6 outline-none focus:border-[var(--color-primary)] focus:bg-white"
             />
             <button
               type="button"
@@ -713,11 +902,30 @@ export default function ChatWidget() {
               onClick={() => sendUserText(input)}
               disabled={loading || !input.trim()}
               aria-label="전송"
-              className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full bg-[var(--color-brand)] text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full bg-[var(--color-primary)] text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
             >
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="22" y1="2" x2="11" y2="13" />
                 <polygon points="22 2 15 22 11 13 2 9 22 2" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {!open && showHint && (
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 rounded-full bg-[var(--color-primary)] py-2 pl-4 pr-2 text-xs font-medium text-white shadow-[0_8px_24px_rgba(0,0,0,0.18)]">
+            궁금한 점을 물어보세요
+            <button
+              type="button"
+              onClick={dismissHint}
+              aria-label="안내 닫기"
+              className="flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-full text-white/50 transition-colors hover:bg-white/10 hover:text-white"
+            >
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
               </svg>
             </button>
           </div>
@@ -729,19 +937,23 @@ export default function ChatWidget() {
         data-testid="chat-fab"
         onClick={open ? handleClose : handleOpen}
         aria-label={open ? "채팅 닫기" : "AI 제품 안내 채팅 열기"}
-        className="flex h-14 w-14 cursor-pointer flex-col items-center justify-center rounded-full border border-[var(--color-border)] bg-white shadow-[0_8px_24px_rgba(0,0,0,0.18)] transition-transform duration-200 active:scale-95"
+        className="chat-fab-tile flex h-14 w-14 shrink-0 cursor-pointer items-center justify-center rounded-[18px] shadow-[0_10px_24px_rgba(20,20,30,0.35)] transition-transform duration-200 active:scale-95"
       >
         {open ? (
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--color-brand)" strokeWidth="2" strokeLinecap="round">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round">
             <line x1="18" y1="6" x2="6" y2="18" />
             <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
         ) : (
-          <>
-            <span className="text-[11px] font-extrabold leading-none tracking-tight text-[var(--color-primary)]">AI</span>
-            <span className="mt-[3px] h-[2px] w-4 rounded-full bg-[var(--color-brand)]" aria-hidden="true" />
-            <span className="mt-[3px] text-[10px] font-extrabold leading-none tracking-tight text-[var(--color-brand)]">CHAT</span>
-          </>
+          <svg width="30" height="30" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+            <path
+              d="M20 22 Q20 10 32 10 H68 Q80 10 80 22 V58 Q80 70 68 70 H45 L35 84 Q32.8 87 32.3 83 L31.3 70 H32 Q20 70 20 58 Z"
+              fill="#ffffff"
+            />
+            <rect x="33" y="28" width="34" height="26" rx="13" fill="#171717" />
+            <circle cx="43.5" cy="41" r="5" fill="#ffffff" />
+            <circle cx="56.5" cy="41" r="5" fill="#ffffff" />
+          </svg>
         )}
       </button>
     </div>

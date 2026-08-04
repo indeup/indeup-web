@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SizeCta from "@/components/SizeCta";
 import Reveal from "@/components/Reveal";
 import CustomFitCalculator from "@/components/CustomFitCalculator";
+import { toSafeJsonLdString } from "@/lib/safeJsonLd";
 
 const siteUrl = "https://indeup.com";
 const pageTitle = "맞춤책상 사이즈 제작 가능 여부 확인 | 인디업";
@@ -99,14 +101,14 @@ export default function CustomFitPage() {
     <div className="flex flex-1 flex-col bg-white text-[var(--color-primary)]">
       <Header />
 
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(applicationJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toSafeJsonLdString(breadcrumbJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toSafeJsonLdString(applicationJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toSafeJsonLdString(faqJsonLd) }} />
 
       <main className="flex-1">
         {/* Breadcrumb */}
         <nav aria-label="브레드크럼" className="border-b border-[var(--color-border)] px-6 py-2.5 sm:px-12">
-          <ol className="mx-auto flex max-w-6xl items-center gap-2 text-xs text-[var(--color-muted-foreground)]">
+          <ol className="mx-auto flex max-w-[1600px] items-center gap-2 text-xs text-[var(--color-muted-foreground)]">
             <li>
               <a href="/" className="cursor-pointer transition-colors hover:text-[var(--color-primary)]">
                 홈
@@ -123,16 +125,16 @@ export default function CustomFitPage() {
         <section className="px-6 pb-6 pt-6 sm:px-12 sm:pt-8">
           <div className="mx-auto max-w-3xl">
             <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-muted-foreground)]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-brand)]" aria-hidden="true" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-primary)]" aria-hidden="true" />
               Custom Fit
             </p>
             <h1
-              className="mt-3 font-bold leading-tight tracking-[-0.02em]"
+              className="mt-3 font-semibold leading-tight tracking-[-0.02em]"
               style={{ fontSize: "clamp(1.6rem, 3.4vw, 2.75rem)" }}
             >
               이 사이즈, 제작될까요?
             </h1>
-            <p className="mt-3 max-w-2xl whitespace-pre-line text-sm leading-6 text-[var(--color-secondary)] sm:text-base sm:leading-7">
+            <p className="mt-3 max-w-2xl whitespace-pre-line text-sm leading-6 text-[var(--color-secondary)] sm:text-base sm:leading-[1.3]">
               {"원하는 책상의 가로·세로·높이를 입력하면\n제작 가능한 인디업 제품과 주문할 때 선택해야 할 옵션을 안내해드립니다.\n모든 단위는 mm입니다."}
             </p>
           </div>
@@ -141,7 +143,12 @@ export default function CustomFitPage() {
         {/* Calculator — also kept out of scroll-reveal so it renders in the first viewport with no delay. */}
         <section className="px-6 pb-16 sm:px-12 sm:pb-20">
           <div className="mx-auto max-w-3xl">
-            <CustomFitCalculator />
+            {/* useSearchParams (reads a ?width=&depth=&height= recommendation
+                carried over from 책상가이드) requires a Suspense boundary on a
+                statically-generated page, or the production build fails. */}
+            <Suspense fallback={null}>
+              <CustomFitCalculator />
+            </Suspense>
           </div>
         </section>
 
@@ -150,8 +157,8 @@ export default function CustomFitPage() {
           <Reveal className="mx-auto max-w-3xl">
             <div className="flex flex-col gap-12">
               <div>
-                <h2 className="text-xl font-bold tracking-[-0.01em] sm:text-2xl">인디업 맞춤책상 사이즈 확인 방법</h2>
-                <p className="mt-3 text-sm leading-7 text-[var(--color-secondary)] sm:text-base">
+                <h2 className="text-xl font-semibold tracking-[-0.01em] sm:text-2xl">인디업 맞춤책상 사이즈 확인 방법</h2>
+                <p className="mt-3 text-sm leading-[1.3] text-[var(--color-secondary)] sm:text-base">
                   원하는 책상의 가로·세로·높이를 mm 단위로 입력하고 &apos;제작 가능 여부 확인하기&apos;를 누르면,
                   입력한 사이즈로 제작 가능한 인디업 제품과 네이버 공식 스토어에서 주문할 때 선택해야 할 기본사양·옵션을
                   바로 확인할 수 있습니다. 별도의 회원가입이나 상담 없이 이 페이지에서 바로 확인할 수 있습니다.
@@ -159,8 +166,8 @@ export default function CustomFitPage() {
               </div>
 
               <div id="how-to-measure" className="scroll-mt-24">
-                <h2 className="text-xl font-bold tracking-[-0.01em] sm:text-2xl">사이즈는 어떻게 측정하나요?</h2>
-                <p className="mt-3 text-sm leading-7 text-[var(--color-secondary)] sm:text-base">
+                <h2 className="text-xl font-semibold tracking-[-0.01em] sm:text-2xl">사이즈는 어떻게 측정하나요?</h2>
+                <p className="mt-3 text-sm leading-[1.3] text-[var(--color-secondary)] sm:text-base">
                   책상을 놓을 공간을 줄자로 측정해 가로(좌우 폭), 세로(앞뒤 깊이), 높이(바닥부터 상판까지)를
                   mm 단위로 확인해 주세요. 벽이나 가구 사이에 놓을 예정이라면 여유 공간을 감안해 실제 배치할 자리의
                   최대 폭을 기준으로 측정하는 것이 좋습니다.
@@ -168,8 +175,8 @@ export default function CustomFitPage() {
               </div>
 
               <div>
-                <h2 className="text-xl font-bold tracking-[-0.01em] sm:text-2xl">10mm 단위 맞춤은 어떻게 주문하나요?</h2>
-                <p className="mt-3 text-sm leading-7 text-[var(--color-secondary)] sm:text-base">
+                <h2 className="text-xl font-semibold tracking-[-0.01em] sm:text-2xl">10mm 단위 맞춤은 어떻게 주문하나요?</h2>
+                <p className="mt-3 text-sm leading-[1.3] text-[var(--color-secondary)] sm:text-base">
                   인디업 책상은 10mm 단위로 맞춤 제작됩니다. 예를 들어 가로 1230mm 책상을 원한다면, 1200mm를
                   기본사양으로 선택한 뒤 옵션에서 +30mm를 추가로 선택하면 됩니다. 이 페이지의 결과 카드에도 어떤
                   기본사양과 옵션을 선택해야 하는지 함께 안내됩니다.
@@ -182,18 +189,18 @@ export default function CustomFitPage() {
         {/* FAQ */}
         <section className="px-6 py-16 sm:px-12 sm:py-20">
           <Reveal className="mx-auto max-w-3xl">
-            <h2 className="text-xl font-bold tracking-[-0.01em] sm:text-2xl">자주 묻는 질문</h2>
+            <h2 className="text-xl font-semibold tracking-[-0.01em] sm:text-2xl">자주 묻는 질문</h2>
             <div className="mt-6 flex flex-col gap-3">
               {faqs.map((f) => (
                 <details
                   key={f.q}
-                  className="group rounded-2xl border border-[var(--color-border)] px-5 py-4 open:border-[var(--color-brand)]/30 sm:px-6 sm:py-5"
+                  className="group rounded-2xl border border-[var(--color-border)] px-5 py-4 open:border-[var(--color-primary)]/30 sm:px-6 sm:py-5"
                 >
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4 marker:content-none">
                     <h3 className="text-sm font-semibold tracking-[-0.01em] sm:text-base">{f.q}</h3>
                     <span
                       aria-hidden="true"
-                      className="shrink-0 text-lg font-light text-[var(--color-muted-foreground)] transition-transform duration-200 group-open:rotate-45 group-open:text-[var(--color-brand)]"
+                      className="shrink-0 text-lg font-light text-[var(--color-muted-foreground)] transition-transform duration-200 group-open:rotate-45 group-open:text-[var(--color-primary)]"
                     >
                       +
                     </span>
@@ -213,27 +220,27 @@ export default function CustomFitPage() {
             </h2>
             <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-3 text-sm sm:text-base">
               <li>
-                <a href="/products/" className="cursor-pointer font-medium text-[var(--color-primary)] underline underline-offset-4 hover:text-[var(--color-brand)]">
+                <a href="/products/" className="cursor-pointer font-medium text-[var(--color-primary)] underline underline-offset-4 hover:text-[var(--color-primary)]">
                   인디업 제품 보기
                 </a>
               </li>
               <li>
-                <a href="/products/" className="cursor-pointer font-medium text-[var(--color-primary)] underline underline-offset-4 hover:text-[var(--color-brand)]">
+                <a href="/guide/" className="cursor-pointer font-medium text-[var(--color-primary)] underline underline-offset-4 hover:text-[var(--color-primary)]">
                   공간별 맞춤책상 선택 가이드
                 </a>
               </li>
               <li>
-                <a href="/custom-fit/#how-to-measure" className="cursor-pointer font-medium text-[var(--color-primary)] underline underline-offset-4 hover:text-[var(--color-brand)]">
+                <a href="/custom-fit/#how-to-measure" className="cursor-pointer font-medium text-[var(--color-primary)] underline underline-offset-4 hover:text-[var(--color-primary)]">
                   책상 사이즈 측정 방법
                 </a>
               </li>
               <li>
-                <a href="/brand/#how-we-make" className="cursor-pointer font-medium text-[var(--color-primary)] underline underline-offset-4 hover:text-[var(--color-brand)]">
+                <a href="/brand/#how-we-make" className="cursor-pointer font-medium text-[var(--color-primary)] underline underline-offset-4 hover:text-[var(--color-primary)]">
                   주문·배송·조립 안내
                 </a>
               </li>
               <li>
-                <a href="/support/" className="cursor-pointer font-medium text-[var(--color-primary)] underline underline-offset-4 hover:text-[var(--color-brand)]">
+                <a href="/support/" className="cursor-pointer font-medium text-[var(--color-primary)] underline underline-offset-4 hover:text-[var(--color-primary)]">
                   고객지원
                 </a>
               </li>

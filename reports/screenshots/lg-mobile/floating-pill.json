@@ -1,0 +1,16 @@
+{
+  "tag": "SPAN",
+  "cls": "blind",
+  "rect": {
+    "x": 334.4949951171875,
+    "y": 764.4949951171875,
+    "w": 0.010009765625,
+    "h": 0.010009765625
+  },
+  "color": "rgb(0, 0, 0)",
+  "background": "rgba(0, 0, 0, 0)",
+  "fontSize": "16px",
+  "fontWeight": "400",
+  "borderRadius": "0px",
+  "padding": "0px"
+}

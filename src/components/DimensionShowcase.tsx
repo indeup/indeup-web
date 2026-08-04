@@ -15,21 +15,24 @@ export default function DimensionShowcase() {
   }
 
   return (
-    <section id="custom" className="bg-[var(--color-primary)] px-6 pb-[115px] pt-20 text-white sm:px-12 sm:py-28">
-      <div className="mx-auto max-w-6xl">
+    <section id="custom" className="mx-3 bg-white px-6 py-10 text-[var(--color-primary)] sm:mx-0 sm:px-12 sm:py-28">
+      <div className="mx-auto max-w-[1600px]">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.15em] text-white/50">
-              <span className="text-[var(--color-brand-light)]">02</span> · 맞춤 제작
+            <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[var(--color-muted-foreground)]">
+              <span className="text-[var(--color-primary)]">02</span> · 맞춤 제작
             </p>
-            <h2 className="mt-4 text-3xl font-bold leading-tight tracking-[-0.02em] sm:text-4xl">
-              공간에 맞는 책상은
+            <h2
+              className="mt-4 font-semibold leading-tight tracking-[-0.02em]"
+              style={{ fontSize: "var(--type-h2)" }}
+            >
+              공간에 맞는 책상은 가로·세로·높이부터{" "}
               <br />
-              가로·세로·높이부터 달라야 합니다.
+              달라야 합니다.
             </h2>
           </div>
           <div>
-            <p className="text-base leading-7 text-white/70 sm:text-lg">
+            <p className="text-base leading-[1.3] text-[var(--color-secondary)] sm:text-lg">
               인디업은 정해진 규격에 공간을 맞추지 않습니다.
               <br />
               사용할 자리와 장비, 생활 방식에 맞춰
@@ -38,7 +41,7 @@ export default function DimensionShowcase() {
             </p>
             <a
               href="/custom-fit/"
-              className="group mt-5 inline-flex cursor-pointer items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-medium text-[var(--color-primary)] transition-colors duration-200 hover:bg-white/85"
+              className="group mt-5 inline-flex cursor-pointer items-center gap-2 rounded-full bg-[var(--color-primary)] px-5 py-2.5 text-sm font-medium text-white transition-colors duration-200 hover:opacity-85"
             >
               내 사이즈 제작 가능한지 확인하기
               <span aria-hidden="true" className="inline-block transition-transform duration-200 group-hover:translate-x-1">
@@ -61,7 +64,7 @@ export default function DimensionShowcase() {
             loop
             playsInline
           />
-          <span className="absolute bottom-6 left-6 rounded-full bg-black/60 px-4 py-2 text-sm font-medium backdrop-blur-sm sm:bottom-8 sm:left-8">
+          <span className="absolute bottom-6 left-6 rounded-full bg-black/60 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm sm:bottom-8 sm:left-8">
             10mm 단위 맞춤 제작
           </span>
 

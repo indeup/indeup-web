@@ -1,0 +1,10 @@
+name = "indeup-chat"
+main = "worker.js"
+compatibility_date = "2026-07-25"
+
+[observability]
+enabled = true
+
+[[kv_namespaces]]
+binding = "CHAT_LOG"
+id = "cec8ae37563c4e44843ea03a066ebda0"

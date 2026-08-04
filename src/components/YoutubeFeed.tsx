@@ -65,9 +65,9 @@ function VideoCard({
     <button
       type="button"
       onClick={() => onPlay(post.id)}
-      className="group flex w-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white text-left transition-all duration-200 hover:-translate-y-1 hover:border-[var(--color-primary)]/30 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+      className="group flex w-full cursor-pointer flex-col overflow-hidden rounded-3xl bg-white text-left shadow-[0_1px_3px_rgba(0,0,0,0.06),0_1px_2px_rgba(0,0,0,0.04)] ring-1 ring-black/[0.04] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_44px_rgba(0,0,0,0.1)]"
     >
-      <div className="relative">
+      <div className="relative overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element -- thumbnail host is YouTube's CDN, not a fixed local asset next/image can validate. */}
         <img
           src={post.thumbnail ?? FALLBACK_THUMBNAIL}
@@ -84,9 +84,9 @@ function VideoCard({
         />
         <span
           aria-hidden="true"
-          className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors duration-200 group-hover:bg-black/10"
+          className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/25 via-transparent to-transparent transition-colors duration-200 group-hover:from-black/35"
         >
-          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-[var(--color-primary)] opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100">
+          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-[var(--color-primary)] shadow-lg transition-transform duration-200 group-hover:scale-110">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
               <path d="M8 5v14l11-7z" />
             </svg>
@@ -103,7 +103,7 @@ function VideoCard({
             </>
           )}
         </p>
-        <h3 className="mt-2 line-clamp-2 text-base font-bold leading-6 tracking-[-0.01em] text-[var(--color-primary)] sm:text-lg">
+        <h3 className="mt-2 line-clamp-2 text-base font-semibold leading-6 tracking-[-0.01em] text-[var(--color-primary)] sm:text-lg">
           {post.title}
         </h3>
         <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-primary)]">
@@ -119,7 +119,7 @@ function VideoCard({
 
 function CardSkeleton() {
   return (
-    <div className="animate-pulse overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white">
+    <div className="animate-pulse overflow-hidden rounded-3xl bg-white shadow-[0_1px_3px_rgba(0,0,0,0.06)] ring-1 ring-black/[0.04]">
       <div className="aspect-[4/3] w-full bg-[var(--color-muted)]" />
       <div className="flex flex-col gap-3 p-5 sm:p-6">
         <div className="h-3 w-20 rounded bg-[var(--color-muted)]" />
@@ -167,7 +167,7 @@ function PlayerView({
         />
       </div>
 
-      <h3 className="mt-4 text-base font-bold leading-6 tracking-[-0.01em] text-[var(--color-primary)] sm:text-lg">
+      <h3 className="mt-4 text-base font-semibold leading-6 tracking-[-0.01em] text-[var(--color-primary)] sm:text-lg">
         {post.title}
       </h3>
     </div>
@@ -178,10 +178,13 @@ export default function YoutubeFeed({
   kind,
   filter,
   initialData,
+  limit,
 }: {
   kind: "longform" | "shorts";
   filter?: GuideFilter;
   initialData?: YoutubeFeedData | null;
+  /** Caps how many posts render — used for the home page's compact preview row. */
+  limit?: number;
 }) {
   const [data, setData] = useState<YoutubeFeedData | null>(initialData ?? null);
   const [failed, setFailed] = useState(false);
@@ -253,9 +256,10 @@ export default function YoutubeFeed({
     return <PlayerView post={playingPost} kind={kind} onBack={() => setPlayingId(null)} />;
   }
 
-  const posts = filter
+  const filtered = filter
     ? allPosts.filter((p) => matchesFilter(filter, `${p.title} ${p.description ?? ""}`, p.categories ?? []))
     : allPosts;
+  const posts = limit ? filtered.slice(0, limit) : filtered;
 
   if (posts.length === 0) {
     return (

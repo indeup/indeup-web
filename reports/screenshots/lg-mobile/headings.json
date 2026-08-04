@@ -1,0 +1,62 @@
+[
+  {
+    "tag": "H2",
+    "idx": 0,
+    "text": "홈메인 팝업",
+    "cls": "blind"
+  },
+  {
+    "tag": "H1",
+    "idx": 1,
+    "text": "LG전자 공식 온라인 브랜드숍",
+    "cls": "blind"
+  },
+  {
+    "tag": "H2",
+    "idx": 2,
+    "text": "MD's CHOICE",
+    "cls": "title-home_title-home_tit__C6CDK"
+  },
+  {
+    "tag": "H2",
+    "idx": 3,
+    "text": "LGE.COM 타임딜",
+    "cls": "title-home_title-home_tit__C6CDK"
+  },
+  {
+    "tag": "H2",
+    "idx": 4,
+    "text": "베스트 랭킹",
+    "cls": "title-home_title-home_tit__C6CDK"
+  },
+  {
+    "tag": "H2",
+    "idx": 5,
+    "text": "홈스타일 탐색하기",
+    "cls": "title-home_title-home_tit__C6CDK"
+  },
+  {
+    "tag": "H2",
+    "idx": 6,
+    "text": "무더운 여름철에는 LG 휘센 쎈세일",
+    "cls": "title-home_title-home_tit__C6CDK"
+  },
+  {
+    "tag": "H2",
+    "idx": 7,
+    "text": "가전 구독",
+    "cls": "title-home_title-home_tit__C6CDK"
+  },
+  {
+    "tag": "H2",
+    "idx": 8,
+    "text": "요즘 주목받는 제품",
+    "cls": "title-home_title-home_tit__C6CDK"
+  },
+  {
+    "tag": "H2",
+    "idx": 9,
+    "text": "브랜드 쇼룸",
+    "cls": "title-home_title-home_tit__C6CDK"
+  }
+]

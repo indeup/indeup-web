@@ -1,0 +1,37 @@
+{
+  "outerHTML": "<div class=\"CommonMoButtonFloating_button-floating__BfCeH\" data-area=\"플로팅 영역\" style=\"--button-floating--bottom: 56px;\"><div class=\"CommonMoButtonFloating_button-floating_lottie__jw7NI\"><a class=\"CommonMoButtonFloating_active__2IfY_\" data-contents=\"AI 챗봇 플로팅\" href=\"#!\" target=\"_blank\" title=\"새창열림\"><span class=\"CommonMoButtonFloating_ico_lottie__yrFyF\"><span class=\"blind\">AI Chat</span></span><span class=\"CommonMoButtonFloating_bg__iDxZd\"><div aria-hidden=\"true\"><div style=\"position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;\"><canvas width=\"120\" height=\"120\" aria-hidden=\"true\" style=\"width: 100%; height: 100%; transform-origin: 0px 0px 0px; content-visibility: visible;\"></canvas></div></div></span><span class=\"CommonMoButtonFloating_msg__Ru_p3\">필요한 정보를 찾기 어려우신가요?</span></a></div></div>",
+  "rect": {
+    "x": 334,
+    "y": 720,
+    "w": 40,
+    "h": 60
+  },
+  "cs": {
+    "position": "fixed",
+    "top": "720px",
+    "left": "334px",
+    "right": "16px",
+    "bottom": "64px",
+    "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "boxShadow": "none",
+    "width": "40px",
+    "height": "60px",
+    "zIndex": "9",
+    "display": "flex"
+  },
+  "parentOuterHTML": "<div class=\"wrap\" data-aria-hidden=\"true\" aria-hidden=\"true\"><header class=\"CommonMoGnb_main__e4__3 CommonMoGnb_gnb__AS3RT\"><div class=\"CommonMoGnb_logo__6Jxci\"><div class=\"CommonMoGnb_recommend_btn_box__JXp2O\"><button class=\"CommonMoGnb_recommend_btn__Be98B\" type=\"button\"><em><img alt=\"LG전자 로고\" loading=\"lazy\" src=\"https://www.lge.co.kr/kr/images/nextjs/lg_logo_213x56.png\"></em><span class=\"blind\">추천메뉴열기</span></button></div></div><ul class=\"CommonMoGnb_util__ytAuP CommonMoGnb_rgh__tN4Bn\"><li cl",
+  "parentRect": {
+    "x": 0,
+    "y": 0,
+    "w": 390,
+    "h": 8605.390625
+  },
+  "parentCs": {
+    "position": "static",
+    "bottom": "auto",
+    "right": "auto",
+    "zIndex": "auto"
+  }
+}

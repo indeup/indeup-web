@@ -1,0 +1,37 @@
+[
+  {
+    "page": "home",
+    "url": "/",
+    "width": 390,
+    "elIdx": 3,
+    "tag": "H2",
+    "fullText": "공간에 맞는 책상은\n가로·세로·높이부터 달라야 합니다.",
+    "segmentLines": [
+      "가로·세로·높이부터 달라야",
+      "합니다."
+    ],
+    "orphanLine": "합니다.",
+    "orphanCharCount": 4,
+    "widthRatio": 0.28,
+    "segmentLineCount": 2,
+    "flagged": true,
+    "screenshot": "FLAG-home-390-01-합니다_.png"
+  },
+  {
+    "page": "brand",
+    "url": "/brand/",
+    "width": 390,
+    "elIdx": 1,
+    "tag": "H1",
+    "fullText": "공간에 맞는 책상을\n직접 만들고 판매합니다.",
+    "segmentLines": [
+      "직접 만들고",
+      "판매합니다."
+    ],
+    "orphanLine": "판매합니다.",
+    "orphanCharCount": 6,
+    "widthRatio": 0.63,
+    "segmentLineCount": 2,
+    "flagged": false
+  }
+]

@@ -1,0 +1,101 @@
+{
+  "userArticle": {
+    "width": "380px",
+    "max-width": "none",
+    "border-radius": "0px",
+    "background-color": "rgba(0, 0, 0, 0)",
+    "background-image": "none",
+    "padding": "60px 0px 0px",
+    "font-size": "16px",
+    "color": "rgb(0, 0, 0)",
+    "border": "0px solid rgb(0, 0, 0)",
+    "border-width": "0px",
+    "border-style": "solid",
+    "border-color": "rgb(0, 0, 0)",
+    "box-shadow": "none",
+    "align-self": "auto",
+    "__rect": {
+      "w": 380,
+      "h": 120,
+      "x": 20
+    },
+    "__text": "사용자 메시지\n\n인기있는 세탁기+건조기 추천해 주세요\n\n오전 12:33",
+    "__cls": "pt-15",
+    "__tag": "ARTICLE"
+  },
+  "userBubble": {
+    "width": "244.922px",
+    "max-width": "none",
+    "border-radius": "20px",
+    "background-color": "rgb(239, 240, 242)",
+    "background-image": "none",
+    "padding": "10px 16px",
+    "font-size": "14px",
+    "color": "rgb(17, 17, 17)",
+    "border": "0px solid rgb(17, 17, 17)",
+    "border-width": "0px",
+    "border-style": "solid",
+    "border-color": "rgb(17, 17, 17)",
+    "box-shadow": "none",
+    "align-self": "auto",
+    "__rect": {
+      "w": 245,
+      "h": 40,
+      "x": 155
+    },
+    "__text": "인기있는 세탁기+건조기 추천해 주세요",
+    "__cls": "w-fit rounded-[20px] bg-[#eff0f2] px-4 py-2.5 text-sm wrap-break-word text-[#111111]",
+    "__tag": "P"
+  },
+  "userTimestamp": {
+    "width": "53.9219px",
+    "max-width": "none",
+    "border-radius": "0px",
+    "background-color": "rgba(0, 0, 0, 0)",
+    "background-image": "none",
+    "padding": "0px",
+    "font-size": "12px",
+    "color": "rgb(114, 119, 128)",
+    "border": "0px solid rgb(114, 119, 128)",
+    "border-width": "0px",
+    "border-style": "solid",
+    "border-color": "rgb(114, 119, 128)",
+    "box-shadow": "none",
+    "align-self": "auto",
+    "__rect": {
+      "w": 54,
+      "h": 16,
+      "x": 346
+    },
+    "__text": "오전 12:33",
+    "__cls": "_time_1xwr2_1",
+    "__tag": "DIV"
+  },
+  "botArticle": {
+    "width": "380px",
+    "max-width": "none",
+    "border-radius": "0px",
+    "background-color": "rgba(0, 0, 0, 0)",
+    "background-image": "none",
+    "padding": "24px 0px 0px",
+    "font-size": "16px",
+    "color": "rgb(0, 0, 0)",
+    "border": "0px solid rgb(0, 0, 0)",
+    "border-width": "0px",
+    "border-style": "solid",
+    "border-color": "rgb(0, 0, 0)",
+    "box-shadow": "none",
+    "align-self": "auto",
+    "__rect": {
+      "w": 380,
+      "h": 588,
+      "x": 20
+    },
+    "__text": "챗봇 메시지",
+    "__cls": "outline-none pt-6",
+    "__tag": "ARTICLE"
+  },
+  "botBubble": null,
+  "allUserLabelsCount": 1,
+  "allBotLabelsCount": 2
+}

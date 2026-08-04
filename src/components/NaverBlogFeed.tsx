@@ -44,25 +44,27 @@ function BlogCard({ post }: { post: BlogPost }) {
       href={post.link}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white transition-all duration-200 hover:-translate-y-1 hover:border-[var(--color-primary)]/30 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+      className="group flex cursor-pointer flex-col overflow-hidden rounded-3xl bg-white shadow-[0_1px_3px_rgba(0,0,0,0.06),0_1px_2px_rgba(0,0,0,0.04)] ring-1 ring-black/[0.04] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_44px_rgba(0,0,0,0.1)]"
     >
-      {/* eslint-disable-next-line @next/next/no-img-element -- thumbnail host is Naver's CDN and varies per post, not a fixed local asset next/image can validate. */}
-      <img
-        src={post.thumbnail}
-        alt={`인디업 블로그: ${post.title}`}
-        loading="lazy"
-        referrerPolicy="no-referrer"
-        onError={(e) => {
-          const img = e.currentTarget;
-          if (img.src !== window.location.origin + FALLBACK_THUMBNAIL) {
-            img.src = FALLBACK_THUMBNAIL;
-          }
-        }}
-        className="aspect-[4/3] w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-      />
+      <div className="relative overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element -- thumbnail host is Naver's CDN and varies per post, not a fixed local asset next/image can validate. */}
+        <img
+          src={post.thumbnail}
+          alt={`인디업 블로그: ${post.title}`}
+          loading="lazy"
+          referrerPolicy="no-referrer"
+          onError={(e) => {
+            const img = e.currentTarget;
+            if (img.src !== window.location.origin + FALLBACK_THUMBNAIL) {
+              img.src = FALLBACK_THUMBNAIL;
+            }
+          }}
+          className="aspect-[4/3] w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+        />
+      </div>
       <div className="flex flex-1 flex-col p-5 sm:p-6">
-        <p className="text-xs font-medium text-[var(--color-muted-foreground)]">{formatDate(post.pubDate)}</p>
-        <h3 className="mt-2 line-clamp-2 text-base font-bold leading-6 tracking-[-0.01em] text-[var(--color-primary)] sm:text-lg">
+        <p className="text-xs font-medium uppercase tracking-[0.1em] text-[var(--color-muted-foreground)]">{formatDate(post.pubDate)}</p>
+        <h3 className="mt-2 line-clamp-2 text-base font-semibold leading-6 tracking-[-0.01em] text-[var(--color-primary)] sm:text-lg">
           {post.title}
         </h3>
         <p className="mt-2 line-clamp-2 flex-1 text-sm leading-6 text-[var(--color-secondary)]">{post.summary}</p>
@@ -79,7 +81,7 @@ function BlogCard({ post }: { post: BlogPost }) {
 
 function CardSkeleton() {
   return (
-    <div className="animate-pulse overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white">
+    <div className="animate-pulse overflow-hidden rounded-3xl bg-white shadow-[0_1px_3px_rgba(0,0,0,0.06)] ring-1 ring-black/[0.04]">
       <div className="aspect-[4/3] w-full bg-[var(--color-muted)]" />
       <div className="flex flex-col gap-3 p-5 sm:p-6">
         <div className="h-3 w-20 rounded bg-[var(--color-muted)]" />
@@ -93,9 +95,12 @@ function CardSkeleton() {
 export default function NaverBlogFeed({
   filter,
   initialData,
+  limit,
 }: {
   filter?: GuideFilter;
   initialData?: BlogFeedData | null;
+  /** Caps how many posts render — used for the home page's compact preview row. */
+  limit?: number;
 }) {
   const [data, setData] = useState<BlogFeedData | null>(initialData ?? null);
   const [failed, setFailed] = useState(false);
@@ -161,11 +166,12 @@ export default function NaverBlogFeed({
     );
   }
 
-  const posts = filter
+  const filtered = filter
     ? data.posts.filter((p) =>
         matchesFilter(filter, `${p.title} ${p.summary} ${(p.tags ?? []).join(" ")}`, p.categories ?? [])
       )
     : data.posts;
+  const posts = limit ? filtered.slice(0, limit) : filtered;
 
   if (posts.length === 0) {
     return (
@@ -180,9 +186,11 @@ export default function NaverBlogFeed({
   return (
     <div>
       <CardScroller items={posts} keyFor={(post) => post.id} renderItem={(post) => <BlogCard post={post} />} />
-      <p className="mt-6 text-center text-xs text-[var(--color-muted-foreground)]">
-        네이버 블로그 글은 하루 4회 자동으로 갱신됩니다.
-      </p>
+      {!limit && (
+        <p className="mt-6 text-center text-xs text-[var(--color-muted-foreground)]">
+          네이버 블로그 글은 하루 4회 자동으로 갱신됩니다.
+        </p>
+      )}
     </div>
   );
 }

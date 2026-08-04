@@ -7,6 +7,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/privacy/",
   },
+  openGraph: {
+    title: "개인정보처리방침 | 인디업 INDEUP",
+    description: "인디업(INDEUP) 공식 홈페이지의 개인정보 처리방침입니다.",
+    url: "/privacy/",
+  },
 };
 
 function Article({
@@ -38,12 +43,12 @@ export default function PrivacyPage() {
             Privacy
           </p>
           <h1
-            className="mt-4 font-bold tracking-[-0.02em]"
+            className="mt-4 font-semibold tracking-[-0.02em]"
             style={{ fontSize: "var(--type-h2)" }}
           >
             개인정보처리방침
           </h1>
-          <p className="mt-6 text-base leading-7 text-[var(--color-secondary)]">
+          <p className="mt-6 text-base leading-[1.4] text-[var(--color-secondary)]">
             스니처(이하 &lsquo;회사&rsquo;)는 인디업(INDEUP) 공식 홈페이지(이하
             &lsquo;홈페이지&rsquo;)를 운영하며, 「개인정보 보호법」 제30조에
             따라 정보주체의 개인정보를 보호하고 이와 관련한 고충을 신속하고
@@ -51,7 +56,7 @@ export default function PrivacyPage() {
             수립·공개합니다.
           </p>
 
-          <div className="mt-10 flex flex-col gap-10 text-base leading-7 text-[var(--color-secondary)]">
+          <div className="mt-10 flex flex-col gap-10 text-base leading-[1.4] text-[var(--color-secondary)]">
             <Article num={1} title="개인정보의 처리 목적 및 현재 처리 현황">
               <p>
                 홈페이지는 회원가입, 주문·결제 기능을 제공하지 않으며, 이름·

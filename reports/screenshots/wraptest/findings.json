@@ -1,0 +1,16 @@
+[
+  {
+    "page": "home",
+    "url": "/",
+    "width": 390,
+    "elIdx": 26,
+    "tag": "H2",
+    "fullText": "공간에 맞는 책상은\n가로·세로·높이부터 달라야 합니다.",
+    "segmentText": "가로·세로·높이부터 달라야 / 합니다.",
+    "orphanLine": "합니다.",
+    "orphanCharCount": 4,
+    "widthRatio": 0.28,
+    "segmentLineCount": 2,
+    "screenshot": "FLAG-home-390-01-합니다_.png"
+  }
+]

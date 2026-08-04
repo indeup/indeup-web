@@ -1,0 +1,64 @@
+{
+  "cls": "HomeMoListHorizontype_list_horizontype_item__UFep2",
+  "rect": {
+    "x": 20,
+    "y": 64,
+    "w": 148,
+    "h": 246
+  },
+  "background": "rgba(0, 0, 0, 0)",
+  "borderRadius": "0px",
+  "boxShadow": "none",
+  "border": "0px none rgb(17, 17, 17)",
+  "padding": "0px",
+  "texts": [
+    {
+      "tag": "STRONG",
+      "cls": "product-card-title_headline",
+      "text": "LG HOM-BOT AI 오브제컬렉션 RONi(로니) (오브제스테이션)",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "color": "rgb(17, 17, 17)"
+    },
+    {
+      "tag": "EM",
+      "cls": "",
+      "text": "흡입+스팀 물걸레",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "color": "rgb(0, 0, 0)"
+    },
+    {
+      "tag": "SPAN",
+      "cls": "blind",
+      "text": "모델명",
+      "fontSize": "11px",
+      "fontWeight": "400",
+      "color": "rgb(114, 119, 128)"
+    },
+    {
+      "tag": "EM",
+      "cls": "title",
+      "text": "최대혜택가",
+      "fontSize": "12px",
+      "fontWeight": "400",
+      "color": "rgb(234, 25, 23)"
+    },
+    {
+      "tag": "STRONG",
+      "cls": "price",
+      "text": "1,990,200",
+      "fontSize": "14px",
+      "fontWeight": "600",
+      "color": "rgb(234, 25, 23)"
+    },
+    {
+      "tag": "SPAN",
+      "cls": "won",
+      "text": "원",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "color": "rgb(234, 25, 23)"
+    }
+  ]
+}

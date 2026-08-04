@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import {
   checkFit,
   productFitConfigs,
@@ -8,6 +9,7 @@ import {
   type ProductSlug,
   type ResolvedDimension,
 } from "@/lib/customFit";
+import { getProductLink, resolveCatalogId } from "@/lib/chatCatalog";
 
 type Users = "1" | "2";
 /**
@@ -136,6 +138,7 @@ type MatchedResult = {
   requestedLabel: string;
   requestedReason?: string;
   productSlug: ProductSlug;
+  variantKey: string;
   productLabel: string;
   productName: string;
   displayLabel: string;
@@ -312,6 +315,7 @@ function recommend(input: {
           requestedLabel,
           requestedReason,
           productSlug: slug,
+          variantKey: variant.variantKey,
           productLabel: productFitConfigs[slug].label,
           productName: variant.name,
           displayLabel: variant.displayLabel,
@@ -414,7 +418,7 @@ function SizeField({
             muted ? "bg-[var(--color-muted)]" : "bg-white"
           } ${
             error
-              ? "border-[var(--color-brand)] focus:border-[var(--color-brand)]"
+              ? "border-[var(--color-primary)] focus:border-[var(--color-primary)]"
               : "border-[var(--color-border)] focus:border-[var(--color-primary)]"
           }`}
         />
@@ -426,7 +430,7 @@ function SizeField({
         </span>
       </div>
       {error && (
-        <span id={errorId} role="alert" className="text-xs font-medium text-[var(--color-brand)]">
+        <span id={errorId} role="alert" className="text-xs font-semibold text-[var(--color-primary)]">
           {error}
         </span>
       )}
@@ -465,7 +469,7 @@ function SpecRow({ label, spec }: { label: string; spec: ResolvedDimension }) {
   return (
     <div className="rounded-xl border border-[var(--color-border)] bg-white px-4 py-3">
       <p className="text-xs font-semibold text-[var(--color-muted-foreground)]">{label}</p>
-      <p className="mt-1 text-sm font-bold text-[var(--color-primary)]">
+      <p className="mt-1 text-sm font-semibold text-[var(--color-primary)]">
         {spec.resolvedValue}mm
         {spec.needsInquiry && <span className="ml-1 font-semibold">(별도문의)</span>}
       </p>
@@ -647,7 +651,7 @@ export default function QuickSizeFinder() {
           ) : (
             <div className="rounded-2xl bg-[var(--color-muted)] p-6 sm:p-8">
               {result.isFallback && (
-                <div className="mb-5 rounded-xl border border-[var(--color-brand)]/30 bg-white p-4">
+                <div className="mb-5 rounded-xl border border-[var(--color-primary)]/25 bg-white p-4">
                   <p className="text-sm font-semibold text-[var(--color-primary)]">
                     {result.requestedLabel} 설치는 권장하지 않습니다.
                   </p>
@@ -665,9 +669,19 @@ export default function QuickSizeFinder() {
               <p className="text-xs font-semibold uppercase tracking-[0.15em] text-[var(--color-muted-foreground)]">
                 {result.isFallback ? "현실적인 대안" : "추천 사이즈"}
               </p>
-              <p className="mt-1 text-xl font-bold tracking-[-0.01em] text-[var(--color-primary)] sm:text-2xl">
-                {result.productName}
-              </p>
+              <div className="mt-2 flex items-center gap-3">
+                {(() => {
+                  const product = getProductLink(resolveCatalogId(result.productSlug, result.variantKey));
+                  return product ? (
+                    <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-[var(--color-border)] sm:h-20 sm:w-20">
+                      <Image src={product.imageUrl} alt={result.productName} fill sizes="80px" className="object-cover" />
+                    </div>
+                  ) : null;
+                })()}
+                <p className="text-xl font-semibold tracking-[-0.01em] text-[var(--color-primary)] sm:text-2xl">
+                  {result.productName}
+                </p>
+              </div>
 
               <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
                 <SpecRow label="가로" spec={result.width} />
@@ -675,7 +689,7 @@ export default function QuickSizeFinder() {
                 <SpecRow label="높이" spec={result.height} />
               </div>
 
-              <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-[var(--color-brand)] bg-white p-4">
+              <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-[var(--color-primary)]/30 bg-white p-4">
                 <svg
                   viewBox="0 0 24 24"
                   width="18"
@@ -686,7 +700,7 @@ export default function QuickSizeFinder() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   aria-hidden="true"
-                  className="mt-0.5 shrink-0 text-[var(--color-brand)]"
+                  className="mt-0.5 shrink-0 text-[var(--color-primary)]"
                 >
                   <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" />
                   <line x1="12" y1="9" x2="12" y2="13" />
@@ -768,13 +782,13 @@ export default function QuickSizeFinder() {
 
               <div className="mt-4 flex flex-col gap-3 sm:flex-row">
                 <a
-                  href={`/products/${result.productSlug}/`}
+                  href={`/products/${result.productSlug}/?width=${result.width.resolvedValue}&depth=${result.depth.resolvedValue}&height=${result.height.resolvedValue}`}
                   className="inline-flex min-h-[46px] flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] px-5 text-sm font-medium text-white transition-colors duration-200 hover:opacity-85"
                 >
                   추천 사이즈 제품 확인하기
                 </a>
                 <a
-                  href="/custom-fit/"
+                  href={`/custom-fit/?width=${result.width.resolvedValue}&depth=${result.depth.resolvedValue}&height=${result.height.resolvedValue}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex min-h-[46px] flex-1 cursor-pointer items-center justify-center gap-2 rounded-full border border-[var(--color-border)] px-5 text-sm font-medium text-[var(--color-secondary)] transition-colors duration-200 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]"

@@ -1,0 +1,30 @@
+[
+  {
+    "tag": "DIV",
+    "id": "",
+    "cls": "CommonMoButtonFloating_button-floating__BfCeH",
+    "rect": {
+      "x": 334,
+      "y": 720,
+      "w": 40,
+      "h": 60
+    },
+    "text": "AI Chat필요한 정보를 찾기 어려우신가요?",
+    "zIndex": "9",
+    "bg": "rgba(0, 0, 0, 0)"
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "cls": "CommonMoSidemenu_btn_close__K30fF mobile-nav-button ",
+    "rect": {
+      "x": -434,
+      "y": 20,
+      "w": 24,
+      "h": 24
+    },
+    "text": "메뉴닫기",
+    "zIndex": "11",
+    "bg": "rgba(0, 0, 0, 0)"
+  }
+]

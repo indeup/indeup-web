@@ -1,0 +1,398 @@
+{
+  "user": {
+    "labelEl": {
+      "width": "1px",
+      "max-width": "none",
+      "border-radius": "0px",
+      "background-color": "rgba(0, 0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+      "padding": "0px",
+      "font-size": "16px",
+      "color": "rgb(0, 0, 0)",
+      "border": "0px none rgb(0, 0, 0)",
+      "border-color": "rgb(0, 0, 0)",
+      "box-shadow": "none",
+      "align-self": "auto",
+      "text-align": "start",
+      "margin": "-1px",
+      "__rect": {
+        "w": 0,
+        "h": 0,
+        "x": 19
+      },
+      "__text": "사용자 메시지",
+      "__cls": "_visually-hidden_p9j9c_1",
+      "__tag": "SPAN"
+    },
+    "parent": {
+      "width": "380px",
+      "max-width": "none",
+      "border-radius": "0px",
+      "background-color": "rgba(0, 0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+      "padding": "60px 0px 0px",
+      "font-size": "16px",
+      "color": "rgb(0, 0, 0)",
+      "border": "0px solid rgb(0, 0, 0)",
+      "border-color": "rgb(0, 0, 0)",
+      "box-shadow": "none",
+      "align-self": "auto",
+      "text-align": "start",
+      "margin": "0px",
+      "__rect": {
+        "w": 380,
+        "h": 120,
+        "x": 20
+      },
+      "__text": "사용자 메시지\n\n200만원 대 냉장고 추천해 주세요\n\n오전 12:31",
+      "__cls": "pt-15",
+      "__tag": "ARTICLE"
+    },
+    "parentChildren": [
+      {
+        "width": "1px",
+        "max-width": "none",
+        "border-radius": "0px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "padding": "0px",
+        "font-size": "16px",
+        "color": "rgb(0, 0, 0)",
+        "border": "0px none rgb(0, 0, 0)",
+        "border-color": "rgb(0, 0, 0)",
+        "box-shadow": "none",
+        "align-self": "auto",
+        "text-align": "start",
+        "margin": "-1px",
+        "__rect": {
+          "w": 0,
+          "h": 0,
+          "x": 19
+        },
+        "__text": "사용자 메시지",
+        "__cls": "_visually-hidden_p9j9c_1",
+        "__tag": "SPAN"
+      },
+      {
+        "width": "380px",
+        "max-width": "none",
+        "border-radius": "0px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "padding": "0px",
+        "font-size": "16px",
+        "color": "rgb(0, 0, 0)",
+        "border": "0px solid rgb(0, 0, 0)",
+        "border-color": "rgb(0, 0, 0)",
+        "box-shadow": "none",
+        "align-self": "auto",
+        "text-align": "start",
+        "margin": "0px",
+        "__rect": {
+          "w": 380,
+          "h": 60,
+          "x": 20
+        },
+        "__text": "200만원 대 냉장고 추천해 주세요\n\n오전 12:31",
+        "__cls": "flex w-full justify-end",
+        "__tag": "DIV"
+      }
+    ],
+    "parentChain": [
+      {
+        "width": "380px",
+        "max-width": "none",
+        "border-radius": "0px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "padding": "60px 0px 0px",
+        "font-size": "16px",
+        "color": "rgb(0, 0, 0)",
+        "border": "0px solid rgb(0, 0, 0)",
+        "border-color": "rgb(0, 0, 0)",
+        "box-shadow": "none",
+        "align-self": "auto",
+        "text-align": "start",
+        "margin": "0px",
+        "__rect": {
+          "w": 380,
+          "h": 120,
+          "x": 20
+        },
+        "__text": "사용자 메시지\n\n200만원 대 냉장고 추천해 주세요\n\n오전 12:31",
+        "__cls": "pt-15",
+        "__tag": "ARTICLE"
+      },
+      {
+        "width": "420px",
+        "max-width": "none",
+        "border-radius": "0px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "padding": "28px 20px 48px",
+        "font-size": "16px",
+        "color": "rgb(0, 0, 0)",
+        "border": "0px solid rgb(0, 0, 0)",
+        "border-color": "rgb(0, 0, 0)",
+        "box-shadow": "none",
+        "align-self": "auto",
+        "text-align": "start",
+        "margin": "0px",
+        "__rect": {
+          "w": 420,
+          "h": 734,
+          "x": 0
+        },
+        "__text": "챗봇 메시지\nAI Chat과\n대화를 시작해볼까요?\n200만원 대 냉장고 추천해 주세요\n75인치 TV 추천해주세요\n30평대 TV 추천해주세요\n다른 질문 추천받기\n고객지원 서비스가 필요하신가요?\n에어컨 자가 점검으로 시원한 여름 보내요\n(새창열림)\n스스로해결/출장예약하는 ",
+        "__cls": "scrollbar-hidden webkit-overscroll-touch absolute inset-0 h-full overflow-y-auto overscroll-contain px-5 pt-7 pb-12",
+        "__tag": "SECTION"
+      },
+      {
+        "width": "420px",
+        "max-width": "none",
+        "border-radius": "0px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "padding": "0px",
+        "font-size": "16px",
+        "color": "rgb(0, 0, 0)",
+        "border": "0px solid rgb(0, 0, 0)",
+        "border-color": "rgb(0, 0, 0)",
+        "box-shadow": "none",
+        "align-self": "auto",
+        "text-align": "start",
+        "margin": "0px",
+        "__rect": {
+          "w": 420,
+          "h": 734,
+          "x": 0
+        },
+        "__text": "챗봇 메시지\nAI Chat과\n대화를 시작해볼까요?\n200만원 대 냉장고 추천해 주세요\n75인치 TV 추천해주세요\n30평대 TV 추천해주세요\n다른 질문 추천받기\n고객지원 서비스가 필요하신가요?\n에어컨 자가 점검으로 시원한 여름 보내요\n(새창열림)\n스스로해결/출장예약하는 ",
+        "__cls": "scrollbar-hidden relative min-h-full overflow-x-hidden",
+        "__tag": "DIV"
+      },
+      {
+        "width": "420px",
+        "max-width": "none",
+        "border-radius": "0px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "padding": "0px",
+        "font-size": "16px",
+        "color": "rgb(0, 0, 0)",
+        "border": "0px solid rgb(0, 0, 0)",
+        "border-color": "rgb(0, 0, 0)",
+        "box-shadow": "none",
+        "align-self": "auto",
+        "text-align": "start",
+        "margin": "0px",
+        "__rect": {
+          "w": 420,
+          "h": 734,
+          "x": 0
+        },
+        "__text": "챗봇 메시지\nAI Chat과\n대화를 시작해볼까요?\n200만원 대 냉장고 추천해 주세요\n75인치 TV 추천해주세요\n30평대 TV 추천해주세요\n다른 질문 추천받기\n고객지원 서비스가 필요하신가요?\n에어컨 자가 점검으로 시원한 여름 보내요\n(새창열림)\n스스로해결/출장예약하는 ",
+        "__cls": "scrollbar-hidden flex-1 overflow-hidden",
+        "__tag": "MAIN"
+      }
+    ]
+  },
+  "bot": {
+    "labelEl": {
+      "width": "1px",
+      "max-width": "none",
+      "border-radius": "0px",
+      "background-color": "rgba(0, 0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+      "padding": "0px",
+      "font-size": "16px",
+      "color": "rgb(0, 0, 0)",
+      "border": "0px none rgb(0, 0, 0)",
+      "border-color": "rgb(0, 0, 0)",
+      "box-shadow": "none",
+      "align-self": "auto",
+      "text-align": "start",
+      "margin": "-1px",
+      "__rect": {
+        "w": 0,
+        "h": 0,
+        "x": 19
+      },
+      "__text": "챗봇 메시지",
+      "__cls": "_visually-hidden_p9j9c_1",
+      "__tag": "SPAN"
+    },
+    "parent": {
+      "width": "380px",
+      "max-width": "none",
+      "border-radius": "0px",
+      "background-color": "rgba(0, 0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+      "padding": "0px",
+      "font-size": "16px",
+      "color": "rgb(0, 0, 0)",
+      "border": "0px solid rgb(0, 0, 0)",
+      "border-color": "rgb(0, 0, 0)",
+      "box-shadow": "none",
+      "align-self": "auto",
+      "text-align": "start",
+      "margin": "0px",
+      "__rect": {
+        "w": 380,
+        "h": 630,
+        "x": 20
+      },
+      "__text": "챗봇 메시지\nAI Chat과\n대화를 시작해볼까요?\n200만원 대 냉장고 추천해 주세요\n75인치 TV 추천해주세요\n30평대 TV 추천해주세요\n다른 질문 추천받기\n고객지원 서비스가 필요하신가요?\n에어컨 자가 점검으로 시원한 여름 보내요\n(새창열림)\n스스로해결/출장예약하는 ",
+      "__cls": "outline-none",
+      "__tag": "ARTICLE"
+    },
+    "parentChildren": [
+      {
+        "width": "1px",
+        "max-width": "none",
+        "border-radius": "0px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "padding": "0px",
+        "font-size": "16px",
+        "color": "rgb(0, 0, 0)",
+        "border": "0px none rgb(0, 0, 0)",
+        "border-color": "rgb(0, 0, 0)",
+        "box-shadow": "none",
+        "align-self": "auto",
+        "text-align": "start",
+        "margin": "-1px",
+        "__rect": {
+          "w": 0,
+          "h": 0,
+          "x": 19
+        },
+        "__text": "챗봇 메시지",
+        "__cls": "_visually-hidden_p9j9c_1",
+        "__tag": "SPAN"
+      },
+      {
+        "width": "380px",
+        "max-width": "none",
+        "border-radius": "0px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "padding": "0px",
+        "font-size": "16px",
+        "color": "rgb(0, 0, 0)",
+        "border": "0px solid rgb(0, 0, 0)",
+        "border-color": "rgb(0, 0, 0)",
+        "box-shadow": "none",
+        "align-self": "auto",
+        "text-align": "start",
+        "margin": "0px",
+        "__rect": {
+          "w": 380,
+          "h": 630,
+          "x": 20
+        },
+        "__text": "AI Chat과\n대화를 시작해볼까요?\n200만원 대 냉장고 추천해 주세요\n75인치 TV 추천해주세요\n30평대 TV 추천해주세요\n다른 질문 추천받기\n고객지원 서비스가 필요하신가요?\n에어컨 자가 점검으로 시원한 여름 보내요\n(새창열림)\n스스로해결/출장예약하는 방법이 궁금해",
+        "__cls": "",
+        "__tag": "DIV"
+      }
+    ],
+    "parentChain": [
+      {
+        "width": "380px",
+        "max-width": "none",
+        "border-radius": "0px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "padding": "0px",
+        "font-size": "16px",
+        "color": "rgb(0, 0, 0)",
+        "border": "0px solid rgb(0, 0, 0)",
+        "border-color": "rgb(0, 0, 0)",
+        "box-shadow": "none",
+        "align-self": "auto",
+        "text-align": "start",
+        "margin": "0px",
+        "__rect": {
+          "w": 380,
+          "h": 630,
+          "x": 20
+        },
+        "__text": "챗봇 메시지\nAI Chat과\n대화를 시작해볼까요?\n200만원 대 냉장고 추천해 주세요\n75인치 TV 추천해주세요\n30평대 TV 추천해주세요\n다른 질문 추천받기\n고객지원 서비스가 필요하신가요?\n에어컨 자가 점검으로 시원한 여름 보내요\n(새창열림)\n스스로해결/출장예약하는 ",
+        "__cls": "outline-none",
+        "__tag": "ARTICLE"
+      },
+      {
+        "width": "420px",
+        "max-width": "none",
+        "border-radius": "0px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "padding": "28px 20px 48px",
+        "font-size": "16px",
+        "color": "rgb(0, 0, 0)",
+        "border": "0px solid rgb(0, 0, 0)",
+        "border-color": "rgb(0, 0, 0)",
+        "box-shadow": "none",
+        "align-self": "auto",
+        "text-align": "start",
+        "margin": "0px",
+        "__rect": {
+          "w": 420,
+          "h": 734,
+          "x": 0
+        },
+        "__text": "챗봇 메시지\nAI Chat과\n대화를 시작해볼까요?\n200만원 대 냉장고 추천해 주세요\n75인치 TV 추천해주세요\n30평대 TV 추천해주세요\n다른 질문 추천받기\n고객지원 서비스가 필요하신가요?\n에어컨 자가 점검으로 시원한 여름 보내요\n(새창열림)\n스스로해결/출장예약하는 ",
+        "__cls": "scrollbar-hidden webkit-overscroll-touch absolute inset-0 h-full overflow-y-auto overscroll-contain px-5 pt-7 pb-12",
+        "__tag": "SECTION"
+      },
+      {
+        "width": "420px",
+        "max-width": "none",
+        "border-radius": "0px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "padding": "0px",
+        "font-size": "16px",
+        "color": "rgb(0, 0, 0)",
+        "border": "0px solid rgb(0, 0, 0)",
+        "border-color": "rgb(0, 0, 0)",
+        "box-shadow": "none",
+        "align-self": "auto",
+        "text-align": "start",
+        "margin": "0px",
+        "__rect": {
+          "w": 420,
+          "h": 734,
+          "x": 0
+        },
+        "__text": "챗봇 메시지\nAI Chat과\n대화를 시작해볼까요?\n200만원 대 냉장고 추천해 주세요\n75인치 TV 추천해주세요\n30평대 TV 추천해주세요\n다른 질문 추천받기\n고객지원 서비스가 필요하신가요?\n에어컨 자가 점검으로 시원한 여름 보내요\n(새창열림)\n스스로해결/출장예약하는 ",
+        "__cls": "scrollbar-hidden relative min-h-full overflow-x-hidden",
+        "__tag": "DIV"
+      },
+      {
+        "width": "420px",
+        "max-width": "none",
+        "border-radius": "0px",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "background": "rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box",
+        "padding": "0px",
+        "font-size": "16px",
+        "color": "rgb(0, 0, 0)",
+        "border": "0px solid rgb(0, 0, 0)",
+        "border-color": "rgb(0, 0, 0)",
+        "box-shadow": "none",
+        "align-self": "auto",
+        "text-align": "start",
+        "margin": "0px",
+        "__rect": {
+          "w": 420,
+          "h": 734,
+          "x": 0
+        },
+        "__text": "챗봇 메시지\nAI Chat과\n대화를 시작해볼까요?\n200만원 대 냉장고 추천해 주세요\n75인치 TV 추천해주세요\n30평대 TV 추천해주세요\n다른 질문 추천받기\n고객지원 서비스가 필요하신가요?\n에어컨 자가 점검으로 시원한 여름 보내요\n(새창열림)\n스스로해결/출장예약하는 ",
+        "__cls": "scrollbar-hidden flex-1 overflow-hidden",
+        "__tag": "MAIN"
+      }
+    ]
+  }
+}

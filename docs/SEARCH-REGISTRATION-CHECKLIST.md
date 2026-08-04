@@ -113,13 +113,29 @@ Bing 색인은 Bing 자체 검색 외에도 Microsoft Copilot, Yahoo·DuckDuckGo
 
 각 채널의 프로필/소개란에 `https://indeup.com`이 홈페이지로 연결되어 있는지 확인하세요.
 
-- [ ] 네이버 브랜드스토어 (`https://brand.naver.com/indeup`) 브랜드 소개에 홈페이지 링크
-- [ ] 네이버 블로그 (`https://blog.naver.com/indeup_official`) 프로필에 홈페이지 링크
-- [ ] 티스토리 (`https://indeup.tistory.com/`) 사이드바에 홈페이지 링크
-- [ ] YouTube (`https://www.youtube.com/@indeup`) 채널 정보란에 홈페이지 링크
-- [ ] Instagram (`https://www.instagram.com/indeup.kr`) 프로필 링크에 홈페이지
+- [x] 네이버 브랜드스토어 (`https://brand.naver.com/indeup`) 브랜드 소개에 홈페이지 링크 (2026-08-02 완료)
+- [x] 네이버 블로그 (`https://blog.naver.com/indeup_official`) 프로필에 홈페이지 링크 (2026-08-02 완료)
+- [x] 티스토리 (`https://indeup.tistory.com/`) 사이드바에 홈페이지 링크 (2026-08-02 완료)
+- [x] YouTube (`https://www.youtube.com/@indeup`) 채널 정보란에 홈페이지 링크 (2026-08-02 완료)
+- [x] Instagram (`https://www.instagram.com/indeup.kr`) 프로필 링크에 홈페이지 (2026-08-02 완료)
 
 모든 채널에서 브랜드명(인디업/INDEUP), 로고, 연락처(1668-5738)를 동일하게 유지하세요.
+
+---
+
+## 3-1. 신규 페이지 추가 시 재제출 (2026-07-26: 제품 라인업 8종 분리)
+
+제품 라인업이 6종에서 8종으로 늘어나 아래 2개 URL이 새로 생겼습니다. 카페24 재배포 후 아래를 진행하세요.
+
+- `https://indeup.com/products/single-desk-computer/`
+- `https://indeup.com/products/double-desk-computer/`
+
+1. 네이버 서치어드바이저 "요청 → 웹페이지 수집"에서 위 2개 URL을 각각 수집 요청
+2. Google Search Console "URL 검사"에서 위 2개 URL을 각각 검사 후 "색인 생성 요청"
+3. IndexNow로 제출: `node scripts/indexnow-submit.mjs https://indeup.com/products/single-desk-computer/ https://indeup.com/products/double-desk-computer/`
+4. `https://indeup.com/products/` (목록 페이지)도 내용이 바뀌었으므로 같은 방식으로 재수집 요청
+
+앞으로 제품 라인업이 또 바뀌면(추가/삭제/URL 변경) 이 섹션의 절차를 그대로 반복하면 됩니다.
 
 ---
 

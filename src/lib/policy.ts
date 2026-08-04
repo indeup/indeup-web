@@ -12,7 +12,18 @@
  */
 export const policyData = {
   productionDays: "7~8영업일",
+  // Numeric form of the same fact, for Merchant listing structured data
+  // (schema.org OfferShippingDetails.deliveryTime.handlingTime) — keep in
+  // lockstep with productionDays above; this is production/handling time
+  // only, not courier transit time (no confirmed figure for that yet).
+  productionDaysMin: 7,
+  productionDaysMax: 8,
   productionExcludes: "주말 및 공휴일",
+  // Courier transit time after the product ships (confirmed by operator
+  // 2026-08-04) — for deliveryTime.transitTime, separate from handlingTime
+  // (production) above.
+  transitDaysMin: 1,
+  transitDaysMax: 2,
   warrantyYears: 3,
   /** Scoped to what support/page.tsx actually promises — damage/defect
    *  cases only, not a blanket "everything is free" claim. */

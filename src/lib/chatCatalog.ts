@@ -9,33 +9,31 @@
  * being duplicated across chat, homepage and product pages.
  */
 import { products, naverStoreUrl } from "./products";
-import { resolveNaverProductUrl, type ProductSlug } from "./customFit";
+import type { ProductSlug } from "./customFit";
 
 export type ProductLink = {
-  id: ProductSlug;
+  /** One of the 8 catalog lines in products.ts — a superset of customFit's
+   *  6-value ProductSlug (which models "책상 단품"/"컴퓨터책상" as a variant
+   *  within a line, not a separate top-level id). Use resolveCatalogId()
+   *  below to go from a ProductSlug + variantKey to this id. */
+  id: string;
   name: string;
   shortDescription: string;
   detailUrl: string;
-  /** Only set when a single Naver listing unambiguously covers the whole
-   *  product line regardless of size (e.g. home-bar-table). Products sold
-   *  as many separate per-width listings (single-desk, double-desk,
-   *  floor-desk, side-table) are left undefined here — the chat never knows
-   *  the customer's exact width up front, so picking one SKU's URL would be
-   *  guessing. Those customers get the generic store link instead, then the
-   *  size calculator hands them the exact per-SKU link once real dimensions
-   *  are entered. */
-  purchaseUrl?: string;
+  /** Category-listing URL on the Naver brand store for this exact product
+   *  line (see products.ts) — every line has one, so this is always set. */
+  purchaseUrl: string;
   imageUrl: string;
   useCases: string[];
   isActive: boolean;
 };
 
 export const productCatalog: ProductLink[] = products.map((p) => ({
-  id: p.slug as ProductSlug,
+  id: p.slug,
   name: `인디업 ${p.title}`,
   shortDescription: p.listSummary,
   detailUrl: `/products/${p.slug}/`,
-  purchaseUrl: p.slug === "home-bar-table" ? resolveNaverProductUrl("home-bar-table", "default", 0) : undefined,
+  purchaseUrl: p.purchaseUrl,
   imageUrl: p.image,
   useCases: p.recommendedSpace.split(/[.,]\s*/).filter(Boolean),
   isActive: true,
@@ -45,9 +43,23 @@ export function getProductLink(id: string): ProductLink | undefined {
   return productCatalog.find((p) => p.id === id);
 }
 
+/** The sizing engine (customFit.ts) still models "책상 단품" vs "컴퓨터책상"
+ *  as a variantKey within 6 product lines (that's the real shape of its
+ *  base/option/redirect rules) — but the catalog above has 8 separate
+ *  entries so each gets its own photo, description and Naver link. This
+ *  bridges a size-checker match back to the right catalog entry, e.g.
+ *  ("single-desk", "computer") -> "single-desk-computer". */
+export function resolveCatalogId(product: ProductSlug, variantKey: string): string {
+  if (variantKey === "computer" && (product === "single-desk" || product === "double-desk")) {
+    return `${product}-computer`;
+  }
+  return product;
+}
+
 export type GuideLinkId =
   | "products"
   | "customFit"
+  | "spaceGuide"
   | "support"
   | "delivery"
   | "assembly"
@@ -58,6 +70,7 @@ export type GuideLinkId =
 export const guideLinks: Record<GuideLinkId, { label: string; href: string }> = {
   products: { label: "전체 제품 보기", href: "/products/" },
   customFit: { label: "사이즈 제작 가능 여부 확인", href: "/custom-fit/" },
+  spaceGuide: { label: "책상가이드에서 추천받기", href: "/guide/" },
   support: { label: "고객지원 보기", href: "/support/" },
   delivery: { label: "주문·배송 안내", href: "/support/#order-shipping" },
   assembly: { label: "조립 방법 확인", href: "/support/" },

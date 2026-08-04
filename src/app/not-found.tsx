@@ -17,10 +17,10 @@ export default function NotFound() {
       <Header />
       <main className="flex flex-1 flex-col items-center justify-center px-6 py-24 text-center sm:px-12">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-muted-foreground)]">404</p>
-        <h1 className="mt-3 max-w-xl font-bold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
+        <h1 className="mt-3 max-w-xl font-semibold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
           페이지를 찾을 수 없습니다
         </h1>
-        <p className="mt-4 max-w-md text-base leading-7 text-[var(--color-secondary)]">
+        <p className="mt-4 max-w-md text-base leading-[1.3] text-[var(--color-secondary)]">
           요청하신 주소가 삭제되었거나 변경되었을 수 있습니다. 아래 링크에서 원하시는 정보를 찾아보세요.
         </p>
 

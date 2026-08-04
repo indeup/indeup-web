@@ -38,8 +38,9 @@ export const naverTalkUrl = "https://talk.naver.com/profile/wcs0s3";
 export const tistoryUrl = "https://indeup.tistory.com/";
 export const youtubeUrl = "https://www.youtube.com/@indeup";
 export const instagramUrl = "https://www.instagram.com/indeup.kr";
+export const threadsUrl = "https://www.threads.com/@indeup.kr";
 
 /** Real official channels only — every entry here is safe to use in
  *  Organization.sameAs. Remove an entry here (not per-callsite) if a
  *  channel is ever discontinued. */
-export const officialChannels = [naverStoreUrl, naverBlogUrl, tistoryUrl, youtubeUrl, instagramUrl] as const;
+export const officialChannels = [naverStoreUrl, naverBlogUrl, tistoryUrl, youtubeUrl, instagramUrl, threadsUrl] as const;

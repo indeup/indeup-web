@@ -51,3 +51,24 @@ next-env.d.ts
 # Playwright
 /playwright-report/
 /test-results/
+
+# Original uncompressed video sources (kept locally for future re-encodes,
+# never deployed — the web-optimized version lives in /public/videos/)
+/source-assets/
+
+# Real customer review exports (order numbers, review IDs, raw review text)
+# — analysis-only, never meant to be committed or deployed. See
+# feedback_public_folder_deploy_exposure memory for why these must never
+# end up in /public/ either.
+/data/reviews/
+
+# Proprietary CAD source files (STEP/DWG engineering drawings) — confidential
+# design IP, analysis-only. Never committed, never deployed to /public/.
+/data/cad/
+
+# Internal pricing/option spreadsheets (raw supplier data, base prices per
+# size/spec) — this repo is public, and these were caught staged for commit
+# by hand once already (2026-08-04). Analysis-only, never meant to be
+# committed.
+/data/*.xls
+/data/*.xlsx

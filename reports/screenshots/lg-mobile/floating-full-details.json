@@ -1,0 +1,67 @@
+{
+  "link": {
+    "rect": {
+      "x": 334,
+      "y": 720,
+      "w": 40,
+      "h": 60
+    },
+    "borderRadius": "0px",
+    "background": "rgba(0, 0, 0, 0)",
+    "backgroundImage": "none",
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "16px",
+    "padding": "0px",
+    "border": "0px none rgb(0, 0, 0)",
+    "boxShadow": "none"
+  },
+  "icoLottie": {
+    "rect": {
+      "x": 334,
+      "y": 764,
+      "w": 40,
+      "h": 16
+    },
+    "borderRadius": "4px",
+    "background": "rgb(255, 255, 255)",
+    "backgroundImage": "none",
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "16px",
+    "padding": "0px",
+    "border": "0px none rgb(0, 0, 0)",
+    "boxShadow": "rgba(0, 0, 0, 0.1) 0px 0px 1px 0px, rgba(0, 0, 0, 0.08) 0px 2px 20px 0px"
+  },
+  "bg": {
+    "rect": {
+      "x": 334,
+      "y": 720,
+      "w": 40,
+      "h": 40
+    },
+    "borderRadius": "100px",
+    "background": "rgba(255, 255, 255, 0.95)",
+    "backgroundImage": "none",
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "16px",
+    "padding": "0px",
+    "border": "0px none rgb(0, 0, 0)",
+    "boxShadow": "rgba(0, 0, 0, 0.1) 0px 0px 1px 0px, rgba(0, 0, 0, 0.08) 0px 2px 20px 0px"
+  },
+  "msg": {
+    "rect": {
+      "x": 124.671875,
+      "y": 722,
+      "w": 197.328125,
+      "h": 36
+    },
+    "borderRadius": "10px",
+    "background": "rgb(17, 17, 17)",
+    "backgroundImage": "none",
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "13px",
+    "padding": "6px 12px",
+    "border": "0px none rgb(255, 255, 255)",
+    "boxShadow": "none"
+  },
+  "wrapperOuter": "<div class=\"CommonMoButtonFloating_button-floating__BfCeH\" data-area=\"플로팅 영역\" style=\"--button-floating--bottom: 56px;\"><div class=\"CommonMoButtonFloating_button-floating_lottie__jw7NI\"><a class=\"CommonMoButtonFloating_active__2IfY_\" data-contents=\"AI 챗봇 플로팅\" href=\"#!\" target=\"_blank\" title=\"새창열림\"><span class=\"CommonMoButtonFloating_ico_lottie__yrFyF\"><span class=\"blind\">AI Chat</span></span><span class=\"CommonMoButtonFloating_bg__iDxZd\"><div aria-hidden=\"true\"><div style=\"position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;\"><canvas width=\"120\" height=\"120\" aria-hidden=\"true\" style=\"width: 100%; height: 100%; transform-origin: 0px 0px 0px; content-visibility: visible;\"></canvas></div></div></span><span class=\"CommonMoButtonFloating_msg__Ru_p3\">필요한 정보를 찾기 어려우신가요?</span></a></div></div>"
+}

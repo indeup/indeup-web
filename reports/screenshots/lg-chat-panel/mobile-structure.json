@@ -1,0 +1,313 @@
+{
+  "tag": "BODY",
+  "id": "",
+  "cls": "",
+  "rect": {
+    "w": 450,
+    "h": 1500,
+    "x": 0,
+    "y": 0
+  },
+  "display": "block",
+  "children": [
+    {
+      "tag": "DIV",
+      "id": "",
+      "cls": "",
+      "rect": {
+        "w": 0,
+        "h": 0,
+        "x": 0,
+        "y": 0
+      },
+      "display": "none",
+      "children": []
+    },
+    {
+      "tag": "SCRIPT",
+      "id": "",
+      "cls": "",
+      "rect": {
+        "w": 0,
+        "h": 0,
+        "x": 0,
+        "y": 0
+      },
+      "display": "none",
+      "children": []
+    },
+    {
+      "tag": "LINK",
+      "id": "",
+      "cls": "",
+      "rect": {
+        "w": 0,
+        "h": 0,
+        "x": 0,
+        "y": 0
+      },
+      "display": "none",
+      "children": []
+    },
+    {
+      "tag": "DIV",
+      "id": "ai-assistant",
+      "cls": "",
+      "rect": {
+        "w": 450,
+        "h": 1500,
+        "x": 0,
+        "y": 0
+      },
+      "display": "block",
+      "children": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "relative flex h-svh flex-col overflow-x-hidden overflow-y-clip bg-[linear-gradient(180deg,#fff_0px,#fff_50px,#f9fafb_10%",
+          "rect": {
+            "w": 450,
+            "h": 1500,
+            "x": 0,
+            "y": 0
+          },
+          "display": "flex",
+          "children": [
+            {
+              "tag": "HEADER",
+              "id": "",
+              "cls": "sticky top-0 z-1 h-14 w-full bg-white px-3",
+              "rect": {
+                "w": 450,
+                "h": 56,
+                "x": 0,
+                "y": 0
+              },
+              "display": "block",
+              "children": [
+                {
+                  "tag": "DIV",
+                  "id": "",
+                  "cls": "relative flex h-full w-full items-center justify-center",
+                  "rect": {
+                    "w": 426,
+                    "h": 56,
+                    "x": 12,
+                    "y": 0
+                  },
+                  "display": "flex",
+                  "children": [
+                    null,
+                    null
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "MAIN",
+              "id": "",
+              "cls": "scrollbar-hidden flex-1 overflow-hidden",
+              "rect": {
+                "w": 450,
+                "h": 1334,
+                "x": 0,
+                "y": 56
+              },
+              "display": "block",
+              "children": [
+                {
+                  "tag": "DIV",
+                  "id": "",
+                  "cls": "scrollbar-hidden relative min-h-full overflow-x-hidden",
+                  "rect": {
+                    "w": 450,
+                    "h": 1334,
+                    "x": 0,
+                    "y": 56
+                  },
+                  "display": "block",
+                  "children": [
+                    null
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "FOOTER",
+              "id": "",
+              "cls": "relative",
+              "rect": {
+                "w": 450,
+                "h": 110,
+                "x": 0,
+                "y": 1390
+              },
+              "display": "block",
+              "children": [
+                {
+                  "tag": "SECTION",
+                  "id": "",
+                  "cls": "relative z-10 rounded-t-3xl border-0 bg-white px-4 pt-2.5 pb-3 shadow-[0px_0px_40px_0px_rgba(0,0,0,0.19)]",
+                  "rect": {
+                    "w": 450,
+                    "h": 110,
+                    "x": 0,
+                    "y": 1390
+                  },
+                  "display": "block",
+                  "children": [
+                    null,
+                    null
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "SCRIPT",
+      "id": "_R_",
+      "cls": "",
+      "rect": {
+        "w": 0,
+        "h": 0,
+        "x": 0,
+        "y": 0
+      },
+      "display": "none",
+      "children": []
+    },
+    {
+      "tag": "SCRIPT",
+      "id": "",
+      "cls": "",
+      "rect": {
+        "w": 0,
+        "h": 0,
+        "x": 0,
+        "y": 0
+      },
+      "display": "none",
+      "children": []
+    },
+    {
+      "tag": "SCRIPT",
+      "id": "",
+      "cls": "",
+      "rect": {
+        "w": 0,
+        "h": 0,
+        "x": 0,
+        "y": 0
+      },
+      "display": "none",
+      "children": []
+    },
+    {
+      "tag": "SCRIPT",
+      "id": "",
+      "cls": "",
+      "rect": {
+        "w": 0,
+        "h": 0,
+        "x": 0,
+        "y": 0
+      },
+      "display": "none",
+      "children": []
+    },
+    {
+      "tag": "SCRIPT",
+      "id": "",
+      "cls": "",
+      "rect": {
+        "w": 0,
+        "h": 0,
+        "x": 0,
+        "y": 0
+      },
+      "display": "none",
+      "children": []
+    },
+    {
+      "tag": "SCRIPT",
+      "id": "",
+      "cls": "",
+      "rect": {
+        "w": 0,
+        "h": 0,
+        "x": 0,
+        "y": 0
+      },
+      "display": "none",
+      "children": []
+    },
+    {
+      "tag": "SCRIPT",
+      "id": "",
+      "cls": "",
+      "rect": {
+        "w": 0,
+        "h": 0,
+        "x": 0,
+        "y": 0
+      },
+      "display": "none",
+      "children": []
+    },
+    {
+      "tag": "SCRIPT",
+      "id": "",
+      "cls": "",
+      "rect": {
+        "w": 0,
+        "h": 0,
+        "x": 0,
+        "y": 0
+      },
+      "display": "none",
+      "children": []
+    },
+    {
+      "tag": "NEXT-ROUTE-ANNOUNCER",
+      "id": "",
+      "cls": "",
+      "rect": {
+        "w": 0,
+        "h": 0,
+        "x": 0,
+        "y": 1500
+      },
+      "display": "block",
+      "children": []
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "cls": "ReactModalPortal",
+      "rect": {
+        "w": 450,
+        "h": 0,
+        "x": 0,
+        "y": 1500
+      },
+      "display": "block",
+      "children": []
+    },
+    {
+      "tag": "SCRIPT",
+      "id": "gtm_referrer_checker",
+      "cls": "",
+      "rect": {
+        "w": 0,
+        "h": 0,
+        "x": 0,
+        "y": 0
+      },
+      "display": "none",
+      "children": []
+    }
+  ]
+}

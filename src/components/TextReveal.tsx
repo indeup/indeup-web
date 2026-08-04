@@ -51,7 +51,7 @@ export default function TextReveal({
             <span className="inline-block overflow-hidden pb-[0.2em] align-bottom">
               <span
                 className={`inline-block transition-transform duration-[600ms] ease-out will-change-transform ${
-                  isHighlight ? "font-bold text-[var(--color-brand)]" : ""
+                  isHighlight ? "text-[var(--color-primary)]" : ""
                 }`}
                 style={{
                   transitionDelay: `${Math.min(i * 24, 480)}ms`,

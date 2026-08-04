@@ -81,24 +81,24 @@ export default function WarrantyBadge() {
   const { display: years, phase } = useSlotCountUp(policyData.warrantyYears, visible);
 
   return (
-    <section className="bg-[var(--color-primary)] px-6 py-28 text-center text-white sm:px-12 sm:py-36">
+    <section className="mx-3 bg-white px-6 py-14 text-center sm:mx-0 sm:px-12 sm:py-36">
       <div
         ref={ref}
         className={`mx-auto max-w-2xl transition-all duration-700 ease-out ${
           visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
         }`}
       >
-        <p className="text-lg font-medium text-white/70 sm:text-xl">
+        <p className="text-lg text-[var(--color-secondary)] sm:text-xl">
           인디업의 모든 제품
         </p>
         <p
-          className="mt-2 font-bold leading-none tracking-[-0.02em]"
-          style={{ fontSize: "clamp(3rem, 9vw, 7rem)" }}
+          className="mt-2 font-semibold leading-none tracking-[-0.02em] text-[var(--color-primary)]"
+          style={{ fontSize: "var(--type-stat)" }}
         >
           품질보증{" "}
           <span
             key={phase === "landed" ? "landed" : "spinning"}
-            className={`inline-block tabular-nums text-[var(--color-brand-light)] ${
+            className={`inline-block tabular-nums text-[var(--color-primary)] ${
               phase === "landed" ? "animate-[count-land_320ms_ease-out]" : ""
             }`}
             style={{
@@ -110,7 +110,7 @@ export default function WarrantyBadge() {
           </span>
           년.
         </p>
-        <p className="mt-8 text-base font-medium uppercase tracking-[0.15em] text-white/60">
+        <p className="mt-8 text-base uppercase tracking-[0.15em] text-[var(--color-muted-foreground)] [text-wrap:balance]">
           {policyData.damageSupport}
         </p>
       </div>

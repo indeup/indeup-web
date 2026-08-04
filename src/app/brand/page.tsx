@@ -6,9 +6,20 @@ import SizeCta from "@/components/SizeCta";
 import Reveal from "@/components/Reveal";
 import SectionNav from "@/components/SectionNav";
 import TextReveal from "@/components/TextReveal";
+import { toSafeJsonLdString } from "@/lib/safeJsonLd";
+import {
+  siteUrl,
+  naverStoreUrl,
+  brandNameKo,
+  brandNameEn,
+  legalName,
+  representativeName,
+  supportPhone,
+  businessAddress,
+  logoUrl,
+  officialChannels,
+} from "@/lib/brand";
 
-const siteUrl = "https://indeup.com";
-const naverStoreUrl = "https://brand.naver.com/indeup";
 const pageTitle = "인디업 브랜드 소개 | 공간에 맞춘 10mm 맞춤 책상";
 const pageDescription =
   "인디업(INDEUP)은 책상을 직접 제조하고 판매하는 국내 데스크 브랜드입니다. 공간과 사용 목적에 맞춰 가로·깊이·높이를 조정하고, 철제 프레임 제작부터 도장·검수·출고까지 직접 관리합니다.";
@@ -47,7 +58,7 @@ export const metadata: Metadata = {
 function Eyebrow({ children }: { children: ReactNode }) {
   return (
     <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-muted-foreground)]">
-      <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-brand)]" aria-hidden="true" />
+      <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-primary)]" aria-hidden="true" />
       {children}
     </p>
   );
@@ -59,7 +70,7 @@ function InlineLink({ href, children, external }: { href: string; children: Reac
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
-      className="cursor-pointer border-b border-[var(--color-primary)]/30 font-medium text-[var(--color-primary)] transition-colors duration-200 hover:border-[var(--color-brand)] hover:text-[var(--color-brand)]"
+      className="cursor-pointer border-b border-[var(--color-primary)]/30 font-medium text-[var(--color-primary)] transition-colors duration-200 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]"
     >
       {children}
     </a>
@@ -74,7 +85,7 @@ function ArrowButton({ href, children, primary, external }: { href: string; chil
       rel={external ? "noopener noreferrer" : undefined}
       className={`group inline-flex cursor-pointer items-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-colors duration-200 ${
         primary
-          ? "bg-[var(--color-brand)] text-white hover:bg-[var(--color-brand-dark)]"
+          ? "bg-[var(--color-primary)] text-white hover:opacity-85"
           : "border border-[var(--color-primary)]/25 text-[var(--color-primary)] hover:border-[var(--color-primary)]"
       }`}
     >
@@ -167,8 +178,10 @@ const processSteps = [
 ];
 
 const collection = [
-  { title: "1인용 책상", body: "원룸, 작은 방, 서재와 홈오피스를 위한 맞춤형 개인 책상" },
-  { title: "2인용 책상", body: "부부, 커플과 두 사람이 함께 사용하는 넓고 안정적인 책상" },
+  { title: "1인용 책상", body: "원룸, 작은 방, 서재와 홈오피스를 위한 맞춤형 개인 책상(단품)" },
+  { title: "1인용 컴퓨터책상", body: "멀티탭거치대가 기본 포함된 1인용 컴퓨터책상" },
+  { title: "2인용 책상", body: "부부, 커플과 두 사람이 함께 사용하는 넓고 안정적인 책상(단품)" },
+  { title: "2인용 컴퓨터책상", body: "멀티탭거치대 2개가 기본 포함된 2인용 컴퓨터책상" },
   { title: "좌식 책상", body: "바닥 생활과 좌식 작업 환경에 맞춘 낮은 높이의 책상" },
   { title: "사이드테이블", body: "소파 옆, 침대 옆과 틈새 공간에 필요한 슬림한 보조 테이블" },
   { title: "홈바테이블", body: "홈바, 작업대와 공간 분리 용도로 사용하는 높은 테이블" },
@@ -299,31 +312,28 @@ export default function BrandPage() {
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "인디업",
-    alternateName: "INDEUP",
-    legalName: "스니처",
+    name: brandNameKo,
+    alternateName: brandNameEn,
+    legalName,
     url: siteUrl,
-    logo: `${siteUrl}/INDEUP_LOGO.svg`,
-    telephone: "1668-5738",
+    logo: logoUrl,
+    telephone: supportPhone,
     address: {
       "@type": "PostalAddress",
-      streetAddress: "동북로473번길 385-14",
-      addressLocality: "김해시",
-      addressRegion: "경남",
-      addressCountry: "KR",
+      ...businessAddress,
     },
-    sameAs: [
-      "https://brand.naver.com/indeup",
-      "https://blog.naver.com/indeup_official",
-      "https://indeup.tistory.com/",
-      "https://www.youtube.com/@indeup",
-      "https://www.instagram.com/indeup.kr",
-    ],
+    founder: { "@type": "Person", name: representativeName },
+    sameAs: [...officialChannels],
   };
 
   const webPageJsonLd = {
     "@context": "https://schema.org",
-    "@type": "WebPage",
+    // AboutPage (not plain WebPage) — this is the site's brand/company-story
+    // page, and several AEO/GEO scanners specifically look for an
+    // AboutPage-typed entity to resolve "who is this business" queries;
+    // without it they report the site as having no recognized About page
+    // even though this content exists.
+    "@type": "AboutPage",
     name: pageTitle,
     description: pageDescription,
     url: `${siteUrl}/brand/`,
@@ -336,14 +346,14 @@ export default function BrandPage() {
       <Header />
       <SectionNav />
 
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toSafeJsonLdString(breadcrumbJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toSafeJsonLdString(organizationJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toSafeJsonLdString(webPageJsonLd) }} />
 
       <main className="flex-1">
         {/* Breadcrumb */}
         <nav aria-label="브레드크럼" className="border-b border-[var(--color-border)] px-6 py-3 sm:px-12">
-          <ol className="mx-auto flex max-w-6xl items-center gap-2 text-xs text-[var(--color-muted-foreground)]">
+          <ol className="mx-auto flex max-w-[1600px] items-center gap-2 text-xs text-[var(--color-muted-foreground)]">
             <li>
               <a href="/" className="cursor-pointer transition-colors hover:text-[var(--color-primary)]">
                 홈
@@ -358,27 +368,27 @@ export default function BrandPage() {
 
         {/* 1. Hero — stacked statement + full-width film */}
         <section id="hero" className="px-6 pb-14 pt-12 sm:px-12 sm:pb-20 sm:pt-16">
-          <Reveal className="mx-auto max-w-6xl">
+          <Reveal className="mx-auto max-w-[1600px]">
             <div className="max-w-3xl">
               <Eyebrow>About Indeup</Eyebrow>
               <h1
-                className="mt-5 font-bold leading-[1.08] tracking-[-0.03em]"
-                style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}
+                className="mt-5 font-semibold leading-[1.08] tracking-[-0.02em]"
+                style={{ fontSize: "clamp(1.75rem, 4vw, 2.75rem)" }}
               >
-                공간에 맞는 책상을
-                <br />
+                공간에 맞는 책상을{" "}
+                <br className="hidden sm:block" />
                 직접 만들고 판매합니다.
               </h1>
               <TextReveal
                 text="인디업(INDEUP)은 책상의 기획, 제작, 검수, 판매와 고객 상담까지 직접 관리하는 국내 데스크 브랜드입니다."
                 highlight="인디업(INDEUP)은"
-                className="mt-6 max-w-xl text-base leading-7 text-[var(--color-secondary)] sm:text-lg"
+                className="mt-6 max-w-xl text-base leading-[1.3] text-[var(--color-secondary)] sm:text-lg"
               />
-              <p className="mt-4 max-w-xl text-base leading-7 text-[var(--color-secondary)] sm:text-lg">
+              <p className="mt-4 max-w-xl text-base leading-[1.3] text-[var(--color-secondary)] sm:text-lg">
                 정해진 규격에 고객의 공간을 맞추기보다, 실제로 책상을 놓을 자리와 사용하는 장비, 생활 방식에 맞춰
                 가로·깊이·높이를 세밀하게 조정해 제작합니다.
               </p>
-              <p className="mt-6 max-w-xl text-lg font-semibold leading-8 tracking-[-0.01em] sm:text-xl">
+              <p className="mt-6 max-w-xl text-lg font-semibold leading-[1.3] tracking-[-0.01em] sm:text-xl">
                 줄자로 잰 사이즈 그대로,
                 <br />
                 공간에 가까운 책상을 만듭니다.
@@ -388,7 +398,7 @@ export default function BrandPage() {
                 {["국내 제조·판매", "10mm 맞춤 제작", "3년 무상보증"].map((label) => (
                   <span
                     key={label}
-                    className="rounded-full border border-[var(--color-border)] bg-white px-3.5 py-1.5 text-xs font-semibold tracking-[-0.01em] text-[var(--color-secondary)]"
+                    className="rounded-full border border-[var(--color-border)] bg-white px-3.5 py-1.5 text-xs font-semibold tracking-[-0.01em] font-medium text-[var(--color-secondary)]"
                   >
                     {label}
                   </span>
@@ -415,18 +425,18 @@ export default function BrandPage() {
 
         {/* 2. WHO WE ARE — split editorial: heading left, flowing copy right */}
         <section id="who-we-are" className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-20">
-          <Reveal className="mx-auto max-w-6xl">
+          <Reveal className="mx-auto max-w-[1600px]">
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-[320px_1fr] lg:gap-16">
               <div>
                 <Eyebrow>Who We Are</Eyebrow>
-                <h2 className="mt-4 font-bold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
+                <h2 className="mt-4 font-semibold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
                   인디업은 어떤
                   <br />
                   브랜드인가요?
                 </h2>
               </div>
-              <div className="flex flex-col gap-3.5 text-base leading-7 text-[var(--color-secondary)] sm:text-lg">
-                <p className="font-medium text-[var(--color-primary)]">
+              <div className="flex flex-col gap-3.5 text-base leading-[1.3] text-[var(--color-secondary)] sm:text-lg">
+                <p className="text-[var(--color-primary)]">
                   인디업은 공간과 사용 목적에 맞춰 책상을 직접 제조하고 판매하는 국내 맞춤 데스크 브랜드입니다.
                 </p>
                 <p>
@@ -448,13 +458,13 @@ export default function BrandPage() {
 
         {/* 3. MAKER & SELLER — horizontal flow ribbon */}
         <section id="maker-seller" className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-20">
-          <Reveal className="mx-auto max-w-6xl">
+          <Reveal className="mx-auto max-w-[1600px]">
             <div className="max-w-3xl">
               <Eyebrow>Maker &amp; Seller</Eyebrow>
-              <h2 className="mt-4 font-bold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
+              <h2 className="mt-4 font-semibold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
                 만드는 사람과 설명하는 사람이 같습니다.
               </h2>
-              <div className="mt-4 flex flex-col gap-3.5 text-base leading-7 text-[var(--color-secondary)] sm:text-lg">
+              <div className="mt-4 flex flex-col gap-3.5 text-base leading-[1.3] text-[var(--color-secondary)] sm:text-lg">
                 <p>인디업은 제조와 판매가 분리되지 않습니다.</p>
                 <p>
                   제품을 직접 만드는 과정과 고객에게 제품을 설명하는 과정이 하나로 이어져 있기 때문에, 상담 단계에서
@@ -479,10 +489,10 @@ export default function BrandPage() {
                     i === 0 ? "border-t sm:border-t-0" : "border-t"
                   } sm:border-t-0 sm:border-l sm:pl-6 ${i === 0 ? "sm:pl-0" : ""}`}
                 >
-                  <span className="text-xs font-bold tracking-[0.1em] text-[var(--color-brand)]">
+                  <span className="text-xs font-semibold tracking-[0.1em] text-[var(--color-primary)]">
                     STEP 0{i + 1}
                   </span>
-                  <h3 className="mt-1.5 font-bold tracking-[-0.01em]">{p.title}</h3>
+                  <h3 className="mt-1.5 font-semibold tracking-[-0.01em]">{p.title}</h3>
                   <p className="mt-1.5 text-sm leading-6 text-[var(--color-secondary)]">{p.body}</p>
                 </div>
               ))}
@@ -492,15 +502,15 @@ export default function BrandPage() {
 
         {/* 4. MADE TO FIT — split: narrative left, worked example + quote right */}
         <section id="made-to-fit" className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-20">
-          <Reveal className="mx-auto max-w-6xl">
+          <Reveal className="mx-auto max-w-[1600px]">
             <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
               <div>
                 <Eyebrow>Made to Fit</Eyebrow>
-                <h2 className="mt-4 font-bold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
+                <h2 className="mt-4 font-semibold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
                   인디업의 10mm 맞춤 책상이란 무엇인가요?
                 </h2>
-                <div className="mt-4 flex flex-col gap-3.5 text-base leading-7 text-[var(--color-secondary)] sm:text-lg">
-                  <p className="font-medium text-[var(--color-primary)]">
+                <div className="mt-4 flex flex-col gap-3.5 text-base leading-[1.3] text-[var(--color-secondary)] sm:text-lg">
+                  <p className="text-[var(--color-primary)]">
                     인디업의 10mm 맞춤 책상은 정해진 규격만 고르는 방식이 아니라, 제품별 선택 범위 안에서 가로와
                     높이를 10mm 단위로 조정해 제작하는 책상입니다.
                   </p>
@@ -521,14 +531,14 @@ export default function BrandPage() {
                   <p className="text-xs font-semibold uppercase tracking-[0.15em] text-[var(--color-muted-foreground)]">
                     예를 들어
                   </p>
-                  <p className="mt-3 text-base leading-7 text-[var(--color-secondary)] sm:text-lg">
+                  <p className="mt-3 text-base leading-[1.3] text-[var(--color-secondary)] sm:text-lg">
                     책상을 놓을 벽면 길이가{" "}
-                    <strong className="font-bold text-[var(--color-brand)]">1230mm</strong>인데 판매되는 제품이
+                    <strong className="font-bold text-[var(--color-primary)]">1230mm</strong>인데 판매되는 제품이
                     1200mm와 1400mm뿐이라면, 한쪽에는 불필요한 공간이 남거나 제품이 자리에 들어가지 않을 수
                     있습니다.
                   </p>
                 </div>
-                <p className="text-lg font-semibold leading-8 tracking-[-0.01em] sm:text-xl">
+                <p className="text-lg font-semibold leading-[1.3] tracking-[-0.01em] sm:text-xl">
                   책상에 공간을 맞추지 않고,
                   <br />
                   공간에 책상을 맞춥니다.
@@ -540,10 +550,10 @@ export default function BrandPage() {
               {dimensionPoints.map((p) => (
                 <div
                   key={p.title}
-                  className="rounded-2xl border border-[var(--color-border)] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-brand)]/40 hover:shadow-[0_16px_32px_rgba(0,0,0,0.06)]"
+                  className="rounded-2xl border border-[var(--color-border)] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-primary)]/40 hover:shadow-[0_16px_32px_rgba(0,0,0,0.06)]"
                 >
                   <dt className="font-semibold text-[var(--color-primary)]">{p.title}</dt>
-                  <dd className="mt-1.5 text-sm leading-6 text-[var(--color-secondary)]">{p.body}</dd>
+                  <dd className="mt-1.5 text-sm leading-6 font-medium text-[var(--color-secondary)]">{p.body}</dd>
                 </div>
               ))}
             </dl>
@@ -556,18 +566,16 @@ export default function BrandPage() {
         </section>
 
         {/* 5. OUR STANDARD — asymmetric bento, 3-year card featured */}
-        <section id="our-standard" className="grain relative overflow-hidden bg-[var(--color-primary)] px-6 py-16 text-white sm:px-12 sm:py-20">
-          <Reveal className="relative mx-auto max-w-6xl">
+        <section id="our-standard" className="relative overflow-hidden border-t border-[var(--color-border)] bg-[var(--color-muted)] px-6 py-16 text-[var(--color-primary)] sm:px-12 sm:py-20">
+          <Reveal className="relative mx-auto max-w-[1600px]">
             <div className="max-w-3xl">
-              <Eyebrow>
-                <span className="text-white/50">Our Standard</span>
-              </Eyebrow>
-              <h2 className="mt-4 font-bold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
+              <Eyebrow>Our Standard</Eyebrow>
+              <h2 className="mt-4 font-semibold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
                 오래 사용하는 책상은
                 <br />
                 보이지 않는 구조부터 달라야 합니다.
               </h2>
-              <div className="mt-4 flex flex-col gap-3 text-base leading-7 text-white/70 sm:text-lg">
+              <div className="mt-4 flex flex-col gap-3 text-base leading-[1.3] text-[var(--color-secondary)] sm:text-lg">
                 <p>인디업은 책상의 외형뿐 아니라 상판 아래 구조와 프레임의 연결 방식까지 중요하게 생각합니다.</p>
                 <p>
                   타이핑, 모니터 사용, 재봉틀과 작업 장비처럼 반복적인 움직임이 발생하는 환경에서도 흔들림을 줄이고
@@ -582,30 +590,30 @@ export default function BrandPage() {
                   key={s.num}
                   className={`rounded-2xl border p-5 transition-all duration-300 hover:-translate-y-1 ${
                     s.num === "06"
-                      ? "border-[var(--color-brand-light)]/40 bg-[var(--color-brand)]/20 hover:bg-[var(--color-brand)]/25"
-                      : "border-white/10 bg-white/[0.04] hover:border-[var(--color-brand-light)]/40 hover:bg-white/[0.07]"
+                      ? "border-[var(--color-primary)]/30 bg-[var(--color-primary)]/[0.06] hover:bg-[var(--color-primary)]/[0.1]"
+                      : "border-[var(--color-border)] bg-white hover:border-[var(--color-primary)]/30 hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)]"
                   }`}
                 >
                   {s.num === "06" ? (
                     <div className="flex items-baseline gap-3">
-                      <span className="text-5xl font-extrabold leading-none text-[var(--color-brand-light)] sm:text-6xl">
+                      <span className="font-semibold leading-none text-[var(--color-primary)]" style={{ fontSize: "var(--type-stat)" }}>
                         3
                       </span>
-                      <h3 className="text-xl font-bold tracking-[-0.01em] sm:text-2xl">년 무상보증</h3>
+                      <h3 className="text-xl font-semibold tracking-[-0.01em] sm:text-2xl">년 무상보증</h3>
                     </div>
                   ) : (
                     <>
-                      <span className="text-sm font-medium text-[var(--color-brand-light)]">{s.num}</span>
-                      <h3 className="mt-1 text-xl font-bold tracking-[-0.01em] sm:text-2xl">{s.title}</h3>
+                      <span className="text-sm font-medium text-[var(--color-primary)]">{s.num}</span>
+                      <h3 className="mt-1 text-xl font-semibold tracking-[-0.01em] sm:text-2xl">{s.title}</h3>
                     </>
                   )}
-                  <p className="mt-2 text-base leading-7 text-white/70">
+                  <p className="mt-2 text-base leading-[1.3] text-[var(--color-secondary)]">
                     {s.body ?? (
                       <>
                         보증 범위와 적용 조건은 제품 및{" "}
                         <a
                           href="/support/"
-                          className="cursor-pointer border-b border-white/40 font-medium text-white transition-colors duration-200 hover:border-[var(--color-brand-light)] hover:text-[var(--color-brand-light)]"
+                          className="cursor-pointer border-b border-[var(--color-primary)]/30 font-medium text-[var(--color-primary)] transition-colors duration-200 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]"
                         >
                           고객지원 안내
                         </a>
@@ -621,13 +629,13 @@ export default function BrandPage() {
 
         {/* 6. HOW WE MAKE — connected vertical timeline */}
         <section id="how-we-make" className="px-6 py-16 sm:px-12 sm:py-20">
-          <Reveal className="mx-auto max-w-6xl">
+          <Reveal className="mx-auto max-w-[1600px]">
             <div className="max-w-3xl">
               <Eyebrow>How We Make</Eyebrow>
-              <h2 className="mt-4 font-bold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
+              <h2 className="mt-4 font-semibold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
                 한 대의 책상이 완성되는 과정
               </h2>
-              <p className="mt-4 text-base leading-7 text-[var(--color-secondary)] sm:text-lg">
+              <p className="mt-4 text-base leading-[1.3] text-[var(--color-secondary)] sm:text-lg">
                 인디업의 주문 제작 책상은 상담과 주문 확인부터 제작, 도장, 검수와 포장을 거쳐 출고됩니다.
               </p>
             </div>
@@ -637,11 +645,11 @@ export default function BrandPage() {
               <ol className="flex flex-col gap-8">
                 {processSteps.map((s) => (
                   <li key={s.num} className="relative flex gap-5">
-                    <span className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-sm font-bold text-white">
+                    <span className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-primary)] text-sm font-semibold text-white">
                       {s.num}
                     </span>
                     <div className="pt-1.5">
-                      <h3 className="text-lg font-bold tracking-[-0.01em]">{s.title}</h3>
+                      <h3 className="text-base font-semibold tracking-[-0.01em]">{s.title}</h3>
                       <p className="mt-1.5 text-sm leading-6 text-[var(--color-secondary)] sm:text-base">
                         {s.body}
                       </p>
@@ -660,13 +668,13 @@ export default function BrandPage() {
 
         {/* 7. OFFICIAL BRAND — trust badge + CTA */}
         <section id="official-brand" className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-20">
-          <Reveal className="mx-auto max-w-6xl">
+          <Reveal className="mx-auto max-w-[1600px]">
             <div className="max-w-3xl">
               <Eyebrow>Official Brand</Eyebrow>
-              <h2 className="mt-4 font-bold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
+              <h2 className="mt-4 font-semibold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
                 공식 상표와 공식 판매 채널로 운영합니다.
               </h2>
-              <div className="mt-4 flex flex-col gap-3.5 text-base leading-7 text-[var(--color-secondary)] sm:text-lg">
+              <div className="mt-4 flex flex-col gap-3.5 text-base leading-[1.3] text-[var(--color-secondary)] sm:text-lg">
                 <TextReveal
                   text="인디업(INDEUP)은 운영사 스니처가 보유하고 사용하는 브랜드 상표입니다."
                   highlight="인디업(INDEUP)은"
@@ -684,11 +692,11 @@ export default function BrandPage() {
 
             <div className="mt-8 flex flex-col gap-6 sm:flex-row sm:items-center">
               <div className="flex items-center gap-4 rounded-2xl border border-[var(--color-border)] bg-white px-5 py-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)]/10 text-[var(--color-brand)]">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
                   <ShieldCheckIcon />
                 </span>
                 <span>
-                  <p className="text-sm font-bold text-[var(--color-primary)]">네이버 브랜드스토어 공식 브랜드</p>
+                  <p className="text-sm font-semibold text-[var(--color-primary)]">네이버 브랜드스토어 공식 브랜드</p>
                   <p className="text-xs text-[var(--color-muted-foreground)]">운영사 스니처 · 인디업(INDEUP)</p>
                 </span>
               </div>
@@ -704,13 +712,13 @@ export default function BrandPage() {
 
         {/* 8. OUR COLLECTION — horizontal scroll carousel */}
         <section id="our-collection" className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-20">
-          <Reveal className="mx-auto max-w-6xl">
+          <Reveal className="mx-auto max-w-[1600px]">
             <div className="max-w-3xl">
               <Eyebrow>Our Collection</Eyebrow>
-              <h2 className="mt-4 font-bold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
+              <h2 className="mt-4 font-semibold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
                 공간과 사용하는 방식에 따라
                 <br />
-                다섯 가지 책상을 제안합니다.
+                일곱 가지 책상을 제안합니다.
               </h2>
             </div>
 
@@ -718,9 +726,9 @@ export default function BrandPage() {
               {collection.map((c) => (
                 <div
                   key={c.title}
-                  className="w-[240px] shrink-0 snap-start rounded-2xl border border-[var(--color-border)] bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-brand)]/40 hover:shadow-[0_16px_32px_rgba(0,0,0,0.08)]"
+                  className="w-[240px] shrink-0 snap-start rounded-2xl border border-[var(--color-border)] bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-primary)]/40 hover:shadow-[0_16px_32px_rgba(0,0,0,0.08)]"
                 >
-                  <h3 className="text-lg font-bold tracking-[-0.01em]">{c.title}</h3>
+                  <h3 className="text-base font-semibold tracking-[-0.01em]">{c.title}</h3>
                   <p className="mt-1.5 text-sm leading-6 text-[var(--color-secondary)]">{c.body}</p>
                 </div>
               ))}
@@ -735,15 +743,13 @@ export default function BrandPage() {
         </section>
 
         {/* 9. OUR PRINCIPLE — manifesto split: big heading left, statement right */}
-        <section id="our-principle" className="grain relative overflow-hidden bg-[var(--color-primary)] px-6 py-16 text-white sm:px-12 sm:py-20">
-          <Reveal className="relative mx-auto max-w-6xl">
-            <Eyebrow>
-              <span className="text-white/50">Our Principle</span>
-            </Eyebrow>
+        <section id="our-principle" className="relative overflow-hidden border-t border-[var(--color-border)] px-6 py-16 text-[var(--color-primary)] sm:px-12 sm:py-20">
+          <Reveal className="relative mx-auto max-w-[1600px]">
+            <Eyebrow>Our Principle</Eyebrow>
             <div className="mt-6 grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
               <h2
-                className="font-bold leading-[1.15] tracking-[-0.03em]"
-                style={{ fontSize: "clamp(1.75rem, 4vw, 3rem)" }}
+                className="font-semibold leading-[1.15] tracking-[-0.03em]"
+                style={{ fontSize: "clamp(1.5rem, 2.2vw, 1.875rem)" }}
               >
                 더 많이 만들기보다,
                 <br />
@@ -752,7 +758,7 @@ export default function BrandPage() {
                 만듭니다.
               </h2>
               <div>
-                <div className="flex flex-col gap-3.5 text-base leading-7 text-white/70 sm:text-lg">
+                <div className="flex flex-col gap-3.5 text-base leading-[1.3] text-[var(--color-secondary)] sm:text-lg">
                   <p>모든 공간은 같은 크기가 아니고, 책상을 사용하는 사람의 자세와 장비도 모두 다릅니다.</p>
                   <p>
                     인디업은 많이 판매되는 한 가지 규격을 정답으로 제안하기보다, 고객이 실제로 사용할 공간과 목적에
@@ -766,11 +772,11 @@ export default function BrandPage() {
                     자연스럽게 잘 맞는 책상입니다.
                   </p>
                 </div>
-                <div className="mt-6 border-t border-white/15 pt-6">
-                  <p className="text-2xl font-bold leading-tight tracking-[-0.02em] text-[var(--color-brand-light)] sm:text-3xl">
+                <div className="mt-6 border-t border-[var(--color-border)] pt-6">
+                  <p className="text-lg font-semibold leading-tight tracking-[-0.01em] text-[var(--color-primary)] sm:text-xl">
                     줄자로 잰 사이즈 그대로 제작.
                   </p>
-                  <p className="mt-2 text-base leading-7 text-white/60">
+                  <p className="mt-2 text-base leading-[1.3] text-[var(--color-muted-foreground)]">
                     흔들림은 줄이고,
                     <br />
                     공간 활용은 더 좋게.
@@ -783,15 +789,15 @@ export default function BrandPage() {
 
         {/* 10. BUILT WITH EXPERIENCE — narrative + example chips */}
         <section id="experience" className="px-6 py-16 sm:px-12 sm:py-20">
-          <Reveal className="mx-auto max-w-6xl">
+          <Reveal className="mx-auto max-w-[1600px]">
             <div className="max-w-3xl">
               <Eyebrow>Built with Experience</Eyebrow>
-              <h2 className="mt-4 font-bold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
+              <h2 className="mt-4 font-semibold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
                 실제 사용 경험을
                 <br />
                 다음 책상에 반영합니다.
               </h2>
-              <div className="mt-4 flex flex-col gap-3.5 text-base leading-7 text-[var(--color-secondary)] sm:text-lg">
+              <div className="mt-4 flex flex-col gap-3.5 text-base leading-[1.3] text-[var(--color-secondary)] sm:text-lg">
                 <p>인디업은 고객 상담과 구매 후기에서 제품을 사용하는 공간과 목적을 확인합니다.</p>
                 <p>
                   좁은 거실의 통로를 확보하기 위해 깊이를 줄인 사례, 부부가 함께 사용하기 위해 넓은 2인용 책상을
@@ -815,18 +821,49 @@ export default function BrandPage() {
                 </span>
               ))}
             </div>
+
+            {/* Real aggregate frequency count over 1,653 Naver Smart Store
+                reviews spanning 5 full years (2021-08-02 ~ 2026-08-02,
+                전시상태 "정상" 리뷰 전수 — 리뷰.xlsx~리뷰5.xlsx, 개인 식별
+                정보 없음), not a single quoted review or any invented
+                "customers often say" claim. Every number here is a literal
+                keyword-match count re-derivable from those 5 files. Yearly
+                average held at 4.89~4.95 every single year — that
+                consistency, not just the aggregate, is the actual signal. */}
+            <div className="mt-10 rounded-2xl border border-[var(--color-border)] bg-white p-6 sm:p-8">
+              <p className="text-sm font-semibold uppercase tracking-[0.15em] text-[var(--color-muted-foreground)]">
+                실구매 후기 1,653건 분석 (최근 5년)
+              </p>
+              <p className="mt-3 text-base leading-[1.4] text-[var(--color-secondary)] sm:text-lg">
+                네이버 스마트스토어에 남겨진 최근 5년간(2021~2026) 실구매 후기 1,653건(평균 평점 4.93)을 전수
+                분석한 결과, 가장 많이 언급된 내용은 &lsquo;튼튼함·흔들림 없음&rsquo;이었습니다(전체 후기의 절반
+                이상에서 언급). 연도별 평균 평점도 4.89~4.95점 사이에서 5년 내내 꾸준히 유지됐습니다. 그다음으로
+                조립의 간단함, 배송·포장 상태에 대한 만족이 뒤를 이었습니다.
+              </p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                <span className="rounded-full bg-[var(--color-muted)] px-3.5 py-1.5 text-xs font-medium text-[var(--color-secondary)]">
+                  튼튼함·견고함 언급 1,019회
+                </span>
+                <span className="rounded-full bg-[var(--color-muted)] px-3.5 py-1.5 text-xs font-medium text-[var(--color-secondary)]">
+                  조립 관련 긍정 언급 757회
+                </span>
+                <span className="rounded-full bg-[var(--color-muted)] px-3.5 py-1.5 text-xs font-medium text-[var(--color-secondary)]">
+                  배송·포장 만족 600회
+                </span>
+              </div>
+            </div>
           </Reveal>
         </section>
 
         {/* 11. OFFICIAL CHANNELS — single-row ribbon on large screens */}
         <section id="channels" className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-20">
-          <Reveal className="mx-auto max-w-6xl">
+          <Reveal className="mx-auto max-w-[1600px]">
             <div className="max-w-3xl">
               <Eyebrow>Official Channels</Eyebrow>
-              <h2 className="mt-4 font-bold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
+              <h2 className="mt-4 font-semibold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
                 인디업의 공식 콘텐츠를 확인하세요.
               </h2>
-              <p className="mt-6 text-base leading-7 text-[var(--color-secondary)] sm:text-lg">
+              <p className="mt-6 text-base leading-[1.3] text-[var(--color-secondary)] sm:text-lg">
                 책상 사이즈 가이드, 제작 과정, 실제 설치 사례와 브랜드 영상은 인디업의 공식 채널을 통해 소개합니다.
               </p>
             </div>
@@ -838,13 +875,13 @@ export default function BrandPage() {
                   href={c.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex flex-col gap-3 rounded-2xl border border-[var(--color-border)] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-brand)]/40 hover:shadow-[0_16px_32px_rgba(0,0,0,0.08)]"
+                  className="group flex flex-col gap-3 rounded-2xl border border-[var(--color-border)] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-primary)]/40 hover:shadow-[0_16px_32px_rgba(0,0,0,0.08)]"
                 >
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[var(--color-primary)]/20 text-[var(--color-primary)] transition-colors duration-200 group-hover:border-[var(--color-brand)] group-hover:text-[var(--color-brand)]">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[var(--color-primary)]/20 text-[var(--color-primary)] transition-colors duration-200 group-hover:border-[var(--color-primary)] group-hover:text-[var(--color-primary)]">
                     <c.Icon />
                   </span>
                   <span>
-                    <h3 className="font-bold tracking-[-0.01em] text-[var(--color-primary)] transition-colors duration-200 group-hover:text-[var(--color-brand)]">
+                    <h3 className="font-semibold tracking-[-0.01em] text-[var(--color-primary)] transition-colors duration-200 group-hover:text-[var(--color-primary)]">
                       {c.title}
                     </h3>
                     <p className="mt-0.5 text-sm leading-6 text-[var(--color-secondary)]">{c.body}</p>
@@ -860,70 +897,38 @@ export default function BrandPage() {
           </Reveal>
         </section>
 
-        {/* 12. Final CTA — centered close */}
-        <section className="grain relative overflow-hidden bg-[var(--color-primary)] px-6 py-16 text-center text-white sm:px-12 sm:py-20">
-          <Reveal className="relative mx-auto max-w-2xl">
-            <h2 className="font-bold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
-              공간을 재셨다면,
-              <br />
-              이제 책상을 맞출 차례입니다.
-            </h2>
-            <p className="mt-5 text-base leading-7 text-white/70 sm:text-lg">
-              사용할 공간과 필요한 크기를 확인하고 인디업의 제품과 제작 방식을 살펴보세요.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <ArrowButton href={naverStoreUrl} primary external>
-                제품 보기
-              </ArrowButton>
-              <a
-                href="/custom-fit/"
-                className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-white transition-colors duration-200 hover:border-white"
-              >
-                맞춤 제작 알아보기
-                <span aria-hidden="true">&rarr;</span>
-              </a>
-              <a
-                href={naverStoreUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-white transition-colors duration-200 hover:border-white"
-              >
-                공식 스토어 방문하기
-                <span aria-hidden="true">&rarr;</span>
-              </a>
-            </div>
-          </Reveal>
-        </section>
-
-        {/* 13. FAQ — two columns on large screens */}
-        <section id="faq" className="px-6 py-16 sm:px-12 sm:py-20">
-          <Reveal className="mx-auto max-w-6xl">
-            <h2 className="font-bold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
+        {/* 12. FAQ — resolves objections before the closing CTA, not after */}
+        <section id="faq" className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-20">
+          <Reveal className="mx-auto max-w-[1600px]">
+            <h2 className="font-semibold leading-tight tracking-[-0.02em]" style={{ fontSize: "var(--type-h2)" }}>
               인디업 브랜드에 대해 자주 묻는 질문
             </h2>
             <div className="mt-8 grid grid-cols-1 gap-3 lg:grid-cols-2 lg:gap-4">
               {faqs.map((item) => (
                 <details
                   key={item.q}
-                  className="group rounded-2xl border border-[var(--color-border)] bg-white px-5 py-4 transition-colors duration-300 open:border-[var(--color-brand)]/30"
+                  className="group rounded-2xl border border-[var(--color-border)] bg-white px-5 py-4 transition-colors duration-300 open:border-[var(--color-primary)]/30"
                 >
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-[var(--color-primary)] marker:content-none">
                     <h3 className="text-base sm:text-lg">{item.q}</h3>
                     <span
-                      className="shrink-0 text-xl font-normal text-[var(--color-muted-foreground)] transition-transform duration-200 group-open:rotate-45 group-open:text-[var(--color-brand)]"
+                      className="shrink-0 text-xl font-normal text-[var(--color-muted-foreground)] transition-transform duration-200 group-open:rotate-45 group-open:text-[var(--color-primary)]"
                       aria-hidden="true"
                     >
                       +
                     </span>
                   </summary>
-                  <p className="mt-3 text-sm leading-7 text-[var(--color-secondary)] sm:text-base">{item.a}</p>
+                  <p className="mt-3 text-sm leading-[1.3] text-[var(--color-secondary)] sm:text-base">{item.a}</p>
                 </details>
               ))}
             </div>
           </Reveal>
         </section>
+
       </main>
 
+      {/* SizeCta closes every page with the same nudge — this page no
+          longer duplicates it with its own bespoke final CTA. */}
       <SizeCta />
       <Footer />
     </div>

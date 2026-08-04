@@ -59,7 +59,7 @@ export default function SectionNav() {
             <span
               className={`rounded-full transition-all duration-300 ${
                 active === s.id
-                  ? "h-2.5 w-2.5 bg-[var(--color-brand)]"
+                  ? "h-2.5 w-2.5 bg-[var(--color-primary)]"
                   : "h-1.5 w-1.5 bg-[var(--color-primary)]/25 group-hover:bg-[var(--color-primary)]/50"
               }`}
             />

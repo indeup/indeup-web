@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import Script from "next/script";
 import ChatWidget from "@/components/ChatWidget";
+import { toSafeJsonLdString } from "@/lib/safeJsonLd";
 import "./globals.css";
 import {
   siteUrl,
@@ -119,7 +120,7 @@ const naverAnalyticsId = process.env.NAVER_ANALYTICS_ID;
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#b32a2a",
+  themeColor: "#ffffff",
 };
 
 export default function RootLayout({
@@ -140,7 +141,24 @@ export default function RootLayout({
       "@type": "PostalAddress",
       ...businessAddress,
     },
+    founder: { "@type": "Person", name: "하민성" },
     sameAs: [...officialChannels],
+    // Mirrors src/lib/policy.ts's operatingHours/operatingDays ("평일 오전
+    // 9시~오후 5시") in schema.org's structured form — keep the two in sync
+    // if that policy value ever changes.
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: supportPhone,
+      contactType: "customer service",
+      areaServed: "KR",
+      availableLanguage: ["Korean"],
+      hoursAvailable: {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "09:00",
+        closes: "17:00",
+      },
+    },
   };
 
   const websiteJsonLd = {
@@ -149,6 +167,10 @@ export default function RootLayout({
     name: brandNameKo,
     alternateName: brandNameEn,
     url: siteUrl,
+    // No real on-site search page exists to point this at (there's no
+    // /search/?q= route), so this only names the site + its known page
+    // types rather than declaring a (fake) SearchAction target.
+    inLanguage: "ko-KR",
   };
 
   return (
@@ -157,12 +179,12 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: toSafeJsonLdString(organizationJsonLd) }}
         />
         <script
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: toSafeJsonLdString(websiteJsonLd) }}
         />
 
         {gaId && (

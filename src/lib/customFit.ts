@@ -329,6 +329,9 @@ export type DimensionResult =
   | { status: "infeasible"; reason?: string }
   | { status: "redirect"; toProduct: ProductSlug; message: string };
 
+/** The two `DimensionResult` cases that actually carry a buildable size — narrows out `infeasible`/`redirect` for call sites (like pricing) that only ever see this after a fit was already confirmed feasible. */
+export type ResolvedBase = Extract<DimensionResult, { status: "exact" } | { status: "rounded-up" }>;
+
 /**
  * Always anchors to the largest base <= desired, then extends upward within
  * that single base's own option ladder (never jumps to a different base row)
@@ -424,7 +427,7 @@ export function resolveHeight(rule: HeightRule, desiredRaw: number): DimensionRe
 export type DepthResolution =
   | { status: "redirect"; toProduct: ProductSlug; message: string }
   | { status: "infeasible"; reason?: string }
-  | { status: "ok"; result: DimensionResult; applicableVariants: DepthVariant[] };
+  | { status: "ok"; result: ResolvedBase; applicableVariants: DepthVariant[] };
 
 /**
  * Depth is special: single/double-desk sell the same depth as two separate
@@ -450,12 +453,12 @@ export function resolveDepth(config: ProductFitConfig, desiredRaw: number): Dept
   }
 
   const applicable: DepthVariant[] = [];
-  let sharedResult: DimensionResult | null = null;
+  let sharedResult: ResolvedBase | null = null;
   for (const variant of variants) {
     const variantMin = Math.min(...variant.bases);
     if (desiredRaw < variantMin) continue;
     const result = resolveDepthForVariant(variant, bridge, desiredRaw);
-    if (!result || result.status === "infeasible") continue;
+    if (!result || result.status === "infeasible" || result.status === "redirect") continue;
     applicable.push(variant);
     if (!sharedResult) sharedResult = result;
   }
@@ -482,6 +485,10 @@ export type ResolvedDimension = {
   optionLine?: string;
   /** Final buildable size in mm after rounding/clamping. */
   resolvedValue: number;
+  /** The anchor size actually sold (from `bases`) that `resolvedValue` was built from — distinct from `resolvedValue` whenever an on-top option applies. Pricing looks up its base-price/surcharge rows by this, not by resolvedValue. */
+  base: number;
+  /** Extra mm added on top of `base` to reach `resolvedValue`, or null when `resolvedValue === base`. */
+  option: number | null;
   needsInquiry: boolean;
 };
 
@@ -611,16 +618,22 @@ export function checkFit(input: FitCheckInput): FitCheckOutcome {
     width: {
       ...formatWidthSpec(widthResult, !!config.hideWidthInName),
       resolvedValue: widthResult.resolvedValue,
+      base: widthResult.base,
+      option: widthResult.option,
       needsInquiry: !!widthNeedsInquiry,
     },
     depth: {
       ...formatDepthSpec(depthResult, smallestDepth),
-      resolvedValue: depthResult.status === "infeasible" || depthResult.status === "redirect" ? input.depth : depthResult.resolvedValue,
+      resolvedValue: depthResult.resolvedValue,
+      base: depthResult.base,
+      option: depthResult.option,
       needsInquiry: depthNeedsInquiry,
     },
     height: {
       ...formatHeightSpec(heightResult, config.height.defaultHeight),
       resolvedValue: heightResult.resolvedValue,
+      base: heightResult.base,
+      option: heightResult.option,
       needsInquiry: heightNeedsInquiry,
     },
     anyInquiry: !!widthNeedsInquiry || depthNeedsInquiry || heightNeedsInquiry,

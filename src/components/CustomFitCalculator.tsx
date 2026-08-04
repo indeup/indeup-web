@@ -1,9 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { checkAllProducts, diagnoseNoMatch, getGlobalBounds, type ProductMatch } from "@/lib/customFit";
 import { naverTalkUrl } from "@/lib/brand";
+import { ColorSwatchGroup, frameSwatches, topSwatches } from "@/components/ColorSwatches";
+import { computePriceForMatch } from "@/lib/pricing";
+import PriceBlock from "@/components/PriceBlock";
 
 /** Product photo(s) per product line + variant — "computer" desks additionally show the multi-tap adapter shot. */
 function getProductImages(product: ProductMatch["product"], variantKey: string): string[] {
@@ -44,7 +48,7 @@ function DimensionField({
   const errorId = `${inputId}-error`;
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={inputId} className="text-sm font-semibold text-[var(--color-primary)]">
+      <label htmlFor={inputId} className={`text-sm font-semibold ${error ? "text-[var(--color-accent)]" : "text-[var(--color-primary)]"}`}>
         {label}
       </label>
       <div className="relative">
@@ -70,10 +74,10 @@ function DimensionField({
           placeholder={dimensionPlaceholders[label]}
           aria-invalid={!!error}
           aria-describedby={error ? errorId : undefined}
-          className={`h-[52px] w-full rounded-xl border bg-white px-4 pr-11 text-base tabular-nums text-[var(--color-primary)] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 ${
+          className={`h-[52px] w-full rounded-xl border bg-white px-4 pr-11 text-base tabular-nums outline-none transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 ${
             error
-              ? "border-[var(--color-brand)] focus-visible:ring-[var(--color-brand)]/40"
-              : "border-[var(--color-border)] focus:border-[var(--color-primary)] focus-visible:ring-[var(--color-primary)]/20"
+              ? "border-[var(--color-accent)] text-[var(--color-accent)] focus-visible:ring-[var(--color-accent)]/40"
+              : "border-[var(--color-border)] text-[var(--color-primary)] focus:border-[var(--color-primary)] focus-visible:ring-[var(--color-primary)]/20"
           }`}
         />
         <span
@@ -84,7 +88,7 @@ function DimensionField({
         </span>
       </div>
       {error && (
-        <span id={errorId} role="alert" className="text-xs font-medium text-[var(--color-brand)]">
+        <span id={errorId} role="alert" className="text-xs font-semibold text-[var(--color-accent)]">
           {error}
         </span>
       )}
@@ -97,27 +101,45 @@ function OptionPill({
   specLine,
   optionLine,
   needsInquiry,
+  specAddonAmount,
+  optionAddonAmount,
 }: {
   label: string;
   specLine?: string;
   optionLine?: string;
   needsInquiry: boolean;
+  /** Won amount tied to specLine (e.g. "500mm 선택") — shown right under that line, separate from optionAddonAmount so a combined depth surcharge doesn't read as one big scary number (합산 표기가 실제보다 비싸 보인다는 피드백, 2026-07-28). Undefined/0 when there's no addon. */
+  specAddonAmount?: number;
+  /** Won amount tied to optionLine (e.g. "옵션추가 +50mm") — shown right under that line. Undefined/0 when there's no addon. */
+  optionAddonAmount?: number;
 }) {
   const hasOption = !!optionLine;
   return (
     <div
       className={`rounded-xl border px-4 py-3.5 ${
-        hasOption ? "border-[var(--color-brand)]/30 bg-[var(--color-brand)]/[0.06]" : "border-[var(--color-border)] bg-white"
+        hasOption ? "border-[var(--color-primary)]/25 bg-[var(--color-muted)]" : "border-[var(--color-border)] bg-white"
       }`}
     >
       <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--color-muted-foreground)]">{label}</p>
-      {specLine && <p className="mt-1.5 text-base font-bold tracking-[-0.01em] text-[var(--color-primary)]">{specLine}</p>}
+      {specLine && (
+        <p className="mt-1.5 text-base font-semibold tracking-[-0.01em] text-[var(--color-primary)]">
+          {specLine}
+          {!!specAddonAmount && (
+            <span className="ml-1.5 text-sm font-semibold text-[var(--color-accent)]">
+              +{specAddonAmount.toLocaleString("ko-KR")}원
+            </span>
+          )}
+        </p>
+      )}
       {optionLine && (
         <p
-          className={`text-base font-bold tracking-[-0.01em] text-[var(--color-brand)] ${specLine ? "mt-0.5 text-sm font-semibold" : "mt-1.5"}`}
+          className={`text-base font-semibold tracking-[-0.01em] text-[var(--color-primary)] ${specLine ? "mt-0.5 text-sm font-semibold" : "mt-1.5"}`}
         >
           {optionLine}
           {needsInquiry && <span className="ml-1.5 font-semibold">(별도문의)</span>}
+          {!!optionAddonAmount && (
+            <span className="ml-1.5 text-[var(--color-accent)]">+{optionAddonAmount.toLocaleString("ko-KR")}원</span>
+          )}
         </p>
       )}
     </div>
@@ -151,13 +173,14 @@ function MatchCard({
 }) {
   const images = getProductImages(match.product, match.variantKey);
   const baseName = bareProductName(match.productName);
+  const price = computePriceForMatch(match);
 
   return (
     <div className="rounded-2xl border border-[var(--color-border)] bg-white p-6 sm:p-8">
       <div className="flex items-start gap-3">
         <span
           aria-hidden="true"
-          className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-xs font-bold text-white"
+          className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--color-primary)] text-xs font-bold text-white"
         >
           &#10003;
         </span>
@@ -167,21 +190,21 @@ function MatchCard({
           </p>
           <a
             href={`/products/${match.product}/`}
-            className="mt-1 inline-block cursor-pointer text-lg font-bold tracking-[-0.01em] text-[var(--color-primary)] underline decoration-transparent underline-offset-4 transition-colors hover:decoration-[var(--color-border)]"
+            className="mt-1 inline-block cursor-pointer text-lg font-semibold tracking-[-0.01em] text-[var(--color-primary)] underline decoration-transparent underline-offset-4 transition-colors hover:decoration-[var(--color-border)]"
           >
             {match.productName}
           </a>
 
-          <div className="mt-3 flex gap-2">
+          <div className="mt-3 flex gap-3">
             {images.map((src, i) => (
               <Image
                 key={src}
                 src={src}
                 alt={i === 0 ? `인디업 ${baseName} 맞춤 제작 제품` : "인디업 컴퓨터책상 멀티탭 거치대 구성품"}
-                width={80}
-                height={80}
+                width={160}
+                height={160}
                 loading="lazy"
-                className="h-16 w-16 rounded-lg object-cover sm:h-20 sm:w-20"
+                className="h-24 w-24 rounded-xl object-cover sm:h-32 sm:w-32"
               />
             ))}
           </div>
@@ -193,8 +216,13 @@ function MatchCard({
         </div>
       </div>
 
+      <div className="mt-5 flex flex-col gap-5 border-t border-[var(--color-border)] pt-5 sm:flex-row sm:gap-8">
+        <ColorSwatchGroup title="프레임 색상" swatches={frameSwatches} compact />
+        <ColorSwatchGroup title="상판 색상·마감" swatches={topSwatches} compact />
+      </div>
+
       <div className="mt-5 rounded-xl bg-[var(--color-primary)] px-4 py-3.5 sm:px-5 sm:py-4">
-        <p className="text-sm font-bold leading-6 text-white sm:text-base">{buildOrderSummary(match)}</p>
+        <p className="text-sm font-semibold leading-6 text-white sm:text-base">{buildOrderSummary(match)}</p>
       </div>
 
       <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -203,19 +231,27 @@ function MatchCard({
           specLine={match.width.specLine}
           optionLine={match.width.optionLine}
           needsInquiry={match.width.needsInquiry}
+          optionAddonAmount={price.status === "ok" ? price.widthAddon : undefined}
         />
         <OptionPill
           label="세로 옵션"
           specLine={match.depth.specLine}
           optionLine={match.depth.optionLine}
           needsInquiry={match.depth.needsInquiry}
+          specAddonAmount={price.status === "ok" ? price.depthBaseAddon : undefined}
+          optionAddonAmount={price.status === "ok" ? price.depthBridgeAddon : undefined}
         />
         <OptionPill
           label="높이 옵션"
           specLine={match.height.specLine}
           optionLine={match.height.optionLine}
           needsInquiry={match.height.needsInquiry}
+          optionAddonAmount={price.status === "ok" ? price.heightAddon : undefined}
         />
+      </div>
+
+      <div className="mt-4">
+        <PriceBlock price={price} />
       </div>
 
       <p className="mt-5 text-xs leading-6 text-[var(--color-muted-foreground)] sm:text-sm">
@@ -228,7 +264,7 @@ function MatchCard({
         href={match.buyUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-5 inline-flex min-h-[44px] cursor-pointer items-center gap-2 rounded-full bg-[var(--color-brand)] px-5 py-2.5 text-sm font-medium text-white transition-colors duration-200 hover:bg-[var(--color-brand-dark)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand)]"
+        className="mt-5 inline-flex min-h-[44px] cursor-pointer items-center gap-2 rounded-full bg-[var(--color-accent)] px-5 py-2.5 text-sm font-medium text-white transition-colors duration-200 hover:opacity-85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
       >
         네이버 스토어에서 구매하기
         <span aria-hidden="true">&rarr;</span>
@@ -259,6 +295,28 @@ export default function CustomFitCalculator() {
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [lastChecked, setLastChecked] = useState({ width: "", depth: "", height: "" });
+
+  // Only set when a visitor arrives here from the 책상가이드 recommendation
+  // (its "맞춤 제작 방법 확인하기" link carries ?width=&depth=&height=) — a
+  // direct visit to this page never has these params, so the prompt below
+  // never shows for anyone who didn't just get a recommendation there.
+  const searchParams = useSearchParams();
+  const recommended = (() => {
+    const w = Number(searchParams.get("width"));
+    const d = Number(searchParams.get("depth"));
+    const h = Number(searchParams.get("height"));
+    if (!w || !d || !h) return null;
+    return { width: w, depth: d, height: h };
+  })();
+  const [recommendedDismissed, setRecommendedDismissed] = useState(false);
+
+  function acceptRecommended() {
+    if (!recommended) return;
+    setWidth(String(recommended.width));
+    setDepth(String(recommended.depth));
+    setHeight(String(recommended.height));
+    setRecommendedDismissed(true);
+  }
 
   const resultsRef = useRef<HTMLDivElement>(null);
   const submitTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -337,6 +395,31 @@ export default function CustomFitCalculator() {
 
   return (
     <div>
+      {recommended && !recommendedDismissed && (
+        <div className="mb-5 flex flex-col gap-3 rounded-xl border border-[var(--color-primary)]/25 bg-[var(--color-muted)] p-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm leading-6 text-[var(--color-primary)]">
+            책상가이드에서 추천받은 사이즈(가로 {recommended.width}mm · 세로 {recommended.depth}mm · 높이{" "}
+            {recommended.height}mm)를 입력할까요?
+          </p>
+          <div className="flex shrink-0 gap-2">
+            <button
+              type="button"
+              onClick={acceptRecommended}
+              className="inline-flex min-h-[40px] cursor-pointer items-center justify-center rounded-full bg-[var(--color-primary)] px-4 text-sm font-medium text-white transition-colors duration-200 hover:opacity-85"
+            >
+              네, 입력할게요
+            </button>
+            <button
+              type="button"
+              onClick={() => setRecommendedDismissed(true)}
+              className="inline-flex min-h-[40px] cursor-pointer items-center justify-center rounded-full border border-[var(--color-border)] px-4 text-sm font-medium text-[var(--color-secondary)] transition-colors duration-200 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]"
+            >
+              아니요
+            </button>
+          </div>
+        </div>
+      )}
+
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -377,7 +460,7 @@ export default function CustomFitCalculator() {
         {checked && matches && matches.length > 0 && (
           <div className="mt-10 flex flex-col gap-5">
             <div>
-              <p className="text-base font-bold tracking-[-0.01em] text-[var(--color-primary)]">
+              <p className="text-base font-semibold tracking-[-0.01em] text-[var(--color-primary)]">
                 입력하신 사이즈로 제작할 수 있습니다.
               </p>
               <p className="mt-1 text-sm font-semibold text-[var(--color-muted-foreground)]">
@@ -406,7 +489,7 @@ export default function CustomFitCalculator() {
                 !
               </span>
               <div>
-                <p className="text-lg font-bold tracking-[-0.01em] text-[var(--color-primary)]">
+                <p className="text-lg font-semibold tracking-[-0.01em] text-[var(--color-primary)]">
                   입력하신 사이즈로 바로 주문 가능한 제품을 찾지 못했습니다.
                 </p>
                 <p className="mt-2 text-sm leading-6 text-[var(--color-secondary)] sm:text-base">
@@ -421,7 +504,7 @@ export default function CustomFitCalculator() {
               href={naverTalkUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-5 inline-flex min-h-[44px] cursor-pointer items-center gap-2 rounded-full bg-[var(--color-brand)] px-5 py-2.5 text-sm font-medium text-white transition-colors duration-200 hover:bg-[var(--color-brand-dark)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand)]"
+              className="mt-5 inline-flex min-h-[44px] cursor-pointer items-center gap-2 rounded-full bg-[var(--color-primary)] px-5 py-2.5 text-sm font-medium text-white transition-colors duration-200 hover:opacity-85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]"
             >
               네이버 톡톡으로 문의하기
               <span aria-hidden="true">&rarr;</span>

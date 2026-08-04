@@ -1,0 +1,491 @@
+{
+  "h1": {
+    "count": 1,
+    "samples": [
+      {
+        "i": 0,
+        "text": "LG전자 공식 온라인 브랜드숍",
+        "box": {
+          "x": 0.4950000047683716,
+          "y": 56.494998931884766,
+          "width": 0.009999990463256836,
+          "height": 0.009998321533203125
+        },
+        "style": {
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "letterSpacing": "normal",
+          "fontWeight": "400",
+          "margin": "0px",
+          "padding": "0px",
+          "color": "rgb(0, 0, 0)"
+        }
+      }
+    ]
+  },
+  "h2": {
+    "count": 13,
+    "samples": [
+      {
+        "i": 0,
+        "text": "홈메인 팝업",
+        "box": {
+          "x": 0.4950000047683716,
+          "y": 540.8387451171875,
+          "width": 0.009999990463256836,
+          "height": 0.010009765625
+        },
+        "style": {
+          "fontSize": "16px",
+          "lineHeight": "20px",
+          "letterSpacing": "normal",
+          "fontWeight": "400",
+          "margin": "0px",
+          "padding": "0px",
+          "color": "rgb(17, 17, 17)"
+        }
+      },
+      {
+        "i": 1,
+        "text": "MD's CHOICE",
+        "box": {
+          "x": 20,
+          "y": 780,
+          "width": 114.46875,
+          "height": 26
+        },
+        "style": {
+          "fontSize": "19px",
+          "lineHeight": "26px",
+          "letterSpacing": "-0.4px",
+          "fontWeight": "600",
+          "margin": "0px",
+          "padding": "0px",
+          "color": "rgb(17, 17, 17)"
+        }
+      },
+      {
+        "i": 2,
+        "text": "LGE.COM 타임딜",
+        "box": {
+          "x": 20,
+          "y": 1242,
+          "width": 133.40625,
+          "height": 26
+        },
+        "style": {
+          "fontSize": "19px",
+          "lineHeight": "26px",
+          "letterSpacing": "-0.4px",
+          "fontWeight": "600",
+          "margin": "0px",
+          "padding": "0px",
+          "color": "rgb(17, 17, 17)"
+        }
+      },
+      {
+        "i": 3,
+        "text": "베스트 랭킹",
+        "box": {
+          "x": 20,
+          "y": 1634,
+          "width": 84.21875,
+          "height": 26
+        },
+        "style": {
+          "fontSize": "19px",
+          "lineHeight": "26px",
+          "letterSpacing": "-0.4px",
+          "fontWeight": "600",
+          "margin": "0px",
+          "padding": "0px",
+          "color": "rgb(17, 17, 17)"
+        }
+      },
+      {
+        "i": 4,
+        "text": "홈스타일 탐색하기",
+        "box": {
+          "x": 20,
+          "y": 2759,
+          "width": 132.28125,
+          "height": 26
+        },
+        "style": {
+          "fontSize": "19px",
+          "lineHeight": "26px",
+          "letterSpacing": "-0.4px",
+          "fontWeight": "600",
+          "margin": "0px",
+          "padding": "0px",
+          "color": "rgb(17, 17, 17)"
+        }
+      },
+      {
+        "i": 5,
+        "text": "무더운 여름철에는 LG 휘센 쎈세일",
+        "box": {
+          "x": 20,
+          "y": 3349,
+          "width": 247.4375,
+          "height": 26
+        },
+        "style": {
+          "fontSize": "19px",
+          "lineHeight": "26px",
+          "letterSpacing": "-0.4px",
+          "fontWeight": "600",
+          "margin": "0px",
+          "padding": "0px",
+          "color": "rgb(17, 17, 17)"
+        }
+      }
+    ]
+  },
+  "h3": {
+    "count": 0
+  },
+  "p": {
+    "count": 329,
+    "samples": [
+      {
+        "i": 3,
+        "text": "10만 멤버십 포인트 증정",
+        "box": {
+          "x": 108.8125,
+          "y": 146,
+          "width": 172.375,
+          "height": 22
+        },
+        "style": {
+          "fontSize": "18px",
+          "lineHeight": "22px",
+          "letterSpacing": "normal",
+          "fontWeight": "500",
+          "margin": "8px 0px 0px",
+          "padding": "0px",
+          "color": "rgb(17, 17, 17)"
+        }
+      },
+      {
+        "i": 4,
+        "text": "카드혜택 최대 10%, 중복할인 쿠폰까지!",
+        "box": {
+          "x": 444.90625,
+          "y": 146,
+          "width": 280.1875,
+          "height": 22
+        },
+        "style": {
+          "fontSize": "18px",
+          "lineHeight": "22px",
+          "letterSpacing": "normal",
+          "fontWeight": "500",
+          "margin": "8px 0px 0px",
+          "padding": "0px",
+          "color": "rgb(255, 255, 255)"
+        }
+      },
+      {
+        "i": 5,
+        "text": "쿠폰 할인 혜택 제공",
+        "box": {
+          "x": 906.171875,
+          "y": 146,
+          "width": 137.640625,
+          "height": 22
+        },
+        "style": {
+          "fontSize": "18px",
+          "lineHeight": "22px",
+          "letterSpacing": "normal",
+          "fontWeight": "500",
+          "margin": "8px 0px 0px",
+          "padding": "0px",
+          "color": "rgb(17, 17, 17)"
+        }
+      }
+    ]
+  },
+  "a": {
+    "count": 440,
+    "samples": [
+      {
+        "i": 1,
+        "text": "장바구니",
+        "box": {
+          "x": 338,
+          "y": 8,
+          "width": 40,
+          "height": 40
+        },
+        "style": {
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "letterSpacing": "normal",
+          "fontWeight": "400",
+          "margin": "0px",
+          "padding": "8px",
+          "color": "rgb(0, 0, 0)"
+        }
+      },
+      {
+        "i": 4,
+        "text": "처음이라 더 특별한 구독10만 멤버십 포인트 증정",
+        "box": {
+          "x": 0,
+          "y": 56,
+          "width": 390,
+          "height": 390
+        },
+        "style": {
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "letterSpacing": "normal",
+          "fontWeight": "400",
+          "margin": "0px",
+          "padding": "0px",
+          "color": "rgb(17, 17, 17)"
+        }
+      },
+      {
+        "i": 5,
+        "text": "세탁가전 혜택 총출동카드혜택 최대 10%, 중복할인 쿠폰까지!",
+        "box": {
+          "x": 390,
+          "y": 56,
+          "width": 390,
+          "height": 390
+        },
+        "style": {
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "letterSpacing": "normal",
+          "fontWeight": "400",
+          "margin": "0px",
+          "padding": "0px",
+          "color": "rgb(17, 17, 17)"
+        }
+      }
+    ]
+  },
+  "span": {
+    "count": 1100,
+    "samples": [
+      {
+        "i": 1,
+        "text": "추천메뉴열기",
+        "box": {
+          "x": 20.4950008392334,
+          "y": 17.4950008392334,
+          "width": 0.010000228881835938,
+          "height": 0.010000228881835938
+        },
+        "style": {
+          "fontSize": "13.3333px",
+          "lineHeight": "normal",
+          "letterSpacing": "normal",
+          "fontWeight": "400",
+          "margin": "0px",
+          "padding": "0px",
+          "color": "rgb(17, 17, 17)"
+        }
+      },
+      {
+        "i": 2,
+        "text": "검색",
+        "box": {
+          "x": 318.4949951171875,
+          "y": 28.4950008392334,
+          "width": 0.010009765625,
+          "height": 0.010000228881835938
+        },
+        "style": {
+          "fontSize": "13.3333px",
+          "lineHeight": "normal",
+          "letterSpacing": "normal",
+          "fontWeight": "400",
+          "margin": "0px",
+          "padding": "0px",
+          "color": "rgb(17, 17, 17)"
+        }
+      },
+      {
+        "i": 3,
+        "text": "장바구니",
+        "box": {
+          "x": 346.4949951171875,
+          "y": 16.494998931884766,
+          "width": 0.010009765625,
+          "height": 0.01000213623046875
+        },
+        "style": {
+          "fontSize": "16px",
+          "lineHeight": "24px",
+          "letterSpacing": "normal",
+          "fontWeight": "400",
+          "margin": "0px",
+          "padding": "0px",
+          "color": "rgb(0, 0, 0)"
+        }
+      },
+      {
+        "i": 4,
+        "text": "이전",
+        "box": {
+          "x": 340.9949951171875,
+          "y": 414.4949951171875,
+          "width": 0.010009765625,
+          "height": 0.010009765625
+        },
+        "style": {
+          "fontSize": "13.3333px",
+          "lineHeight": "normal",
+          "letterSpacing": "normal",
+          "fontWeight": "400",
+          "margin": "0px",
+          "padding": "0px",
+          "color": "rgb(17, 17, 17)"
+        }
+      },
+      {
+        "i": 5,
+        "text": "다음",
+        "box": {
+          "x": 357.9949951171875,
+          "y": 414.4949951171875,
+          "width": 0.010009765625,
+          "height": 0.010009765625
+        },
+        "style": {
+          "fontSize": "13.3333px",
+          "lineHeight": "normal",
+          "letterSpacing": "normal",
+          "fontWeight": "400",
+          "margin": "0px",
+          "padding": "0px",
+          "color": "rgb(17, 17, 17)"
+        }
+      }
+    ]
+  },
+  "button": {
+    "count": 59,
+    "samples": [
+      {
+        "i": 0,
+        "text": "닫기",
+        "box": {
+          "x": 20,
+          "y": 804,
+          "width": 24.203125,
+          "height": 32
+        },
+        "style": {
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "letterSpacing": "normal",
+          "fontWeight": "500",
+          "margin": "0px",
+          "padding": "0px",
+          "color": "rgb(17, 17, 17)"
+        }
+      },
+      {
+        "i": 1,
+        "text": "다시 보지 않기",
+        "box": {
+          "x": 290.5625,
+          "y": 804,
+          "width": 79.4375,
+          "height": 32
+        },
+        "style": {
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "letterSpacing": "normal",
+          "fontWeight": "500",
+          "margin": "0px 0px 0px 246.359px",
+          "padding": "0px",
+          "color": "rgb(17, 17, 17)"
+        }
+      },
+      {
+        "i": 2,
+        "text": "추천메뉴열기",
+        "box": {
+          "x": 20,
+          "y": 17,
+          "width": 112,
+          "height": 22
+        },
+        "style": {
+          "fontSize": "13.3333px",
+          "lineHeight": "normal",
+          "letterSpacing": "normal",
+          "fontWeight": "400",
+          "margin": "0px",
+          "padding": "0px",
+          "color": "rgb(17, 17, 17)"
+        }
+      },
+      {
+        "i": 3,
+        "text": "검색",
+        "box": {
+          "x": 298,
+          "y": 8,
+          "width": 40,
+          "height": 40
+        },
+        "style": {
+          "fontSize": "13.3333px",
+          "lineHeight": "normal",
+          "letterSpacing": "normal",
+          "fontWeight": "400",
+          "margin": "0px",
+          "padding": "8px",
+          "color": "rgb(17, 17, 17)"
+        }
+      },
+      {
+        "i": 4,
+        "text": "이전",
+        "box": {
+          "x": 328,
+          "y": 410,
+          "width": 21,
+          "height": 24
+        },
+        "style": {
+          "fontSize": "13.3333px",
+          "lineHeight": "normal",
+          "letterSpacing": "normal",
+          "fontWeight": "400",
+          "margin": "0px",
+          "padding": "0px 0px 0px 4px",
+          "color": "rgb(17, 17, 17)"
+        }
+      },
+      {
+        "i": 5,
+        "text": "다음",
+        "box": {
+          "x": 349,
+          "y": 410,
+          "width": 21,
+          "height": 24
+        },
+        "style": {
+          "fontSize": "13.3333px",
+          "lineHeight": "normal",
+          "letterSpacing": "normal",
+          "fontWeight": "400",
+          "margin": "0px",
+          "padding": "0px 4px 0px 0px",
+          "color": "rgb(17, 17, 17)"
+        }
+      }
+    ]
+  }
+}

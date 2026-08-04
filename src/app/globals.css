@@ -6,17 +6,25 @@
 
   --color-primary: #171717;
   --color-on-primary: #ffffff;
-  --color-secondary: #404040;
+  /* Lightened from #404040 — measured against a reference mobile site's own
+     body/description text color (~rgb(114-128), i.e. close to a mid-gray,
+     not near-black) across many card/section descriptions. #404040 read as
+     much darker/heavier than that in practice. */
+  --color-secondary: #6e6e6e;
   --color-muted: #f5f5f5;
   --color-muted-foreground: #737373;
   --color-border: #e5e5e5;
 
-  /* Brand red, taken directly from the INDEUP_LOGO mark. Base is for light
-     backgrounds (buttons, text on white); light is a brightened variant for
-     legibility on the dark/photo sections that make up most of the page. */
-  --color-brand: #b32a2a;
-  --color-brand-dark: #8f2222;
-  --color-brand-light: #e2574c;
+  /* Price/purchase-CTA accent — same red used for "예상 최대혜택가" in the
+     price-display work, kept as a distinct token from --color-primary since
+     it's reserved for money/purchase emphasis, not general UI. */
+  --color-accent: #f0402a;
+
+  /* Naver's own brand green — used only for the "NPAY+ 멤버십 적립" badge, to
+     match how Naver itself renders that badge everywhere else (N Pay logo
+     color). Not a general-purpose token. */
+  --color-naver: #03c75a;
+  --color-naver-bg: #e8f9ef;
 
   /* Min lowered from 2.75rem: at that floor, clamp() doesn't hand off to the
      7vw scaling term until ~628px wide, so every real Korean phone (360–
@@ -25,23 +33,25 @@
      wrap (which then clipped against the pinned section's fixed-height,
      overflow-hidden frame). 1.75rem fits within a 360px screen's content
      width at the line lengths actually used. */
-  --type-hero: clamp(1.75rem, 7vw, 6.5rem);
-  --type-h2: clamp(1.75rem, 3.5vw, 3rem);
-  --type-stat: clamp(2.25rem, 4vw, 3.5rem);
-
-  /* Tried pinning this to `1svh` (the small/stable viewport height, which
-     never changes as the address bar hides/shows) to stop a scroll bounce
-     on mobile — confirmed via a real screen recording that this was wrong:
-     `svh` stays sized for the address bar being *shown*, so once the
-     address bar actually hides, the newly-revealed strip at the bottom is
-     left as a plain white gap (the pinned section doesn't grow to fill it)
-     until the next scroll event recalculates. `dvh` does grow/shrink live
-     with the real visible area, which is what mobile visitors actually
-     expect — the original bounce turned out to be dominated by a separate,
-     now-fixed bug (interrupted crossfade transitions in the hero slider),
-     not by dvh itself. Kept as a variable in case a future component needs
-     to opt out, but both tiers resolve to dvh for now. */
-  --vh-unit: 1dvh;
+  /* Desktop max cut again, from 5.5rem(88px) to 2.75rem(44px) — measured
+     against a reference desktop homepage's own biggest promo headline
+     (36px, its absolute largest text on the page, at any viewport). 88px
+     was roughly 2.4x that. Mobile minimum untouched (see the note above
+     about the 360px-wrap fix), only the desktop ceiling changed. */
+  --type-hero: clamp(1.75rem, 4vw, 2.75rem);
+  /* Mobile min tightened to 19px — matches a major Korean portal's own
+     measured mobile section-heading size (19px/26px line-height/-0.4px
+     tracking), rather than the much larger ~24px this used to floor at.
+     Desktop max cut from 2.75rem(44px) to 1.875rem(30px) — measured
+     against the same reference desktop homepage's plain section headings
+     (24px). */
+  --type-h2: clamp(1.1875rem, 2.2vw, 1.875rem);
+  /* Matches the one big-stat moment on the site (WarrantyBadge's "품질보증
+     N년.") — previously this token was defined but unused, while that
+     component carried its own separate, much larger clamp() inline, so
+     the two silently diverged. Aligning the token to what's actually in
+     use keeps this a real single source of truth instead of dead config. */
+  --type-stat: clamp(2.5rem, 7.5vw, 5.75rem);
 }
 
 
@@ -84,6 +94,28 @@ body {
      restricts breaks to spaces (between 어절), matching how Korean text is
      actually meant to wrap. Latin/number runs still wrap normally. */
   word-break: keep-all;
+  /* Naver's mobile body text (measured: 18px / line-height 1.56 / -0.3px
+     letter-spacing) reads tighter and more typeset than plain browser
+     defaults at the same font-size — headings already carry their own
+     tracking-[-0.02em] utility class, but body paragraphs didn't have any
+     letter-spacing adjustment at all. This applies the same modest
+     tightening site-wide as a baseline, so paragraph text doesn't read as
+     noticeably looser than the headings sitting above it. */
+  letter-spacing: -0.02em;
+  line-height: 1.6;
+}
+
+/* Lets the browser choose line-break points that keep wrapped lines close
+   to equal width, instead of whatever the last line happens to leave over —
+   this is what was producing short orphaned trailing words/fragments (e.g.
+   a heading wrapping to leave just "합니다." alone on its own line) after
+   any font-size or copy change shifts where a line naturally breaks.
+   Supported browsers balance automatically; unsupported ones just keep
+   normal wrapping, so this is a strict improvement with no fallback needed. */
+h1,
+h2,
+h3 {
+  text-wrap: balance;
 }
 
 .no-scrollbar {
@@ -121,6 +153,105 @@ section[id] {
   }
   100% {
     transform: scale(1);
+  }
+}
+
+.chat-fab-tile {
+  background-image: linear-gradient(120deg, #050505, #3a3a3f, #0a0a0a, #4a4a52, #050505);
+  background-size: 400% 400%;
+  animation: chat-fab-move 4.5s ease-in-out infinite;
+}
+
+@keyframes chat-fab-move {
+  0% {
+    background-position: 0% 20%;
+  }
+  50% {
+    background-position: 100% 80%;
+  }
+  100% {
+    background-position: 0% 20%;
+  }
+}
+
+/* Chat loading indicator — a moving highlight sweeps across the text instead
+   of a static "답변 작성 중..." string, so a slow AI response reads as "still
+   working" rather than "stuck". Reduced-motion users get the flat muted
+   color instead (handled by the global override below, which zeroes out
+   animation-duration for every animated element on the page). */
+.chat-loading-shimmer {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-muted-foreground) 0%,
+    var(--color-muted-foreground) 35%,
+    var(--color-primary) 50%,
+    var(--color-muted-foreground) 65%,
+    var(--color-muted-foreground) 100%
+  );
+  background-size: 250% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: chat-loading-shimmer-move 1.6s linear infinite;
+}
+
+@keyframes chat-loading-shimmer-move {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.animate-scroll-cue {
+  animation: scroll-cue-move 1.8s ease-in-out infinite;
+}
+
+@keyframes scroll-cue-move {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  70% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  71% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Masked line-reveal + blur-to-focus — the parent <p> clips with
+   overflow-hidden, this span slides up from behind that mask while
+   sharpening from a blur, instead of a plain fade. This is the current
+   text-reveal pattern most editorial/agency sites use (the wrapstudio
+   reference itself splits its headline into spans for the same reason). */
+.animate-intro-reveal {
+  opacity: 0;
+  transform: translateY(100%);
+  filter: blur(10px);
+  animation: intro-reveal-up 900ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes intro-reveal-up {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+    filter: blur(10px);
+  }
+  55% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
   }
 }
 

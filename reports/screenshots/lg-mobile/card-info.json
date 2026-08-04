@@ -1,0 +1,114 @@
+[
+  {
+    "cls": "product-card-image_image",
+    "rect": {
+      "x": 20,
+      "y": 914,
+      "w": 148,
+      "h": 148
+    },
+    "borderRadius": "8px",
+    "boxShadow": "none",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "padding": "16px",
+    "border": "0px none rgb(17, 17, 17)"
+  },
+  {
+    "cls": "product-card-image_image",
+    "rect": {
+      "x": 178,
+      "y": 914,
+      "w": 148,
+      "h": 148
+    },
+    "borderRadius": "8px",
+    "boxShadow": "none",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "padding": "16px",
+    "border": "0px none rgb(17, 17, 17)"
+  },
+  {
+    "cls": "product-card-image_image",
+    "rect": {
+      "x": 336,
+      "y": 914,
+      "w": 148,
+      "h": 148
+    },
+    "borderRadius": "8px",
+    "boxShadow": "none",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "padding": "16px",
+    "border": "0px none rgb(17, 17, 17)"
+  },
+  {
+    "cls": "product-card-image_image",
+    "rect": {
+      "x": 494,
+      "y": 914,
+      "w": 148,
+      "h": 148
+    },
+    "borderRadius": "8px",
+    "boxShadow": "none",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "padding": "16px",
+    "border": "0px none rgb(17, 17, 17)"
+  },
+  {
+    "cls": "product-card-image_image",
+    "rect": {
+      "x": 652,
+      "y": 914,
+      "w": 148,
+      "h": 148
+    },
+    "borderRadius": "8px",
+    "boxShadow": "none",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "padding": "16px",
+    "border": "0px none rgb(17, 17, 17)"
+  },
+  {
+    "cls": "product-card-image_image",
+    "rect": {
+      "x": 810,
+      "y": 914,
+      "w": 148,
+      "h": 148
+    },
+    "borderRadius": "8px",
+    "boxShadow": "none",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "padding": "16px",
+    "border": "0px none rgb(17, 17, 17)"
+  },
+  {
+    "cls": "product-card-image_image",
+    "rect": {
+      "x": 968,
+      "y": 914,
+      "w": 148,
+      "h": 148
+    },
+    "borderRadius": "8px",
+    "boxShadow": "none",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "padding": "16px",
+    "border": "0px none rgb(17, 17, 17)"
+  },
+  {
+    "cls": "product-card-image_image",
+    "rect": {
+      "x": 1126,
+      "y": 914,
+      "w": 148,
+      "h": 148
+    },
+    "borderRadius": "8px",
+    "boxShadow": "none",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "padding": "16px",
+    "border": "0px none rgb(17, 17, 17)"
+  }
+]
