@@ -517,6 +517,42 @@ const handWrittenGuideArticles: GuideArticle[] = [
     relatedProduct: { label: "좌식 책상 자세히 보기", href: "/products/floor-desk/" },
     publishedAt: "2026-08-04",
   },
+  {
+    slug: "frame-parts-only-purchase-guide",
+    title: "책상 부품만 따로 구매할 수 있나요 — 프레임·보강대·다리",
+    description:
+      "상판 없이 프레임만, 또는 보강대·다리 프레임 세트만 따로 구매할 수 있는지 실제 판매 구성 기준으로 안내합니다.",
+    categories: ["맞춤 제작"],
+    sections: [
+      {
+        heading: "프레임만 따로 구매할 수 있습니다",
+        body: [
+          "인디업 프레임 제품은 상판이 포함되지 않은 단독 구성입니다. 보유하고 있는 상판이나 별도로 준비한 상판에 맞춰 구성하거나, 기존 책상의 프레임만 교체하고 싶을 때 선택할 수 있습니다.",
+        ],
+      },
+      {
+        heading: "보강대·다리 프레임만 따로 구매도 가능합니다",
+        body: [
+          "프레임 전체가 아니라 보강대 1세트나 다리 프레임 1세트처럼 필요한 구성만 별도로 구매하는 것도 가능합니다.",
+        ],
+      },
+      {
+        heading: "상판만 단독으로는 판매하지 않습니다",
+        body: [
+          "인디업은 상판만 따로 판매하지 않습니다. 상판이 필요하시다면 프레임에 보유 중인 상판을 맞춰 사용하시거나, 상판과 프레임이 함께 구성된 책상 제품을 선택하시는 방법이 있습니다.",
+        ],
+      },
+      {
+        heading: "프레임 사이즈는 어떻게 정하나요",
+        body: [
+          "프레임은 다른 제품처럼 표준 사이즈 계산기로 바로 확인하는 대상이 아니라, 문의를 통해 원하는 사이즈로 진행됩니다. 기존 상판 치수나 원하는 사이즈를 정리해 네이버 톡톡이나 고객센터로 문의해 주세요.",
+        ],
+      },
+    ],
+    images: [{ src: "/frame_desk.jpg", alt: "인디업 프레임" }],
+    relatedProduct: { label: "프레임 자세히 보기", href: "/products/frame/" },
+    publishedAt: "2026-08-04",
+  },
 ];
 
 // scripts/fetch-notion-guide.mjs writes this file from the "인디업 블로그
