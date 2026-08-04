@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import fs from "node:fs";
-import path from "node:path";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
@@ -8,8 +6,7 @@ import SizeCta from "@/components/SizeCta";
 import GuideExplorer from "@/components/GuideExplorer";
 import { guideArticles } from "@/lib/guideArticles";
 import { leadTime } from "@/lib/products";
-import type { BlogFeedData } from "@/components/NaverBlogFeed";
-import type { YoutubeFeedData } from "@/components/YoutubeFeed";
+import { toSafeJsonLdString } from "@/lib/safeJsonLd";
 
 const siteUrl = "https://indeup.com";
 const pageTitle = "책상 사이즈·배치 가이드 | 원룸·컴퓨터·2인용 책상 | 인디업";
@@ -67,19 +64,7 @@ const faqs = [
   },
 ];
 
-function readBuildTimeData<T>(filename: string): T | null {
-  try {
-    const filePath = path.join(process.cwd(), "public", "data", filename);
-    return JSON.parse(fs.readFileSync(filePath, "utf-8")) as T;
-  } catch {
-    return null;
-  }
-}
-
 export default function GuidePage() {
-  const initialBlogData = readBuildTimeData<BlogFeedData>("naver-blog.json");
-  const initialYoutubeData = readBuildTimeData<YoutubeFeedData>("youtube.json");
-
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -109,43 +94,6 @@ export default function GuidePage() {
     })),
   };
 
-  // Real, published videos from the channel already embedded on this page
-  // (see GuideExplorer/YoutubeFeed) — VideoObject markup so search engines
-  // can recognize and potentially rich-result them, same as the guide
-  // articles above. Capped and sorted by real publish date; skipped
-  // entirely when the feed hasn't loaded (no placeholder/fabricated
-  // entries).
-  const allVideos = [...(initialYoutubeData?.longform ?? []), ...(initialYoutubeData?.shorts ?? [])]
-    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-    .slice(0, 12);
-  const videoJsonLd =
-    allVideos.length > 0
-      ? {
-          "@context": "https://schema.org",
-          "@type": "ItemList",
-          itemListElement: allVideos.map((v, i) => ({
-            "@type": "ListItem",
-            position: i + 1,
-            item: {
-              "@type": "VideoObject",
-              name: v.title,
-              description: v.description || v.title,
-              thumbnailUrl: v.thumbnail ? [v.thumbnail] : undefined,
-              uploadDate: v.publishedAt,
-              contentUrl: v.link,
-              embedUrl: `https://www.youtube.com/embed/${v.id}`,
-              ...(v.viewCount != null && {
-                interactionStatistic: {
-                  "@type": "InteractionCounter",
-                  interactionType: "https://schema.org/WatchAction",
-                  userInteractionCount: v.viewCount,
-                },
-              }),
-            },
-          })),
-        }
-      : null;
-
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -160,18 +108,15 @@ export default function GuidePage() {
     <div className="flex flex-1 flex-col bg-white text-[var(--color-primary)]">
       <Header />
 
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }} />
-      {videoJsonLd && (
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(videoJsonLd) }} />
-      )}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toSafeJsonLdString(breadcrumbJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toSafeJsonLdString(webPageJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toSafeJsonLdString(itemListJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toSafeJsonLdString(faqJsonLd) }} />
 
       <main className="flex-1">
         {/* Breadcrumb */}
         <nav aria-label="브레드크럼" className="border-b border-[var(--color-border)] px-6 py-2.5 sm:px-12">
-          <ol className="mx-auto flex max-w-[1300px] items-center gap-2 text-xs text-[var(--color-muted-foreground)]">
+          <ol className="mx-auto flex max-w-[1600px] items-center gap-2 text-xs text-[var(--color-muted-foreground)]">
             <li>
               <a href="/" className="cursor-pointer transition-colors hover:text-[var(--color-primary)]">
                 홈
@@ -184,23 +129,23 @@ export default function GuidePage() {
           </ol>
         </nav>
 
-        <GuideExplorer initialBlogData={initialBlogData} initialYoutubeData={initialYoutubeData} />
+        <GuideExplorer />
 
         {/* FAQ */}
         <section className="border-t border-[var(--color-border)] px-6 py-16 sm:px-12 sm:py-16">
           <Reveal className="mx-auto max-w-3xl">
-            <h2 className="text-xl font-bold tracking-[-0.01em] sm:text-2xl">책상 가이드 FAQ</h2>
+            <h2 className="text-xl font-semibold tracking-[-0.01em] sm:text-2xl">책상 가이드 FAQ</h2>
             <div className="mt-6 flex flex-col gap-3">
               {faqs.map((f) => (
                 <details
                   key={f.q}
-                  className="group rounded-2xl border border-[var(--color-border)] px-5 py-4 open:border-[var(--color-brand)]/30 sm:px-6 sm:py-5"
+                  className="group rounded-2xl border border-[var(--color-border)] px-5 py-4 open:border-[var(--color-primary)]/30 sm:px-6 sm:py-5"
                 >
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4 marker:content-none">
                     <h3 className="text-sm font-semibold tracking-[-0.01em] sm:text-base">{f.q}</h3>
                     <span
                       aria-hidden="true"
-                      className="shrink-0 text-lg font-light text-[var(--color-muted-foreground)] transition-transform duration-200 group-open:rotate-45 group-open:text-[var(--color-brand)]"
+                      className="shrink-0 text-lg font-light text-[var(--color-muted-foreground)] transition-transform duration-200 group-open:rotate-45 group-open:text-[var(--color-primary)]"
                     >
                       +
                     </span>

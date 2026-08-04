@@ -1,4 +1,4 @@
-name: Refresh content feeds (Naver Blog + YouTube)
+name: Refresh content feeds (Naver Blog + YouTube + Notion guide)
 
 on:
   schedule:
@@ -34,18 +34,54 @@ jobs:
       - name: Fetch YouTube feed -> public/data/youtube.json
         run: node scripts/fetch-youtube.mjs
 
-      - name: Commit updated feed data if changed
+      - name: Fetch Notion guide articles -> data/guide/notion-articles.json
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: node scripts/fetch-notion-guide.mjs
+
+      - name: Check what changed
+        id: check
         run: |
-          if git diff --quiet -- public/data/naver-blog.json public/data/youtube.json; then
-            echo "No changes to feed data"
-            exit 0
+          GUIDE_PATHS="data/guide/notion-articles.json data/guide/notion-slug-history.json data/guide/notion-redirects.json public/.htaccess"
+          if git diff --quiet -- $GUIDE_PATHS; then
+            echo "guide_changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "guide_changed=true" >> "$GITHUB_OUTPUT"
           fi
+          if git diff --quiet -- public/data/naver-blog.json public/data/youtube.json $GUIDE_PATHS; then
+            echo "any_changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "any_changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit updated feed data if changed
+        if: steps.check.outputs.any_changed == 'true'
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/data/naver-blog.json public/data/youtube.json
+          git add public/data/naver-blog.json public/data/youtube.json data/guide/notion-articles.json data/guide/notion-slug-history.json data/guide/notion-redirects.json public/.htaccess
           git commit -m "chore: refresh content feed data"
           # Pick up any commits made to the repo since this job's checkout
           # (e.g. a manual push) before pushing, so this never fails with a
           # rejected non-fast-forward push.
           git pull --rebase origin main
           git push
+
+      # Guide articles are statically imported into guideArticles.ts at
+      # build time (see src/lib/guideArticles.ts) — unlike the Naver
+      # blog/YouTube feeds, which the browser fetches at runtime, a new or
+      # edited Notion article only reaches indeup.com through a real
+      # rebuild + redeploy. Gated on guide_changed specifically (not
+      # any_changed) so a routine Naver/YouTube refresh alone doesn't
+      # trigger a full site republish.
+      - name: Install dependencies
+        if: steps.check.outputs.guide_changed == 'true'
+        run: npm ci
+
+      - name: Build and deploy to Cafe24
+        if: steps.check.outputs.guide_changed == 'true'
+        env:
+          CAFE24_FTP_HOST: ${{ secrets.CAFE24_FTP_HOST }}
+          CAFE24_FTP_USER: ${{ secrets.CAFE24_FTP_USER }}
+          CAFE24_FTP_PASSWORD: ${{ secrets.CAFE24_FTP_PASSWORD }}
+        run: npm run deploy:ftp

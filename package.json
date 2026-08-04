@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "predeploy:ftp": "node -e \"require('fs').rmSync('out',{recursive:true,force:true})\"",
+    "deploy:ftp": "next build && node scripts/deploy-ftp.mjs"
   },
   "dependencies": {
     "next": "16.2.10",
@@ -19,6 +21,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "basic-ftp": "^6.2.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
     "tailwindcss": "^4",
