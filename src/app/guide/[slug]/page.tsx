@@ -23,6 +23,7 @@ export async function generateMetadata({
   if (!article) return {};
 
   const url = `/guide/${article.slug}/`;
+  const ogImage = article.images?.[0];
   return {
     title: { absolute: `${article.title} | 인디업 책상 가이드` },
     description: article.description,
@@ -32,11 +33,13 @@ export async function generateMetadata({
       title: article.title,
       description: article.description,
       url,
+      ...(ogImage && { images: [{ url: ogImage.src, alt: ogImage.alt }] }),
     },
     twitter: {
-      card: "summary",
+      card: ogImage ? "summary_large_image" : "summary",
       title: article.title,
       description: article.description,
+      ...(ogImage && { images: [ogImage.src] }),
     },
   };
 }
@@ -71,6 +74,9 @@ export default async function GuideArticlePage({
     datePublished: article.publishedAt,
     dateModified: article.updatedAt ?? article.publishedAt,
     isPartOf: { "@type": "WebSite", name: "인디업", url: siteUrl },
+    ...(article.images && article.images.length > 0 && {
+      image: article.images.map((img) => `${siteUrl}${img.src}`),
+    }),
     // A named Person (not just the Organization) is a real E-E-A-T signal —
     // AI/search engines weigh "a specific person with relevant authority
     // wrote or verified this" more than an anonymous brand byline.
@@ -157,6 +163,25 @@ export default async function GuideArticlePage({
                 </span>
               ))}
             </div>
+
+            {article.images && article.images.length > 0 && (
+              <div
+                className={`mt-8 grid gap-3 ${article.images.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}
+              >
+                {article.images.map((img) => (
+                  // eslint-disable-next-line @next/next/no-img-element -- fixed
+                  // aspect-ratio photo, not a next/image layout fit (see
+                  // src/app/products/page.tsx for the same pattern).
+                  <img
+                    key={img.src}
+                    src={img.src}
+                    alt={img.alt}
+                    className="w-full rounded-2xl border border-[var(--color-border)] object-cover"
+                    style={{ aspectRatio: "4 / 3" }}
+                  />
+                ))}
+              </div>
+            )}
 
             <Reveal className="mt-10 flex flex-col gap-9">
               {article.sections.map((section) => (

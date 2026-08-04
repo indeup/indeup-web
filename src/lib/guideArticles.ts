@@ -48,6 +48,12 @@ export type GuideArticle = {
    *  procedure (not added just to have a HowTo) — lets the article page
    *  emit HowTo JSON-LD without restating or inventing any step. */
   howTo?: { name: string; steps: string[] };
+  /** Real product photography only (the same files used on /products/) —
+   *  never a stock or generated image. One image for an article about a
+   *  single product, two side by side for a comparison article. Also feeds
+   *  the article's og:image, Article JSON-LD image, and sitemap image
+   *  entry. */
+  images?: { src: string; alt: string }[];
   relatedProduct: { label: string; href: string };
   /** Real authored date (not build time) — every article below was written
    *  on this date; update it by hand if a specific article's body is later
@@ -451,6 +457,10 @@ const handWrittenGuideArticles: GuideArticle[] = [
           "정확한 사이즈가 아직 정해지지 않았다면 책상 가이드 페이지의 '내 공간 책상 사이즈 계산기'로 공간 정보를 입력해 대략적인 권장 사이즈부터 확인해보세요.",
         ],
       },
+    ],
+    images: [
+      { src: "/side_table.jpg", alt: "인디업 사이드테이블" },
+      { src: "/home_bar_table.jpg", alt: "인디업 홈바테이블" },
     ],
     relatedProduct: { label: "사이드테이블 자세히 보기", href: "/products/side-table/" },
     publishedAt: "2026-08-04",

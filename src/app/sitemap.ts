@@ -51,6 +51,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.5,
+      ...(a.images && a.images.length > 0 && { images: a.images.map((img) => `${siteUrl}${img.src}`) }),
     })),
     ...products.map((p) => ({
       url: `${siteUrl}/products/${p.slug}/`,
