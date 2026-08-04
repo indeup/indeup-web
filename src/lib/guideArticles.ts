@@ -76,6 +76,7 @@ const singleDesk = productFitConfigs["single-desk"];
 const doubleDesk = productFitConfigs["double-desk"];
 const sideTable = productFitConfigs["side-table"];
 const homeBarTable = productFitConfigs["home-bar-table"];
+const floorDesk = productFitConfigs["floor-desk"];
 
 const handWrittenGuideArticles: GuideArticle[] = [
   {
@@ -463,6 +464,57 @@ const handWrittenGuideArticles: GuideArticle[] = [
       { src: "/home_bar_table.jpg", alt: "인디업 홈바테이블" },
     ],
     relatedProduct: { label: "사이드테이블 자세히 보기", href: "/products/side-table/" },
+    publishedAt: "2026-08-04",
+  },
+  {
+    slug: "floor-desk-height-depth-guide",
+    title: "좌식책상 사이즈 가이드 — 높이·깊이 얼마까지 되나요",
+    description:
+      "바닥 생활에 맞춘 좌식책상의 높이·깊이 제작 범위와, 일반 책상과 무엇이 다른지 실제 제작 사이즈 기준으로 정리합니다.",
+    categories: ["책상 높이"],
+    sections: [
+      {
+        heading: "좌식책상, 일반 책상과 뭐가 다른가요",
+        body: [
+          "좌식책상은 의자 없이 바닥에 앉아서 쓰는 것을 기준으로 만들어져, 일반 책상보다 훨씬 낮은 높이로 제작됩니다. 가로·깊이 제작 범위는 1인용 책상과 비슷하지만, 높이만큼은 별도의 낮은 범위로 만들어집니다.",
+        ],
+      },
+      {
+        heading: "제작 가능한 사이즈",
+        body: [],
+        table: {
+          headers: ["항목", "제작 범위"],
+          rows: [
+            [
+              "가로",
+              `${floorDesk.width!.bases[0]}~${floorDesk.width!.bases[floorDesk.width!.bases.length - 1]}mm`,
+            ],
+            [
+              "세로(깊이)",
+              `${floorDesk.depth!.variants[0].bases[0]}~${floorDesk.depth!.variants[0].hardMax}mm`,
+            ],
+            [
+              "높이",
+              `기본 ${floorDesk.height!.defaultHeight}mm, ${floorDesk.height!.min}~${floorDesk.height!.max}mm 범위에서 10mm 단위 조정`,
+            ],
+          ],
+        },
+      },
+      {
+        heading: "높이 500mm를 넘으면 어떻게 되나요",
+        body: [
+          `${floorDesk.height!.redirectAtOrAbove!.message} 좌식책상은 바닥에 앉아 쓰는 낮은 높이 전용 제품이라, 의자에 앉아 쓸 높이가 필요하다면 1인용 책상 쪽 범위(기본 720mm)에서 확인하시는 것이 맞습니다.`,
+        ],
+      },
+      {
+        heading: "정확한 사이즈가 애매하다면",
+        body: [
+          "책상 가이드 페이지의 '내 공간 책상 사이즈 계산기'로 공간 정보를 입력해 대략적인 권장 사이즈부터 확인해보세요.",
+        ],
+      },
+    ],
+    images: [{ src: "/floor_sitting_desk.jpg", alt: "인디업 좌식 책상" }],
+    relatedProduct: { label: "좌식 책상 자세히 보기", href: "/products/floor-desk/" },
     publishedAt: "2026-08-04",
   },
 ];
