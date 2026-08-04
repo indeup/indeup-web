@@ -6,6 +6,7 @@
 
 import { productFitConfigs } from "@/lib/customFit";
 import { material, structure, leadTime, warranty, safetyUsageNotice } from "@/lib/products";
+import { policyData } from "@/lib/policy";
 import notionArticlesRaw from "../../data/guide/notion-articles.json";
 
 export type GuideCategory =
@@ -551,6 +552,46 @@ const handWrittenGuideArticles: GuideArticle[] = [
     ],
     images: [{ src: "/frame_desk.jpg", alt: "인디업 프레임" }],
     relatedProduct: { label: "프레임 자세히 보기", href: "/products/frame/" },
+    publishedAt: "2026-08-04",
+  },
+  {
+    slug: "exchange-return-policy-guide",
+    title: "교환·반품 규정 총정리 — 실측 오류, 단순 변심은 어떻게 되나요",
+    description:
+      "배송 파손, 제작 오류, 실측 오류, 단순 변심 등 상황별로 교환·반품이 가능한지 실제 고객지원 기준으로 정리합니다.",
+    categories: ["맞춤 제작"],
+    sections: [
+      {
+        heading: "상황별 교환·반품 가능 여부",
+        body: [],
+        table: {
+          headers: ["상황", "가능 여부"],
+          rows: [
+            ["배송 파손 / 제작 오류", "무료 교환"],
+            ["실측을 잘못해서 사이즈가 안 맞음", "최초 1회에 한해 무상으로 사이즈를 다시 확인한 뒤 교환"],
+            ["단순 변심 / 사용 흔적이 있음", "반품 어려움"],
+          ],
+        },
+      },
+      {
+        heading: "왜 단순 변심 반품이 어려운가요",
+        body: [
+          "인디업 책상은 고객님만을 위한 사이즈로 제작하는 맞춤형 상품이라, 재고로 다시 판매할 수 없습니다. 그래서 단순 변심이나 사용 흔적이 있는 경우의 반품은 어려운 점 양해 부탁드립니다.",
+        ],
+      },
+      {
+        heading: "보증 기간 안에는 이렇게 진행됩니다",
+        body: [warranty, policyData.damageSupport + "됩니다."],
+      },
+      {
+        heading: "신청 방법",
+        body: [
+          "네이버 톡톡으로 고객센터에 문의해 주세요. 가장 빠르게 확인해 드립니다.",
+          `고객센터 상담 가능 시간: ${policyData.operatingHours} (${policyData.operatingDays})`,
+        ],
+      },
+    ],
+    relatedProduct: { label: "고객지원에 문의하기", href: "/support/" },
     publishedAt: "2026-08-04",
   },
 ];
