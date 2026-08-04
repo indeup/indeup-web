@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, type FormEvent, type ReactNode } from "react";
-import CardScroller from "@/components/CardScroller";
 import QuickSizeFinder from "@/components/QuickSizeFinder";
 import Reveal from "@/components/Reveal";
-import { guideArticles, type GuideArticle } from "@/lib/guideArticles";
+import { guideArticles, GUIDE_CATEGORIES, type GuideArticle } from "@/lib/guideArticles";
 import { matchesFilter, EMPTY_FILTER, type GuideFilter } from "@/lib/guideSearch";
 
 function SearchIcon() {
@@ -150,6 +149,34 @@ export default function GuideExplorer() {
               {searchNotice}
             </p>
           )}
+
+          <div className="mt-4 flex flex-wrap gap-2" role="group" aria-label="카테고리로 필터">
+            <button
+              type="button"
+              onClick={() => setFilter((f) => ({ ...f, category: null }))}
+              className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors duration-200 ${
+                filter.category === null
+                  ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white"
+                  : "border-[var(--color-border)] text-[var(--color-secondary)] hover:border-[var(--color-primary)]/50"
+              }`}
+            >
+              전체
+            </button>
+            {GUIDE_CATEGORIES.map((c) => (
+              <button
+                key={c}
+                type="button"
+                onClick={() => setFilter((f) => ({ ...f, category: f.category === c ? null : c }))}
+                className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors duration-200 ${
+                  filter.category === c
+                    ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white"
+                    : "border-[var(--color-border)] text-[var(--color-secondary)] hover:border-[var(--color-primary)]/50"
+                }`}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -166,8 +193,10 @@ export default function GuideExplorer() {
         </Reveal>
       </FeedSection>
 
-      {/* 자체 가이드 */}
-      <FeedSection id="own-guides" title="가장 많이 찾는 책상 가이드">
+      {/* 자체 가이드 — 전체 목록. 글이 늘어날수록 가로 스크롤 캐러셀 하나로는
+          "이게 전부인지" 알기 어려워지므로, 검색/카테고리로 걸러지지 않는 한
+          항상 그리드로 전체를 펼쳐서 보여준다. */}
+      <FeedSection id="own-guides" title={`책상 가이드 전체 (${guideArticles.length}개)`}>
         <Reveal>
           {filteredArticles.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-[var(--color-border)] p-8 text-center sm:p-10">
@@ -176,11 +205,11 @@ export default function GuideExplorer() {
               </p>
             </div>
           ) : (
-            <CardScroller
-              items={filteredArticles}
-              keyFor={(a) => a.slug}
-              renderItem={(a) => <ArticleCard article={a} />}
-            />
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {filteredArticles.map((a) => (
+                <ArticleCard key={a.slug} article={a} />
+              ))}
+            </div>
           )}
         </Reveal>
       </FeedSection>
